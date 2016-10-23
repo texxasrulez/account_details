@@ -24,7 +24,7 @@ $account_details_config['display_create'] = true;
 $account_details_config['display_lastlogin'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'The Great State of Texas';
+$account_details_config['location'] = 'Change me in config.inc.php';
 
 // For the next three URL/host variables, you can use these
 // characters for dynamic replacement:

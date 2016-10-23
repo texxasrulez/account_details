@@ -24,7 +24,7 @@ $account_details_config['display_create'] = true;
 $account_details_config['display_lastlogin'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'The Great State of Texas';
+$account_details_config['location'] = 'Change me in config.inc.php';
 
 // For the next three URL/host variables, you can use these
 // characters for dynamic replacement:
@@ -40,11 +40,11 @@ $account_details_config['location'] = 'The Great State of Texas';
 $account_details_config['webmail_url'] = '%p://%s/mail/';
 
 // Server hostname
-$account_details_config['hostname'] = '%s';
+$account_details_config['hostname'] = '%S';
 // If you have different server host names per protocol
-$account_details_config['hostname_smtp'] = 'smtp.%s';
-$account_details_config['hostname_imap'] = 'imap.%s';
-$account_details_config['hostname_pop'] = 'pop.%s';
+$account_details_config['hostname_smtp'] = 'smtp.%S';
+$account_details_config['hostname_imap'] = 'imap.%S';
+$account_details_config['hostname_pop'] = 'pop.%S';
 
 // === SERVER CAPABILITIES ==========================================
 
