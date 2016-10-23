@@ -1,0 +1,64 @@
+/*
+	Account Details Info CSS file
+	default CSS last updated in version 2009-09-26
+*/
+.scroller {
+	overflow: auto;
+}
+
+div.settingsbox-account_details, div.settingsbox-account_details-custom {
+	/* Expand the width of the box instead of breaking lines */
+	margin: 0 1px 1px 0;
+}
+
+div.settingsbox-account_details div.boxcontent {
+	padding: 1px;
+}
+
+div.settingsbox-account_details-custom div.boxcontent {
+	padding: 1px 1px;
+}
+
+table.account_details {
+	margin: 0;
+	padding: 0px 0 0px 0;
+	width: 100%;
+}
+
+
+table.account_details td {
+	padding: 0 0 0 0;
+	background: #EEEEEE;
+}
+
+
+table.account_details td.header {
+	font-weight: bold;
+	padding-top: 0px;
+	
+}
+
+table.account_details td.headerfirst {
+	font-weight: bold;
+	
+}
+
+table.account_details td.title {
+	padding-right: 10px;
+	white-space: nowrap;
+	
+}
+
+table.account_details td.categorynote {
+	font-style: italic;
+}
+
+span.fieldnote-parentheses {
+	/* style notes about field value - parentheses versions */
+}
+
+span.fieldnote-newline {
+	/* style notes about field value - newline versions */
+	display: block;
+	margin-top: 2px;
+}
