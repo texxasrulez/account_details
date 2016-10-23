@@ -17,12 +17,13 @@
 */
 
 $labels = array();
+$labels['account'] = 'Account Details';
 $labels['account_details'] = 'Account Details';
+$labels['authrequired'] = 'Authentication required';
 $labels['created'] = 'Created';
-$labels['lastlogin'] = 'Last Login';
 $labels['defaultidentity'] = 'Name';
 $labels['emailaddress'] = 'Email Address';
-$labels['account'] = 'Account Details';
+$labels['lastlogin'] = 'Last Login';
 $labels['storagequota'] = 'Storage Space:';
 $labels['usedstorage'] = 'Used storage:';
 $labels['pluginname'] = 'Account Information';
@@ -45,9 +46,7 @@ $labels['copytoclipboard'] = 'Copy to clipboard';
 $labels['calendars'] = 'Calendars';
 $labels['addressbooks'] = 'Address Books';
 $labels['mailbox'] = 'Mailbox';
-$labels['webmail'] = 'Webmail:';
-$labels['url'] = 'URL';
-$labels['web_url'] = 'Webmail URL:';
+
 
 $labels['serverinfo'] = 'Server Info';
 $labels['serverinformation'] = 'Server Information';
@@ -61,21 +60,25 @@ $labels['hostname'] = 'Hostname:';
 $labels['location'] = 'Server Location:';
 
 $labels['portnumbers'] = 'Port numbers:';
-$labels['portnumbersregular'] = 'regular connection to mail server:';
+$labels['portnumbersregular'] = 'regular connection to mail server';
 $labels['smtp'] = 'Outgoing: SMTP:';
 $labels['imap'] = 'Incoming: IMAP:';
 $labels['pop'] = 'Incoming: POP:';
-$labels['portnumbersencrypted'] = 'encrypted connection to mail server (recommended):';
+$labels['portnumbersencrypted'] = 'encrypted connection to mail server';
 $labels['smtp-ssl'] = 'Outgoing: SMTP-SSL:';
 $labels['imap-ssl'] = 'Incoming: IMAP-SSL:';
 $labels['pop-ssl'] = 'Incoming: POP-SSL:';
 
-$labels['recommended'] = 'recommended';
+$labels['recommended'] = 'SSL Recommended';
 $labels['port'] = 'Port:';
 $labels['and'] = 'and';
 
-$labels['authrequired'] = ' Authentication required';
+
 $labels['spaauthsupported'] = ' SPA password encyption supported';
+$labels['web_url'] = 'Webmail URL:';
+$labels['webmail'] = 'Webmail:';
+$labels['url'] = 'URL';
+
 
 // %s will be excanged with the appropiate "SMTP after *" below
 $labels['openrelaylocal'] = 'Permitted to send when on same network as server';

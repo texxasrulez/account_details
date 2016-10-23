@@ -24,7 +24,7 @@ $account_details_config['display_create'] = true;
 $account_details_config['display_lastlogin'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'Change me in config.inc.php';
+$account_details_config['location'] = 'The Great State of Texas';
 
 // For the next three URL/host variables, you can use these
 // characters for dynamic replacement:
@@ -73,7 +73,7 @@ $account_details_config['smtp_auth_required_else'] = true;  // SMTP auth require
                                                        //  one of the above
 
 // Add a (recommended) note to the SSL port numbers header?
-$account_details_config['recommendssl'] = false; //TODO Doesn't work as expexted
+$account_details_config['recommendssl'] = true; //TODO Doesn't work as expexted
 
 // Add a newline between the port numbers and the port notes
 // if false - put in pharentesises instead
@@ -130,8 +130,8 @@ $account_details_config['pn_newline'] = false;
 
 // Include a file with customized text in it's own box at the bottom
 // This implementation is limited - PHP not possible, no language handling
-//$account_details_config['enable_custombox'] = false; //TODO
-//$account_details_config['custombox_header'] = 'Help a Brotha Out!';
-//$account_details_config['custombox_file'] = 'plugins/account_details/custom_includes/example_box_1.html';
+$account_details_config['enable_custombox'] = true; //TODO
+$account_details_config['custombox_header'] = 'Help a Brotha Out!';
+$account_details_config['custombox_file'] = 'plugins/account_details/custom_includes/example_box_1.html';
 
 ?>

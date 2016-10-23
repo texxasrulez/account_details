@@ -65,6 +65,15 @@ class account_details extends rcube_plugin
 		$this->_load_config();
 		$rcmail = rcmail::get_instance();
 		$user = $rcmail->user;
+		
+			// Set commalist variables from config and language file
+		if ($this->config['pn_newline']) {
+			$pn_newline = true;
+			$pn_parentheses = false;
+		} else {
+			$pn_newline = false;
+			$pn_parentheses = true;
+		}
 	
 	$table = new html_table(array('cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'account_details'));
 		
@@ -253,7 +262,7 @@ class account_details extends rcube_plugin
 
 			$portnumbers_regular_header =  html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('portnumbers') . ' - ' . $this->gettext('portnumbersencrypted')));
 			if ($this->config['recommendssl'])
-				$portnumbers_regular_header .= ' (' . $this->gettext('recommended') . '):';
+				$portnumbers_regular_header .= ' ' . html::tag('div', array('style' => 'color:green;'), '&nbsp;' .  $this->gettext('recommended'));
 
 			$table->add(array('colspan' => 2, 'class' => 'header'), $portnumbers_regular_header);
 			$table->add_row();
