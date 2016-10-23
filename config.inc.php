@@ -73,7 +73,7 @@ $account_details_config['smtp_auth_required_else'] = true;  // SMTP auth require
                                                        //  one of the above
 
 // Add a (recommended) note to the SSL port numbers header?
-$account_details_config['recommendssl'] = false;
+$account_details_config['recommendssl'] = false; //TODO Doesn't work as expexted
 
 // Add a newline between the port numbers and the port notes
 // if false - put in pharentesises instead

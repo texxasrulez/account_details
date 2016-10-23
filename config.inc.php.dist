@@ -16,13 +16,15 @@ $account_details_config = array();
 // === ACCOUNT/WEBMAIL/SERVER INFO ===================
 
 // Enable display of used/total quota
+$account_details_config['enable_userid'] = true;
 $account_details_config['enable_quota'] = true;
 
-// Display last webmail login
+// Display last webmail login / create
+$account_details_config['display_create'] = true;
 $account_details_config['display_lastlogin'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = '';
+$account_details_config['location'] = 'The Great State of Texas';
 
 // For the next three URL/host variables, you can use these
 // characters for dynamic replacement:
@@ -35,14 +37,14 @@ $account_details_config['location'] = '';
 //        everything to and including the fist dot stripped
 
 // Webmail URL
-$account_details_config['webmail_url'] = '%p://%s/roundcube/';
+$account_details_config['webmail_url'] = '%p://%s/mail/';
 
 // Server hostname
-$account_details_config['hostname'] = '%s';
+$account_details_config['hostname'] = '%S';
 // If you have different server host names per protocol
-$account_details_config['hostname_smtp'] = 'smtp.geneshosting.com';
-$account_details_config['hostname_imap'] = 'imap.geneshosting.com';
-$account_details_config['hostname_pop'] = 'pop.geneshosting.com';
+$account_details_config['hostname_smtp'] = 'smtp.%S';
+$account_details_config['hostname_imap'] = 'imap.%S';
+$account_details_config['hostname_pop'] = 'pop.%S';
 
 // === SERVER CAPABILITIES ==========================================
 
@@ -61,7 +63,7 @@ $account_details_config['spa_support_imap'] = false;  // SPA auth for IMAP
 $account_details_config['spa_support_pop'] = false;   // SPA auth for POP
 
 // Authentication always required on SMTP:
-$account_details_config['smtp_auth_required_always'] = false;
+$account_details_config['smtp_auth_required_always'] = true;
 
 // If previous setting is set to false, the following info will be used instead:
 $account_details_config['smtp_relay_local'] = true;         // Open relay for hosts on server network
@@ -71,11 +73,11 @@ $account_details_config['smtp_auth_required_else'] = true;  // SMTP auth require
                                                        //  one of the above
 
 // Add a (recommended) note to the SSL port numbers header?
-$account_details_config['recommendssl'] = false;
+$account_details_config['recommendssl'] = false; //TODO Doesn't work as expexted
 
 // Add a newline between the port numbers and the port notes
 // if false - put in pharentesises instead
-$account_details_config['pn_newline'] = true;
+$account_details_config['pn_newline'] = false;
 
 // === CUSTOM INFORMATION: ADD TO SERVER INFO BOX ======================
 
@@ -128,8 +130,8 @@ $account_details_config['pn_newline'] = true;
 
 // Include a file with customized text in it's own box at the bottom
 // This implementation is limited - PHP not possible, no language handling
-$account_details_config['enable_custombox'] = false;
-$account_details_config['custombox_header'] = 'Other information';
-$account_details_config['custombox_file'] = 'plugins/account_details/custom_includes/example_box_1.html';
+//$account_details_config['enable_custombox'] = false; //TODO
+//$account_details_config['custombox_header'] = 'Help a Brotha Out!';
+//$account_details_config['custombox_file'] = 'plugins/account_details/custom_includes/example_box_1.html';
 
 ?>
