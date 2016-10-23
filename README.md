@@ -14,6 +14,18 @@ Adds tab in Setting for more user info.
 
 You can enable/disable certain things via the config.inc.php
 
-More to come
+Copy url's from Calendars and Address Books to clipboard with a simple click (Doesn't work in Firefox)
 
-Copy url's to clipboard with a simple click (Doesn't work in Firefox)
+Installation
+-------------
+Upload contents to /roundcube_location/plugins/account_details.
+
+Copy folder named 'copy_to_web_root' into your webroot. Basically want your url like http(s):domain.ltd/tutorials/
+
+Enable plugin via config.inc.php 
+
+$config['plugins'] = array('account_details');
+
+Enjoy!
+
+More to come
