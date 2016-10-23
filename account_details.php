@@ -6,8 +6,7 @@
  */
 class account_details extends rcube_plugin
 {
-    public $task    = 'settings';
-    public $noajax  = true;
+    public $task    = 'mail|addressbook|calendar|settings';
 
     function init()
     {
@@ -76,13 +75,6 @@ class account_details extends rcube_plugin
 		}
 	
 	$table = new html_table(array('cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'account_details'));
-		
-
-    $skin = $rcmail->config->get('skin', 'classic');
-    $this->include_script('flashclipboard.js');
-    $rcmail->output->add_footer(html::tag('div', array('id' => 'zclipdialog', 'title' => $this->gettext('copiedtoclipboard'))));
-    $icon = '&nbsp;' . html::tag('img', array('class' => 'zclip', 'src' => 'plugins/account_details/skins/' . $skin . '/images/clipboard.png', 'title' => $this->gettext('copytoclipboard'), 'alt' => $this->gettext('copytoclipboard'), 'align' => 'baseline'));
-
 
     $table = new html_table(array('class' => 'account_details', 'cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0));
     
@@ -133,30 +125,63 @@ class account_details extends rcube_plugin
 				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('usedstorage')));
 				$table->add('value', $quotaused);
 			}
+			$support_url = $rcmail->config->get('support_url');
+			if ($this->config['enable_support']) {
+				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('enable_support') . ':'));
+				$table->add('value', html::tag('a', array('href' => $support_url, 'target' => '_blank'), $support_url));
+			}
 		}
-			if (!empty($this->config['location'])) {
+			if ($this->config['enable_mailbox']) {
+			$table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('mailbox') . ':')));
+			$table->add('', '');
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('inbox') . ':'));
+			$table->add('value', $imap->count($this->INBOX, 'UNSEEN') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;' . $imap->count($this->INBOX, 'ALL') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('total'))));
+			
+			if ($this->config['enable_drafts']) {
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('drafts') . ':'));
+			$table->add('value', $imap->count($this->INBOX.Drafts, 'UNSEEN') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;' . $imap->count($this->INBOX.Drafts, 'ALL') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('total'))));
+			}
+			if ($this->config['enable_sent']) {
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('sent') . ':'));
+			$table->add('value', $imap->count($this->INBOX.Sent, 'UNSEEN') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;' . $imap->count($this->INBOX.Sent, 'ALL') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('total'))));
+			}
+			if ($this->config['enable_trash']) {
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('trash') . ':'));
+			$table->add('value', $imap->count($this->INBOX.Trash, 'UNSEEN') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;' . $imap->count($this->INBOX.Trash, 'ALL') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('total'))));
+			}
+			if ($this->config['enable_junk']) {
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('junk') . ':'));
+			$table->add('value', $imap->count($this->INBOX.Junk, 'UNSEEN') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;' . $imap->count($this->INBOX.Junk, 'ALL') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('total'))));
+			}
+			if ($this->config['enable_archive']) {
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('archive') . ':'));
+			$table->add('value', $imap->count($this->INBOX.Archive, 'UNSEEN') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;' . $imap->count($this->INBOX.Archive, 'ALL') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('total'))));
+			}
+			}
+			if ($this->config['location']) {
 				$table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('serverinfo') . ':')));
 				$table->add('', '');
 				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('location')));
 				$table->add('value', $this->config['location']);
 			}
 
-		if (!empty($this->config['hostname'])) {
+		$webmail_url = $this->_host_replace($this->config['webmail_url']);
+		if ($this->config['hostname']) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('web_url')));
-			$table->add('value', $this->_host_replace($this->config['webmail_url']));
+			$table->add('value', html::tag('a', array('href' => $webmail_url, 'target' => '_top'), $webmail_url));
 		}
 
-		if (!empty($this->config['hostname_smtp'])) {
+		if ($this->config['hostname_smtp']) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('smtp')));
 			$table->add('value', $this->_host_replace($this->config['hostname_smtp']));
 		}
 		
-		if (!empty($this->config['hostname_imap'])) {
+		if ($this->config['hostname_imap']) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('imap')));
 			$table->add('value', $this->_host_replace($this->config['hostname_imap']));
 		}
 		
-		if (!empty($this->config['hostname_pop'])) {
+		if ($this->config['hostname_pop']) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('pop')));
 			$table->add('value', $this->_host_replace($this->config['hostname_pop']));
 		}
@@ -217,15 +242,15 @@ class account_details extends rcube_plugin
 		$smtp_notes_array_encrypted = array_merge((array)$smtp_notes_array_all, (array)$smtp_notes_array_encryptedonly);
 		
 		// If we have some info in the SMTP information arrays, make them ready for printing
-		if (!empty($smtp_notes_array_regular))
+		if ($smtp_notes_array_regular)
 			$smtp_notes_regular = ucfirst($this->_separated_list($smtp_notes_array_regular, $and = false, $sentences = true, $commalist_ucfirst, $pn_parentheses, $pn_newline));
-		if (!empty($smtp_notes_array_regular))
+		if ($smtp_notes_array_regular)
 			$smtp_notes_encrypted = ucfirst($this->_separated_list($smtp_notes_array_encrypted, $and = false, $sentences = true, $commalist_ucfirst, $pn_parentheses, $pn_newline));
 			
 		
 		// Port numbers - regular
 		
-		if (!empty($this->config['port_smtp']) or !empty($this->config['port_imap']) or !empty($this->config['port_pop']) or count($this->config['customfields_regularports']) > 0) {
+		if ($this->config['port_smtp'] or ($this->config['port_imap']) or ($this->config['port_pop']) or count($this->config['customfields_regularports']) > 0) {
 		
 			$table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('portnumbers') . ' - ' . $this->gettext('portnumbersregular'))));
 			$table->add('', '');
@@ -236,17 +261,17 @@ class account_details extends rcube_plugin
 				$table->add_row();
 			}
 			
-			if (!empty($this->config['port_smtp'])) {
+			if ($this->config['port_smtp']) {
 				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('smtp')));
 				$table->add('value', $this->gettext('port') . ' ' . $this->_separated_list($this->config['port_smtp'], $and = true) . $smtp_notes_regular);
 			}
 		
-			if (!empty($this->config['port_imap'])) {
+			if ($this->config['port_imap']) {
 				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('imap')));
 				$table->add('value', $this->gettext('port') . ' ' . $this->_separated_list($this->config['port_imap'], $and = true) . $imap_notes_regular);
 			}
 		
-			if (!empty($this->config['port_pop'])) {
+			if ($this->config['port_pop']) {
 				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('pop')));
 				$table->add('value', $this->gettext('port') . ' ' . $this->_separated_list($this->config['port_pop'], $and = true) . $pop_notes_regular);
 			}
@@ -258,7 +283,7 @@ class account_details extends rcube_plugin
 		
 		// Port numbers - encrypted
 		
-		if (!empty($this->config['port_smtp-ssl']) or !empty($this->config['port_imap-ssl']) or !empty($this->config['port_pop-ssl']) or count($this->config['customfields_encryptedports']) > 0) {
+		if ($this->config['port_smtp-ssl'] or ($this->config['port_imap-ssl']) or ($this->config['port_pop-ssl']) or count($this->config['customfields_encryptedports']) > 0) {
 
 			$portnumbers_regular_header =  html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('portnumbers') . ' - ' . $this->gettext('portnumbersencrypted')));
 			if ($this->config['recommendssl'])
@@ -267,17 +292,17 @@ class account_details extends rcube_plugin
 			$table->add(array('colspan' => 2, 'class' => 'header'), $portnumbers_regular_header);
 			$table->add_row();
 			
-			if (!empty($this->config['port_smtp-ssl'])) {
+			if ($this->config['port_smtp-ssl']) {
 				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('smtp-ssl')));
 				$table->add('value', $this->gettext('port') . ' ' . $this->_separated_list($this->config['port_smtp-ssl'], $and = true) . $smtp_notes_encrypted);
 			}
 		
-			if (!empty($this->config['port_imap-ssl'])) {
+			if ($this->config['port_imap-ssl']) {
 				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('imap-ssl')));
 				$table->add('value', $this->gettext('port') . ' ' . $this->_separated_list($this->config['port_imap-ssl'], $and = true) . $imap_notes_encrypted);
 			}
 		
-			if (!empty($this->config['port_pop-ssl'])) {
+			if ($this->config['port_pop-ssl']) {
 				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('pop-ssl')));
 				$table->add('value', $this->gettext('port') . ' ' . $this->_separated_list($this->config['port_pop-ssl'], $and = true) . $pop_notes_encrypted);
 			}
@@ -312,7 +337,7 @@ class account_details extends rcube_plugin
           }
         }
         $table->add('title','&nbsp;&#9679; ' . $key);
-        $table->add('', html::tag('span', null,rcube_utils::rep_specialchars_output(str_replace('%u', $user, str_replace('@', urlencode('@'), $url)))) . $icon);
+        $table->add('', html::tag('span', null,rcube_utils::rep_specialchars_output(str_replace('%u', $user, str_replace('@', urlencode('@'), $url)))));
       }
       if($clients == '' && $rcmail->config->get('account_details_show_tutorial_links', true)){
         $clients = ('');
@@ -353,7 +378,7 @@ class account_details extends rcube_plugin
           }
         }
         $table->add('title', '&nbsp;&#9679; ' . $key);
-        $table->add('', html::tag('span', null, rcube_utils::rep_specialchars_output(str_replace('%u', $user, str_replace('@', urlencode('@'), $url)))) . $icon);
+        $table->add('', html::tag('span', null, rcube_utils::rep_specialchars_output(str_replace('%u', $user, str_replace('@', urlencode('@'), $url)))));
       }
       if($clients == '' && $rcmail->config->get('account_details_show_tutorial_links', true)){
         $clients = html::tag('hr');
@@ -376,10 +401,10 @@ class account_details extends rcube_plugin
     }
 	$out = html::div(array('class' => 'settingsbox settingsbox-account_details'), html::div(array('class' => 'boxtitle'), $this->gettext('account_details') . ' for ' . $identity['name'])) . html::div(array('class' => 'scroller'), $table->show() . $clients);
 	
-			if ($this->config['enable_custombox']) {
+/*			if ($this->config['enable_custombox']) {
 			
 			$out .= html::div(array('class' => 'settingsbox settingsbox-account_details-custom'), html::div(array('class' => 'boxtitle'), $this->config['custombox_header']) . html::div(array('class' => 'boxcontent'), $this->_print_file_contents($this->config['custombox_file'])));
-		}
+		} */
 	
     return $out;
   }

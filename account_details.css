@@ -28,7 +28,6 @@ table.account_details {
 
 table.account_details td {
 	padding: 0 0 0 0;
-	background: #EEEEEE;
 }
 
 
@@ -45,7 +44,6 @@ table.account_details td.headerfirst {
 
 table.account_details td.title {
 	padding-right: 10px;
-	white-space: nowrap;
 	
 }
 
@@ -61,4 +59,28 @@ span.fieldnote-newline {
 	/* style notes about field value - newline versions */
 	display: block;
 	margin-top: 2px;
+}
+
+/* unvisited link */
+a:link {
+    color: dark-gray;
+	text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+    color: black;
+	text-decoration: none;
+}
+
+/* mouse over link */
+a:hover {
+    color: blue;
+	text-decoration: none;
+}
+
+/* selected link */
+a:active {
+    color: blue;
+	text-decoration: none;
 }

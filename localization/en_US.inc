@@ -19,12 +19,21 @@
 $labels = array();
 $labels['account'] = 'Account Details';
 $labels['account_details'] = 'Account Details';
+$labels['archive'] = 'Archive Folder';
 $labels['authrequired'] = 'Authentication required';
 $labels['created'] = 'Created';
 $labels['defaultidentity'] = 'Name';
+$labels['drafts'] = 'Drafts Folder';
 $labels['emailaddress'] = 'Email Address';
+$labels['enable_support'] = 'Support URL';
+$labels['inbox'] = 'Inbox';
 $labels['lastlogin'] = 'Last Login';
+$labels['sent'] = 'Sent Folder';
+$labels['trash'] = 'Trash Folder';
+$labels['junk'] = 'Junk Folder';
 $labels['storagequota'] = 'Storage Space:';
+$labels['total'] = 'Total Count';
+$labels['unread'] = 'Unread Count';
 $labels['usedstorage'] = 'Used storage:';
 $labels['pluginname'] = 'Account Information';
 $labels['plugindescription'] = 'Displays basic account information such as IMAP, POP & SMTP server protocols, default Identity, user’s CalDAV & CardDAV URLs and other details.';
@@ -45,10 +54,11 @@ $labels['copiedtoclipboard'] = 'Copied to clipboard';
 $labels['copytoclipboard'] = 'Copy to clipboard';
 $labels['calendars'] = 'Calendars';
 $labels['addressbooks'] = 'Address Books';
-$labels['mailbox'] = 'Mailbox';
+$labels['mailbox'] = 'Mailbox Details';
+$labels['account-details-title'] = 'Account Details for %u';
 
 
-$labels['serverinfo'] = 'Server Info';
+$labels['serverinfo'] = 'Server Details';
 $labels['serverinformation'] = 'Server Information';
 $labels['server'] = 'Server';
 
@@ -61,13 +71,13 @@ $labels['location'] = 'Server Location:';
 
 $labels['portnumbers'] = 'Port numbers:';
 $labels['portnumbersregular'] = 'regular connection to mail server';
-$labels['smtp'] = 'Outgoing: SMTP:';
-$labels['imap'] = 'Incoming: IMAP:';
-$labels['pop'] = 'Incoming: POP:';
+$labels['smtp'] = 'Outgoing SMTP:';
+$labels['imap'] = 'Incoming IMAP:';
+$labels['pop'] = 'Incoming POP:';
 $labels['portnumbersencrypted'] = 'encrypted connection to mail server';
-$labels['smtp-ssl'] = 'Outgoing: SMTP-SSL:';
-$labels['imap-ssl'] = 'Incoming: IMAP-SSL:';
-$labels['pop-ssl'] = 'Incoming: POP-SSL:';
+$labels['smtp-ssl'] = 'Outgoing SMTP-SSL:';
+$labels['imap-ssl'] = 'Incoming IMAP-SSL:';
+$labels['pop-ssl'] = 'Incoming POP-SSL:';
 
 $labels['recommended'] = 'SSL Recommended';
 $labels['port'] = 'Port:';

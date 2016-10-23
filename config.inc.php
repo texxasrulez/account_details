@@ -23,8 +23,22 @@ $account_details_config['enable_quota'] = true;
 $account_details_config['display_create'] = true;
 $account_details_config['display_lastlogin'] = true;
 
+//Display Support URL - If enabled, Be sure and fill this out in Roundcubes main config.inc.php if not specified during installation
+
+$account_details_config['enable_support'] = true;
+
 // Server location (Example: 'City, Country')
 $account_details_config['location'] = 'The Great State of Texas';
+
+//Display Mailbox Details
+
+$account_details_config['enable_mailbox'] = true;
+//Enable or Disable Individual Folders
+$account_details_config['enable_drafts'] = true;
+$account_details_config['enable_sent'] = true;
+$account_details_config['enable_junk'] = true;
+$account_details_config['enable_trash'] = true;
+$account_details_config['enable_archive'] = true;
 
 // For the next three URL/host variables, you can use these
 // characters for dynamic replacement:
@@ -58,9 +72,9 @@ $account_details_config['port_imap-ssl'] = array('993');
 $account_details_config['port_pop-ssl'] = array('995');
 
 // SPA auth support for protocols
-$account_details_config['spa_support_smtp'] = false;  // SPA auth for SMTP
-$account_details_config['spa_support_imap'] = false;  // SPA auth for IMAP
-$account_details_config['spa_support_pop'] = false;   // SPA auth for POP
+$account_details_config['spa_support_smtp'] = true;  // SPA auth for SMTP
+$account_details_config['spa_support_imap'] = true;  // SPA auth for IMAP
+$account_details_config['spa_support_pop'] = true;   // SPA auth for POP
 
 // Authentication always required on SMTP:
 $account_details_config['smtp_auth_required_always'] = true;
@@ -70,7 +84,7 @@ $account_details_config['smtp_relay_local'] = true;         // Open relay for ho
 $account_details_config['smtp_after_pop'] = false;          // SMTP after POP support
 $account_details_config['smtp_after_imap'] = false;         // SMTP after POP support
 $account_details_config['smtp_auth_required_else'] = true;  // SMTP auth required if not
-                                                       //  one of the above
+
 
 // Add a (recommended) note to the SSL port numbers header?
 $account_details_config['recommendssl'] = true; //TODO Doesn't work as expexted
@@ -130,8 +144,8 @@ $account_details_config['pn_newline'] = false;
 
 // Include a file with customized text in it's own box at the bottom
 // This implementation is limited - PHP not possible, no language handling
-$account_details_config['enable_custombox'] = true; //TODO
-$account_details_config['custombox_header'] = 'Help a Brotha Out!';
-$account_details_config['custombox_file'] = 'plugins/account_details/custom_includes/example_box_1.html';
+//$account_details_config['enable_custombox'] = true; //TODO
+//$account_details_config['custombox_header'] = 'Help a Brotha Out!';
+//$account_details_config['custombox_file'] = 'plugins/account_details/custom_includes/example_box_1.html';
 
 ?>

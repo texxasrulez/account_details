@@ -7,14 +7,13 @@ Account Details Plugin for Roundcube
 Adds tab in Setting for more user info. 
 * Identities
 * email address
-* storage space and quota
+* storage space quota
+* Mailbox Stats (Still a work in progress)
 * server url, port and other useful info
 * CalDAV URL;s
 * CardDAV URL's
 
 You can enable/disable certain things via the config.inc.php
-
-Copy url's from Calendars and Address Books to clipboard with a simple click (Doesn't work in Firefox)
 
 Installation
 -------------
