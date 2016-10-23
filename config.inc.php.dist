@@ -40,11 +40,11 @@ $account_details_config['location'] = 'The Great State of Texas';
 $account_details_config['webmail_url'] = '%p://%s/mail/';
 
 // Server hostname
-$account_details_config['hostname'] = '%S';
+$account_details_config['hostname'] = '%s';
 // If you have different server host names per protocol
-$account_details_config['hostname_smtp'] = 'smtp.%S';
-$account_details_config['hostname_imap'] = 'imap.%S';
-$account_details_config['hostname_pop'] = 'pop.%S';
+$account_details_config['hostname_smtp'] = 'smtp.%s';
+$account_details_config['hostname_imap'] = 'imap.%s';
+$account_details_config['hostname_pop'] = 'pop.%s';
 
 // === SERVER CAPABILITIES ==========================================
 
