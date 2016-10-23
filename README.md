@@ -18,11 +18,12 @@ Copy url's from Calendars and Address Books to clipboard with a simple click (Do
 
 Installation
 -------------
-Upload contents to /roundcube_location/plugins/account_details.
+Upload contents to '/roundcube_location/plugins/account_details/'.
 
-Copy folder named 'copy_to_web_root' into your webroot. Basically want your url like http(s):domain.ltd/tutorials/
+Copy folder named 'copy_to_web_root' into your webroot. Basically want your url like 'http(s):domain.ltd/tutorials/etc/'
+I just have empty html index files. You can customized your tutorials to suit your needs and custom to your services.
 
-Enable plugin via config.inc.php 
+Enable plugin via config.inc.php with
 
 $config['plugins'] = array('account_details');
 
