@@ -32,14 +32,15 @@ $labels['sent'] = 'Sent Folder';
 $labels['trash'] = 'Trash Folder';
 $labels['junk'] = 'Junk Folder';
 $labels['storagequota'] = 'Storage Space:';
-$labels['total'] = 'Total Count';
-$labels['unread'] = 'Unread Count';
+$labels['total'] = 'Total';
+$labels['unread'] = 'Unread';
 $labels['usedstorage'] = 'Used storage:';
 $labels['pluginname'] = 'Account Information';
 $labels['plugindescription'] = 'Displays basic account information such as IMAP, POP & SMTP server protocols, default Identity, user’s CalDAV & CardDAV URLs and other details.';
 $labels['accountinformation'] = 'Account Details';
 $labels['encryption'] = 'Encryption';
 $labels['port'] = 'Port';
+$labels['rc_version'] = 'Roundcube Version';
 $labels['auth'] = 'Authentication';
 $labels['yes'] = 'Yes';
 $labels['no'] = 'No';
@@ -84,7 +85,7 @@ $labels['port'] = 'Port:';
 $labels['and'] = 'and';
 
 
-$labels['spaauthsupported'] = ' SPA password encyption supported';
+$labels['spaauthsupported'] = '&nbsp; SPA password encryption supported';
 $labels['web_url'] = 'Webmail URL:';
 $labels['webmail'] = 'Webmail:';
 $labels['url'] = 'URL';

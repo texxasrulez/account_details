@@ -13,7 +13,12 @@
 
 $account_details_config = array();
 
+//Debugging
+$config['account_details_debug'] = false;
+
 // === ACCOUNT/WEBMAIL/SERVER INFO ===================
+// Display Roundcube Version
+$account_details_config['display_rcv_ersion'] = true;
 
 // Enable display of used/total quota
 $account_details_config['enable_userid'] = true;
@@ -23,17 +28,15 @@ $account_details_config['enable_quota'] = true;
 $account_details_config['display_create'] = true;
 $account_details_config['display_lastlogin'] = true;
 
-//Display Support URL - If enabled, Be sure and fill this out in Roundcubes main config.inc.php if not specified during installation
-
+// Display Support URL - If enabled, Be sure and fill this out in Roundcubes main config.inc.php if not specified during installation
 $account_details_config['enable_support'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'The Great State of Texas';
+$account_details_config['location'] = 'The Great State of Texas'; //Cannot be blank. Messes with tables
 
-//Display Mailbox Details
-
+// Display Mailbox Details
 $account_details_config['enable_mailbox'] = true;
-//Enable or Disable Individual Folders
+// Enable or Disable Individual Folders
 $account_details_config['enable_drafts'] = true;
 $account_details_config['enable_sent'] = true;
 $account_details_config['enable_junk'] = true;
@@ -60,14 +63,17 @@ $account_details_config['hostname_smtp'] = 'smtp.%S';
 $account_details_config['hostname_imap'] = 'imap.%S';
 $account_details_config['hostname_pop'] = 'pop.%S';
 
+// Enable CalDAV and CardDAV URL's
+$account_details_config['enable_dav_urls'] = true;
+
 // === SERVER CAPABILITIES ==========================================
 
 // Port numbers in arrays (multiple port numbers allowed).
 // Assign empty string '' instead of array to hide the row.
-$account_details_config['port_smtp'] = array('25', '587');
+$account_details_config['port_smtp'] = array('25');
 $account_details_config['port_imap'] = array('143');
 $account_details_config['port_pop'] = array('110');
-$account_details_config['port_smtp-ssl'] = array('465');
+$account_details_config['port_smtp-ssl'] = array('587');
 $account_details_config['port_imap-ssl'] = array('993');
 $account_details_config['port_pop-ssl'] = array('995');
 

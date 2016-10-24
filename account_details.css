@@ -2,68 +2,79 @@
 	Account Details Info CSS file
 	default CSS last updated in version 2009-09-26
 */
-.scroller {
+body.scroller {
 	overflow: auto;
 }
 
-div.settingsbox-account_details, div.settingsbox-account_details-custom {
+div.settingsbox-account-details, div.settingsbox-account-details-custom {
 	/* Expand the width of the box instead of breaking lines */
 	margin: 0 1px 1px 0;
+	overflow: auto;
 }
 
-div.settingsbox-account_details div.boxcontent {
+div.settingsbox-account-details div.boxcontent {
 	padding: 1px;
+	overflow: auto;
 }
 
-div.settingsbox-account_details-custom div.boxcontent {
+div.settingsbox-account-details-custom div.boxcontent {
 	padding: 1px 1px;
+	overflow: auto;
 }
 
-table.account_details {
+table.account-details {
 	margin: 0;
 	padding: 0px 0 0px 0;
 	width: 100%;
+	overflow: auto;
 }
 
 
-table.account_details td {
+table.account-details td {
 	padding: 0 0 0 0;
+	overflow: auto;
 }
 
 
-table.account_details td.header {
+table.account-details td.header {
 	font-weight: bold;
 	padding-top: 0px;
+	overflow: auto;
 	
 }
 
-table.account_details td.headerfirst {
+table.account-details td.headerfirst {
 	font-weight: bold;
+	overflow: auto;
 	
 }
 
-table.account_details td.title {
+table.account-details td.title {
 	padding-right: 10px;
+	overflow: auto;
 	
 }
 
-table.account_details td.categorynote {
+table.account-details td.categorynote {
 	font-style: italic;
+	overflow: auto;
 }
 
 span.fieldnote-parentheses {
 	/* style notes about field value - parentheses versions */
+	overflow: auto;
 }
 
 span.fieldnote-newline {
 	/* style notes about field value - newline versions */
 	display: block;
 	margin-top: 2px;
+	overflow: auto;
 }
 
 /* unvisited link */
 a:link {
-    color: dark-gray;
+    color: blue;
 	text-decoration: none;
 }
 
@@ -75,8 +86,8 @@ a:visited {
 
 /* mouse over link */
 a:hover {
-    color: blue;
-	text-decoration: none;
+    color: green;
+	text-decoration: underline;
 }
 
 /* selected link */
