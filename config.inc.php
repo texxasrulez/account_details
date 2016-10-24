@@ -13,12 +13,15 @@
 
 $account_details_config = array();
 
-//Debugging
+// Debugging
 $config['account_details_debug'] = false;
+
+// DONATION - Just trying to get paid. You can turn off Paypal Button here
+$account_details_config['enable_paypal'] = true;
 
 // === ACCOUNT/WEBMAIL/SERVER INFO ===================
 // Display Roundcube Version
-$account_details_config['display_rcv_ersion'] = true;
+$account_details_config['display_rc_version'] = true;
 
 // Enable display of used/total quota
 $account_details_config['enable_userid'] = true;
@@ -34,14 +37,14 @@ $account_details_config['enable_support'] = true;
 // Server location (Example: 'City, Country')
 $account_details_config['location'] = 'The Great State of Texas'; //Cannot be blank. Messes with tables
 
-// Display Mailbox Details
+// Display Mailbox Details - Unread Count - Total Count - Size of Folder
 $account_details_config['enable_mailbox'] = true;
 // Enable or Disable Individual Folders
-$account_details_config['enable_drafts'] = true;
-$account_details_config['enable_sent'] = true;
-$account_details_config['enable_junk'] = true;
-$account_details_config['enable_trash'] = true;
-$account_details_config['enable_archive'] = true;
+$account_details_config['enable_drafts'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_sent'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_junk'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_trash'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_archive'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
 
 // For the next three URL/host variables, you can use these
 // characters for dynamic replacement:
@@ -153,5 +156,8 @@ $account_details_config['pn_newline'] = false;
 //$account_details_config['enable_custombox'] = true; //TODO
 //$account_details_config['custombox_header'] = 'Help a Brotha Out!';
 //$account_details_config['custombox_file'] = 'plugins/account_details/custom_includes/example_box_1.html';
+
+$account_details_config['intro'] = 'plugins/account_details/custom_includes/intro.html';
+$account_details_config['paypal'] = 'plugins/account_details/custom_includes/paypal.html';
 
 ?>

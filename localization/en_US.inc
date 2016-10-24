@@ -31,6 +31,7 @@ $labels['lastlogin'] = 'Last Login';
 $labels['sent'] = 'Sent Folder';
 $labels['trash'] = 'Trash Folder';
 $labels['junk'] = 'Junk Folder';
+$labels['size'] = 'K';
 $labels['storagequota'] = 'Storage Space:';
 $labels['total'] = 'Total';
 $labels['unread'] = 'Unread';
