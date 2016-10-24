@@ -2,7 +2,7 @@
     "name": "roundcube/account_details",
     "type": "roundcube-plugin",
     "description": "Sample plugin that adds a new tab to the settings section to display additional information about the current user.",
-    "homepage": "https://github.com/texxasrulez/More-User-Info-for-Roundcube",
+    "homepage": "https://github.com/texxasrulez/Account-Details-for-Roundcube",
     "license": "GPLv3+",
     "version": "1.0",
     "authors": [
