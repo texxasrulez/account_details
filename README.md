@@ -1,4 +1,5 @@
 Account Details Roundcube Plugins
+---------------------------------
 
 I have merged 3 plugins, userinfo, moreuserinfo and serverinfo into one .. 
 
@@ -8,12 +9,13 @@ Adds tab in Setting for more user info.
 * Identities
 * email address
 * storage space quota
+* Roundcube version
 * Mailbox Stats (Still a work in progress)
 * server url, port and other useful info
 * CalDAV URL;s
 * CardDAV URL's
 
-You can enable/disable certain things via the config.inc.php
+You can enable/disable most variables via the config.inc.php 
 
 Installation
 -------------
