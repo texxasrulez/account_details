@@ -17,79 +17,70 @@
 */
 
 $labels = array();
-$labels['account'] = 'Account Details';
+$labels['account'] = 'Account User Details';
 $labels['account_details'] = 'Account Details';
+$labels['accountinformation'] = 'Account Details';
+$labels['and'] = 'and';
+$labels['auth'] = 'Authentication';
+$labels['addressbooks'] = 'Address Books';
 $labels['archive'] = 'Archive Folder';
-$labels['authrequired'] = 'Authentication required';
+$labels['authrequired'] = 'Authentication Required';
+$labels['back'] = 'Back';
+$labels['calendars'] = 'Calendars';
+$labels['clients'] = 'Recommended clients which support %s protocol';
+$labels['copiedtoclipboard'] = 'Copied to clipboard';
+$labels['copytoclipboard'] = 'Copy to clipboard';
 $labels['created'] = 'Created';
+$labels['description'] = 'Get detailed information about your account.';
+$labels['default'] = 'Default';
 $labels['defaultidentity'] = 'Name';
 $labels['drafts'] = 'Drafts Folder';
 $labels['emailaddress'] = 'Email Address';
 $labels['enable_support'] = 'Support URL';
-$labels['inbox'] = 'Inbox';
-$labels['lastlogin'] = 'Last Login';
-$labels['sent'] = 'Sent Folder';
-$labels['trash'] = 'Trash Folder';
-$labels['junk'] = 'Junk Folder';
-$labels['size'] = 'K';
-$labels['storagequota'] = 'Storage Space:';
-$labels['total'] = 'Total';
-$labels['unread'] = 'Unread';
-$labels['usedstorage'] = 'Used storage:';
-$labels['pluginname'] = 'Account Information';
-$labels['plugindescription'] = 'Displays basic account information such as IMAP, POP & SMTP server protocols, default Identity, user’s CalDAV & CardDAV URLs and other details.';
-$labels['accountinformation'] = 'Account Details';
 $labels['encryption'] = 'Encryption';
-$labels['port'] = 'Port';
-$labels['rc_version'] = 'Roundcube Version';
-$labels['auth'] = 'Authentication';
-$labels['yes'] = 'Yes';
-$labels['no'] = 'No';
-$labels['back'] = 'Back';
-$labels['userinfo'] = 'User Info';
-$labels['userid'] = 'System User ID';
-$labels['description'] = 'Get detailed information about your account.';
-$labels['default'] = 'Default';
-$labels['clients'] = 'Recommended clients which support %s protocol';
-$labels['tutorial'] = 'Tutorial &nbsp;&nbsp;';
-$labels['copiedtoclipboard'] = 'Copied to clipboard';
-$labels['copytoclipboard'] = 'Copy to clipboard';
-$labels['calendars'] = 'Calendars';
-$labels['addressbooks'] = 'Address Books';
+$labels['hostname'] = 'Hostname';
+$labels['imap'] = 'Incoming IMAP';
+$labels['imap-ssl'] = 'Incoming IMAP-SSL';
+$labels['inbox'] = 'Inbox';
+$labels['ipaddress'] = 'Current IP Address';
+$labels['junk'] = 'Junk Folder';
+$labels['lastlogin'] = 'Last Login';
+$labels['location'] = 'Server Location';
 $labels['mailbox'] = 'Mailbox Details';
-$labels['account-details-title'] = 'Account Details for %u';
-
-
+$labels['no'] = 'No';
+$labels['php_version'] = 'PHP Version';
+$labels['pluginname'] = 'Account Details';
+$labels['plugindescription'] = 'Displays basic account information such as IMAP, POP & SMTP server protocols, default Identity, user’s CalDAV & CardDAV URLs and other details.';
+$labels['pop'] = 'Incoming POP';
+$labels['pop-ssl'] = 'Incoming POP-SSL';
+$labels['port'] = 'Port';
+$labels['portnumbers'] = 'Port numbers';
+$labels['portnumbersencrypted'] = 'encrypted connection to mail server';
+$labels['portnumbersregular'] = 'regular connection to mail server';
+$labels['rc_version'] = 'Roundcube Version';
+$labels['recommended'] = 'SSL Recommended';
+$labels['sent'] = 'Sent Folder';
 $labels['serverinfo'] = 'Server Details';
 $labels['serverinformation'] = 'Server Information';
 $labels['server'] = 'Server';
-
-$labels['username'] = 'Username';
-
-$labels['webmailsystem'] = 'Webmail system:';
-
-$labels['hostname'] = 'Hostname:';
-$labels['location'] = 'Server Location:';
-
-$labels['portnumbers'] = 'Port numbers:';
-$labels['portnumbersregular'] = 'regular connection to mail server';
-$labels['smtp'] = 'Outgoing SMTP:';
-$labels['imap'] = 'Incoming IMAP:';
-$labels['pop'] = 'Incoming POP:';
-$labels['portnumbersencrypted'] = 'encrypted connection to mail server';
-$labels['smtp-ssl'] = 'Outgoing SMTP-SSL:';
-$labels['imap-ssl'] = 'Incoming IMAP-SSL:';
-$labels['pop-ssl'] = 'Incoming POP-SSL:';
-
-$labels['recommended'] = 'SSL Recommended';
-$labels['port'] = 'Port:';
-$labels['and'] = 'and';
-
-
+$labels['size'] = 'KB';
+$labels['smtp'] = 'Outgoing SMTP';
+$labels['smtp-ssl'] = 'Outgoing SMTP-SSL';
 $labels['spaauthsupported'] = '&nbsp; SPA password encryption supported';
-$labels['web_url'] = 'Webmail URL:';
-$labels['webmail'] = 'Webmail:';
+$labels['storagequota'] = 'Total Storage';
+$labels['trash'] = 'Trash Folder';
+$labels['total'] = 'Total';
+$labels['tutorial'] = 'Tutorial &nbsp;&nbsp;';
+$labels['unread'] = 'Unread';
 $labels['url'] = 'URL';
+$labels['usedstorage'] = 'Used Storage';
+$labels['yes'] = 'Yes';
+$labels['userinfo'] = 'User Info';
+$labels['userid'] = 'System User ID';
+$labels['username'] = 'Username';
+$labels['webmail'] = 'Webmail';
+$labels['webmailsystem'] = 'Webmail system';
+$labels['web_url'] = 'Webmail URL';
 
 
 // %s will be excanged with the appropiate "SMTP after *" below

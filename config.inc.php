@@ -23,6 +23,9 @@ $account_details_config['enable_paypal'] = true;
 // Display Roundcube Version
 $account_details_config['display_rc_version'] = true;
 
+// Display PHP Version
+$account_details_config['display_php_version'] = true;
+
 // Enable display of used/total quota
 $account_details_config['enable_userid'] = true;
 $account_details_config['enable_quota'] = true;
@@ -30,6 +33,9 @@ $account_details_config['enable_quota'] = true;
 // Display last webmail login / create
 $account_details_config['display_create'] = true;
 $account_details_config['display_lastlogin'] = true;
+
+//Enable IP Address
+$account_details_config['enable_ip'] = true;
 
 // Display Support URL - If enabled, Be sure and fill this out in Roundcubes main config.inc.php if not specified during installation
 $account_details_config['enable_support'] = true;
