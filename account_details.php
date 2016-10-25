@@ -6,9 +6,7 @@
  */
 class account_details extends rcube_plugin
 {
-    public $task    = 'mail|addressbook|calendar|settings|dummy';	
-    public $noframe = true;
-    public $noajax  = true;
+    public $task    = 'mail|addressbook|calendar|settings|dummy';
 
     function init()
     {
@@ -16,6 +14,8 @@ class account_details extends rcube_plugin
         $this->register_action('plugin.account_details', array($this, 'infostep'));
         $this->include_script('account_details.js');
 		$this->include_stylesheet('account_details.css');
+		require($this->home . '/lib/Browser.php');
+		require($this->home . '/lib/OS.php');
     }
 		private function _load_config()
 	{
@@ -75,13 +75,18 @@ class account_details extends rcube_plugin
 			$pn_newline = false;
 			$pn_parentheses = true;
 		}
+
+	$browser = new Browser();
+	$width = " <script>document.write(screen.width); </script>";
+	$height = " <script>document.write(screen.height); </script>";
+
 	
 	$table = new html_table(array('cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'account-details'));
     $table = new html_table(array('class' => 'account-details', 'cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0));
 	
 	if ($this->config['enable_paypal']) {
-	$table->add('title', $this->_print_file_contents($this->config['paypal']));
-	$table->add('value', $this->_print_file_contents($this->config['intro']));
+	$table->add('title', $this->_print_file_contents($this->config['intro']));
+	$table->add('paypal', $this->_print_file_contents($this->config['paypal']));
 	}
 	
     $table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('account') . ':')));
@@ -112,40 +117,58 @@ class account_details extends rcube_plugin
     $table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('lastlogin') . ':'));
     $table->add('', rcube_utils::rep_specialchars_output(date_format($lastlogin, $date_format)));
 	}
-    
-			if ($this->config['enable_quota']) {
-				
+ 				
 			$rcmail->storage_connect(true);
 			$imap = $rcmail->imap;
 		
 			$quota = $imap->get_quota();
 			
+			if (!empty($this->config['enable_quota'])) {			
 			if (quota) {
 				$quotatotal = rcmail::get_instance()->show_bytes($quota['total'] * 1024);
 				$quotaused = rcmail::get_instance()->show_bytes($quota['used'] * 1024) . ' (' . $quota['percent'] . '%)';
 
-				if ($quota && ($quota['total']==0 && $rcmail->config->get('quota_zero_as_unlimited'))) {
-					$quotatotal = 'unlimited';
-				}
+			if ($quota && ($quota['total']==0 && $rcmail->config->get('quota_zero_as_unlimited'))) {
+				$quotatotal = 'unlimited';
+			}
 				
-				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('storagequota') . ':'));
-				$table->add('value', $quotatotal);
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('storagequota') . ':'));
+			$table->add('value', $quotatotal);
 				
-				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('usedstorage') . ':'));
-				$table->add('value', $quotaused);
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('usedstorage') . ':'));
+			$table->add('value', $quotaused);
 			}
 			
-			if ($this->config['enable_ip']) {
+			if (!empty($this->config['enable_ip'])) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('ipaddress') . ':'));
 			$table->add('value', $_SERVER["REMOTE_ADDR"]);
 			}
-						
+			
+			if (!empty($this->config['enable_support'])) {				
 			$support_url = $rcmail->config->get('support_url');
-			if (!empty($this->config['enable_support'])) {
-				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('enable_support') . ':'));
-				$table->add('value', html::tag('a', array('href' => $support_url, 'title' => 'Link to your Mail Providers Support Page', 'target' => '_blank'), $support_url));
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('enable_support') . ':'));
+			$table->add('value', html::tag('a', array('href' => $support_url, 'title' => 'Link to your Mail Providers Support Page', 'target' => '_blank'), $support_url));
 			}
 		}
+		
+			if (!empty($this->config['enable_osystem'])) {
+			$table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('usystem') . ':')));
+			$table->add('', '');
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('os') . ':'));
+			$table->add('value', os_info($uagent));
+			
+			if (!empty($this->config['enable_resolution'])) {
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('resolution') . ':'));
+			$table->add('value', rcube_utils::rep_specialchars_output($width . ' x' . rcube_utils::rep_specialchars_output($height)));			
+			}
+			
+			if (!empty($this->config['enable_browser'])) {
+			$table->add('top', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('browser') . '&nbsp;&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('browser-version') .'&nbsp;&nbsp;&#9679;&nbsp;' .  rcube_utils::rep_specialchars_output($this->gettext('browser-user-agent') . ''))));
+			$table->add('value', $browser);	
+			}
+			
+			}
+			
 			if (!empty($this->config['enable_mailbox'])) {
 			$table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('mailbox') . ':')));
 			$table->add('', '');
@@ -154,7 +177,7 @@ class account_details extends rcube_plugin
 			
 			if (!empty($this->config['enable_drafts'])) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('drafts') . ':'));
-			$table->add('value', $imap->count($folder = INBOX.Drafts, 'UNSEEN') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;' . $imap->count(INBOX.drafts, 'ALL') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('total') . '&nbsp;-&nbsp;' . $imap->folder_size(Drafts) . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('size')))));
+			$table->add('value', $imap->count(INBOX.Drafts, 'UNSEEN') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;' . $imap->count(INBOX.drafts, 'ALL') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('total') . '&nbsp;-&nbsp;' . $imap->folder_size(Drafts) . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('size')))));
 			}
 			if (!empty($this->config['enable_sent'])) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('sent') . ':'));
@@ -230,7 +253,7 @@ class account_details extends rcube_plugin
 		} 
 		
 
-		if ($this->config['smtp_auth_required_always']) {
+		if (!empty($this->config['smtp_auth_required_always'])) {
 			$smtp_notes_array_all[] = $this->gettext('authrequired');
 		} else {
 		// SMTP auth is not always enabled, we have to print something based on

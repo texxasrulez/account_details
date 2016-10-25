@@ -74,13 +74,13 @@ span.fieldnote-newline {
 
 /* unvisited link */
 a:link {
-    color: blue;
+    color: red;
 	text-decoration: none;
 }
 
 /* visited link */
 a:visited {
-    color: black;
+    color: blue;
 	text-decoration: none;
 }
 
@@ -94,4 +94,27 @@ a:hover {
 a:active {
     color: blue;
 	text-decoration: none;
+}
+
+td.top_bold {
+	font-weight: bold;
+	vertical-align: top;
+	overflow: auto;
+}
+
+td.top {
+	vertical-align: top;
+	padding-right: 10px;
+	overflow: auto;
+}
+
+td.bottom_bold {
+	font-weight: bold;
+	vertical-align: bottom;
+	overflow: auto;
+}
+
+
+td.paypal {
+    text-align: right;
 }

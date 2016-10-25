@@ -5,10 +5,7 @@
 	default config last updated in version 2009-09-26
 	
 	To hide a row, do not remove the variable, but set it: ''
-	
-	If you want to edit the width of the boxes, see classes 
-		div.settingsbox-account_details, div.settingsbox-custom
-	in account_details.css.
+
 */
 
 $account_details_config = array();
@@ -41,16 +38,25 @@ $account_details_config['enable_ip'] = true;
 $account_details_config['enable_support'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'Paris, Texas'; //Cannot be blank. Messes with tables
+$account_details_config['location'] = 'Somewhere in the World'; //Cannot be blank. Messes with tables
 
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
 $account_details_config['enable_mailbox'] = true;
-// Enable or Disable Individual Folders
+// Enable or Disable Individual Folders - 'enable_mailbox' Must be true
 $account_details_config['enable_drafts'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
 $account_details_config['enable_sent'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
 $account_details_config['enable_junk'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
 $account_details_config['enable_trash'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
 $account_details_config['enable_archive'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
+
+// Display User System Details
+$account_details_config['enable_osystem'] = true;
+
+// Display Browser Information
+$account_details_config['enable_browser'] = true;
+
+// Display Resolution Settings
+$account_details_config['enable_resolution'] = true;
 
 // For the next three URL/host variables, you can use these
 // characters for dynamic replacement:

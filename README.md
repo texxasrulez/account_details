@@ -8,8 +8,11 @@ Adds tab in Setting for more user info.
 * Identities
 * email address
 * storage space quota
-* Mailbox Stats (Still a work in progress)
-* server url, port and other useful info
+* Operating System
+* Web Browser
+* Video Resolution
+* Mailbox Stats (Still a work in progress - only Inbox works)
+* Server URL, port and other useful info
 * CalDAV URL;s
 * CardDAV URL's
 
