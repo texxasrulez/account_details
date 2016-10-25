@@ -41,16 +41,16 @@ $account_details_config['enable_ip'] = true;
 $account_details_config['enable_support'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'The Great State of Texas'; //Cannot be blank. Messes with tables
+$account_details_config['location'] = 'Paris, Texas'; //Cannot be blank. Messes with tables
 
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
 $account_details_config['enable_mailbox'] = true;
 // Enable or Disable Individual Folders
-$account_details_config['enable_drafts'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_sent'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_junk'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_trash'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_archive'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_drafts'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_sent'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_junk'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_trash'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_archive'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
 
 // For the next three URL/host variables, you can use these
 // characters for dynamic replacement:
