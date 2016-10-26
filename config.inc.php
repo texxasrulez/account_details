@@ -10,9 +10,6 @@
 
 $account_details_config = array();
 
-// Debugging
-$config['account_details_debug'] = false;
-
 // DONATION - Just trying to get paid. You can turn off Paypal Button here
 $account_details_config['enable_paypal'] = true;
 
@@ -38,7 +35,7 @@ $account_details_config['enable_ip'] = true;
 $account_details_config['enable_support'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'Somewhere in the World'; //Cannot be blank. Messes with tables
+$account_details_config['location'] = 'Somewhere on the Earth'; //Cannot be blank. Messes with tables
 
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
 $account_details_config['enable_mailbox'] = true;
@@ -48,9 +45,25 @@ $account_details_config['enable_sent'] = false; // Have not figured this out yet
 $account_details_config['enable_junk'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
 $account_details_config['enable_trash'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
 $account_details_config['enable_archive'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
+///////////////////////////////////////////////////////////////////////////////////////////
 
 // Display User System Details
 $account_details_config['enable_osystem'] = true;
+
+// Displays Information for YOUR Server ... USE AT YOUR OWN RISK
+// Display your Server OS
+$account_details_config['enable_server_os'] = true; // Only one of the 3 options below should be true otherwise multiple tables will show OS.
+// Display only Server name
+$account_details_config['enable_server_name'] = false;
+// Display Server name and Release
+$account_details_config['enable_server_rel'] = false;
+// Display Server name Release and version
+$account_details_config['enable_server_ver'] = true;
+
+// Display Server Uptime
+$account_details_config['enable_server_uptime'] = true;
+///////////////////////////////////////////////////////////////////////////////////////////
+
 
 // Display Browser Information
 $account_details_config['enable_browser'] = true;

@@ -4,6 +4,9 @@
  * Sample plugin that adds a new tab to the settings section
  * to display some information about the current user
  */
+ 
+// error_log(print_r($variable, TRUE)); // I only have this here for development
+ 
 class account_details extends rcube_plugin
 {
     public $task    = 'mail|addressbook|calendar|settings|dummy';
@@ -49,12 +52,12 @@ class account_details extends rcube_plugin
 				'message' => "Failed to load Account Details plugin config"), true, true);
 		}
 	}
-
+	
     function infostep()
     {
 		
-        $this->register_handler('plugin.body', array($this, 'infohtml'));
-		
+        $this->register_handler('plugin.body', array($this, 'infohtml'));		
+        //$this->register_action('plugin.account_details', array($this, 'infostep'));
         $rcmail = rcmail::get_instance();
 		$rcmail->output->set_pagetitle($this->gettext('account_details'));
 		$rcmail->output->send('plugin');
@@ -75,10 +78,20 @@ class account_details extends rcube_plugin
 			$pn_newline = false;
 			$pn_parentheses = true;
 		}
-
+		
+		// Grabs Browser Info
 	$browser = new Browser();
+	
+		// Grabs Screen Resolution Info	
 	$width = " <script>document.write(screen.width); </script>";
 	$height = " <script>document.write(screen.height); </script>";
+	
+		// Server Uptime Info
+	$uptime = shell_exec("cut -d. -f1 /proc/uptime");
+	$days = floor($uptime/60/60/24);
+	$hours = $uptime/60/60%24;
+	$mins = $uptime/60%60;
+	$secs = $uptime%60;
 
 	
 	$table = new html_table(array('cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'account-details'));
@@ -202,6 +215,30 @@ class account_details extends rcube_plugin
 				$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('location') . ':'));
 				$table->add('value', $this->config['location']);
 			}
+			
+			if (!empty($this->config['enable_server_os'])) {
+			if (!empty($this->config['enable_server_name'])) {
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('serveros') . ':'));
+			$table->add('value', php_uname ("s"));
+			}
+			if (!empty($this->config['enable_server_rel'])) {
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('serveros') . ':'));
+			$table->add('value', php_uname ("s") . " - " . php_uname ("r"));
+			}
+			if (!empty($this->config['enable_server_ver'])) {
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('serveros') . ':'));
+			$table->add('value', php_uname ("s") . " - " . php_uname ("r") . " - " . php_uname ("v"));
+			}
+			if (!empty($this->config['enable_server_uptime'])) {
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('serveruptime') . ':'));
+			$table->add('value', rcube_utils::rep_specialchars_output($days) . " days, " . rcube_utils::rep_specialchars_output($hours) . " hours, " . rcube_utils::rep_specialchars_output($mins) . " minutes, and " . rcube_utils::rep_specialchars_output($secs) . " seconds");
+			}
+		
+		if ($this->config['display_php_version']) {
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('php_version') . ':'));
+			$table->add('value', PHP_VERSION);
+		}
+		}
 
 		$webmail_url = $this->_host_replace($this->config['webmail_url']);
 		if (!empty($this->config['hostname'])) {
@@ -212,11 +249,6 @@ class account_details extends rcube_plugin
 		if ($this->config['display_rc_version']) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('rc_version') . ':'));
 			$table->add('value', RCMAIL_VERSION);
-		}
-		
-		if ($this->config['display_php_version']) {
-			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('php_version') . ':'));
-			$table->add('value', PHP_VERSION);
 		}
 
 		if (!empty($this->config['hostname_smtp'])) {
