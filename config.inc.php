@@ -35,7 +35,7 @@ $account_details_config['enable_ip'] = true;
 $account_details_config['enable_support'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'The Great State of Texas'; //Cannot be blank. Messes with tables
+$account_details_config['location'] = 'Paris, Texas'; //Cannot be blank. Messes with tables
 
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
 $account_details_config['enable_mailbox'] = true;

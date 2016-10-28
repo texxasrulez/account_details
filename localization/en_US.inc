@@ -87,6 +87,7 @@ $labels['url'] = 'URL';
 $labels['usedstorage'] = 'Used Storage';
 $labels['userinfo'] = 'User Info';
 $labels['userid'] = 'System User ID';
+$labels['used'] = 'Used';
 $labels['username'] = 'Username';
 $labels['webmail'] = 'Webmail';
 $labels['webmailsystem'] = 'Webmail system';

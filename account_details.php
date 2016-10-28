@@ -96,7 +96,7 @@ class account_details extends rcube_plugin
 	$mins = $uptime/60%60;
 	$secs = $uptime%60;
 	
-//	$details = json_decode(file_get_contents("http://ipinfo.io/"));
+	$details = json_decode(file_get_contents("http://ipinfo.io/"));
 
 	
 	$table = new html_table(array('cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'account-details'));
@@ -159,8 +159,7 @@ class account_details extends rcube_plugin
 			
 			if (!empty($this->config['enable_ip'])) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('ipaddress') . ':'));
-//			$table->add('value', $_SERVER["REMOTE_ADDR"] . ' - ' . $details->city . ',&nbsp;' . $details->region);
-			$table->add('value', $_SERVER["REMOTE_ADDR"]);
+			$table->add('value', $_SERVER["REMOTE_ADDR"] . ' - ' . $details->city . ',&nbsp;' . $details->region);
 			}
 			
 			if (!empty($this->config['enable_support'])) {				
@@ -237,7 +236,7 @@ class account_details extends rcube_plugin
 			}
 			if (!empty($this->config['enable_server_memory'])) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('servermemory') . ':'));
-			$table->add('value', round(get_server_memory_usage(),2) . ' MB Used');
+			$table->add('value', round(get_server_memory_usage(),2) . ' % ' . rcube_utils::rep_specialchars_output($this->gettext('used')));
 			}
 			if (!empty($this->config['enable_server_cpu'])) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('servercpu') . ':'));
