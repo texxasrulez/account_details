@@ -19,6 +19,7 @@
 $labels = array();
 $labels['account'] = 'User Details';
 $labels['account_details'] = 'Account Details';
+$labels['account_details_mo'] = 'Account Details Plugin';
 $labels['accountinformation'] = 'Account Details';
 $labels['and'] = 'and';
 $labels['auth'] = 'Authentication';
@@ -68,6 +69,8 @@ $labels['sent'] = 'Sent Folder';
 $labels['serverinfo'] = 'Server Details';
 $labels['serverinformation'] = 'Server Information';
 $labels['server'] = 'Server';
+$labels['servercpu'] = 'Server CPU Load';
+$labels['servermemory'] = 'Server Memory';
 $labels['serveros'] = 'Server OS';
 $labels['serveruptime'] = 'Server Uptime';
 $labels['size'] = 'KB';
@@ -82,13 +85,13 @@ $labels['unread'] = 'Unread';
 $labels['usystem'] = 'User System Details';
 $labels['url'] = 'URL';
 $labels['usedstorage'] = 'Used Storage';
-$labels['yes'] = 'Yes';
 $labels['userinfo'] = 'User Info';
 $labels['userid'] = 'System User ID';
 $labels['username'] = 'Username';
 $labels['webmail'] = 'Webmail';
 $labels['webmailsystem'] = 'Webmail system';
 $labels['web_url'] = 'Webmail URL';
+$labels['yes'] = 'Yes';
 
 
 // %s will be excanged with the appropiate "SMTP after *" below

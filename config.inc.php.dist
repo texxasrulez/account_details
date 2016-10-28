@@ -35,16 +35,16 @@ $account_details_config['enable_ip'] = true;
 $account_details_config['enable_support'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'Somewhere on the Earth'; //Cannot be blank. Messes with tables
+$account_details_config['location'] = 'Paris, Texas'; //Cannot be blank. Messes with tables
 
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
 $account_details_config['enable_mailbox'] = true;
 // Enable or Disable Individual Folders - 'enable_mailbox' Must be true
-$account_details_config['enable_drafts'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_sent'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_junk'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_trash'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_archive'] = false; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_drafts'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_sent'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_junk'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_trash'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
+$account_details_config['enable_archive'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 // Display User System Details
@@ -56,9 +56,15 @@ $account_details_config['enable_server_os'] = true; // Only one of the 3 options
 // Display only Server name
 $account_details_config['enable_server_name'] = false;
 // Display Server name and Release
-$account_details_config['enable_server_rel'] = false;
+$account_details_config['enable_server_rel'] = true;
 // Display Server name Release and version
-$account_details_config['enable_server_ver'] = true;
+$account_details_config['enable_server_ver'] = false;
+
+// Display Server CPU Load
+$account_details_config['enable_server_cpu'] = true;
+
+// Display Server Memory
+$account_details_config['enable_server_memory'] = true;
 
 // Display Server Uptime
 $account_details_config['enable_server_uptime'] = true;

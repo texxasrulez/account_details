@@ -33,6 +33,7 @@ table.account-details {
 table.account-details td {
 	padding: 0 0 0 0;
 	overflow: auto;
+	background: #eee;
 }
 
 
@@ -70,30 +71,6 @@ span.fieldnote-newline {
 	display: block;
 	margin-top: 2px;
 	overflow: auto;
-}
-
-/* unvisited link */
-a:link {
-    color: red;
-	text-decoration: none;
-}
-
-/* visited link */
-a:visited {
-    color: blue;
-	text-decoration: none;
-}
-
-/* mouse over link */
-a:hover {
-    color: green;
-	text-decoration: underline;
-}
-
-/* selected link */
-a:active {
-    color: blue;
-	text-decoration: none;
 }
 
 td.top_bold {

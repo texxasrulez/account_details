@@ -1,0 +1,52 @@
+Oct 28, 2016
+*Fixed: All mailboxes gets checked for Unread and Total Count.
+
+
+Oct 26, 2016 Ver 1.0.0
+
+Initial Release
+
+Features:
+* User Details
+** System User ID:	1
+** Edentity Name
+** Email Address
+** Account Create Date
+** Last Login
+** Total Storage
+** Used Storage
+** Current IP Address
+** Support URL
+
+* User System Details
+** Operating System
+** Screen Resolution
+** Web Browser:
+ ** Version
+ ** User Agent
+
+* Mailbox Details:
+** Inbox
+** Drafts Folder
+** Sent Folder
+** Trash Folder
+** Junk Folder
+** Archive Folder
+
+* Server Details
+** Server Location
+** Server OS
+** Server Memory
+** Server CPU Load
+** Server Uptime
+** PHP Version
+** Webmail URL
+** Roundcube Version
+** Outgoing SMTP
+** Incoming IMAP
+
+
+* Calendar URL's
+
+* Address Books
+
