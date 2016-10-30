@@ -16,6 +16,7 @@ Adds tab in Setting for more user info.
 * CalDAV URL;s
 * CardDAV URL's
 * and more
+
 You can enable/disable certain things via the config.inc.php
 
 Installation
