@@ -1,5 +1,8 @@
-Oct 28, 2016
-*Fixed: All mailboxes gets checked for Unread and Total Count.
+Oct 30, 2016
+* Added Plugin Info
+
+Oct 28, 2016 Ver 1.1.0
+* Fixed: All mailboxes gets checked for Unread and Total Count.
 
 
 Oct 26, 2016 Ver 1.0.0
@@ -8,7 +11,7 @@ Initial Release
 
 Features:
 * User Details
-** System User ID
+** System User ID:	1
 ** Edentity Name
 ** Email Address
 ** Account Create Date
@@ -25,7 +28,7 @@ Features:
  ** Version
  ** User Agent
 
-* Mailbox Details
+* Mailbox Details:
 ** Inbox
 ** Drafts Folder
 ** Sent Folder

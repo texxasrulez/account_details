@@ -10,12 +10,15 @@
 
 $account_details_config = array();
 
+
 // DONATION - Just trying to get paid. You can turn off Paypal Button here
 $account_details_config['enable_paypal'] = true;
 
 // === ACCOUNT/WEBMAIL/SERVER INFO ===================
 // Display Roundcube Version
 $account_details_config['display_rc_version'] = true;
+// Display Plugin List
+$account_details_config['rc_pluginlist'] = true;
 
 // Display PHP Version
 $account_details_config['display_php_version'] = true;
@@ -28,37 +31,49 @@ $account_details_config['enable_quota'] = true;
 $account_details_config['display_create'] = true;
 $account_details_config['display_lastlogin'] = true;
 
-//Enable IP Address
-$account_details_config['enable_ip'] = true;
+// Enable User IP Address
+$account_details_config['enable_ip'] = true; // Simple IP Address from your system IP Only - Shows LAN IP if behind firewall
+$account_details_config['useipinfo'] = false; // Displays IP, City and Region provided by http://ipinfo.io/ - Free up to 1000 hits a day - No Registration required
 
 // Display Support URL - If enabled, Be sure and fill this out in Roundcubes main config.inc.php if not specified during installation
 $account_details_config['enable_support'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'Paris, Texas'; //Cannot be blank. Messes with tables
+$account_details_config['location'] = 'The Great State of Texas'; // Cannot be blank. Messes with tables
 
+//========= Mailbox Details ==========================
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
 $account_details_config['enable_mailbox'] = true;
 // Enable or Disable Individual Folders - 'enable_mailbox' Must be true
-$account_details_config['enable_drafts'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_sent'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_junk'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_trash'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
-$account_details_config['enable_archive'] = true; // Have not figured this out yet. Only can get INBOX Working. I need help
-///////////////////////////////////////////////////////////////////////////////////////////
+$account_details_config['enable_drafts'] = true; 
+$account_details_config['enable_sent'] = true; 
+$account_details_config['enable_junk'] = true; 
+$account_details_config['enable_trash'] = true; 
+$account_details_config['enable_archive'] = true; 
+//====================================================
 
 // Display User System Details
 $account_details_config['enable_osystem'] = true;
 
-// Displays Information for YOUR Server ... USE AT YOUR OWN RISK
+// Display Browser Information
+$account_details_config['enable_browser'] = true;
+
+// Display Resolution Settings
+$account_details_config['enable_resolution'] = true;
+
+//======== Hosting Server Details ====================
+// Displays Information for YOUR Server ... USE AT YOUR OWN RISK TRUST IN USERS REQUIRED
+
 // Display your Server OS
 $account_details_config['enable_server_os'] = true; // Only one of the 3 options below should be true otherwise multiple tables will show OS.
+	//==== Enable only one out of 3 below ===============
 // Display only Server name
 $account_details_config['enable_server_name'] = false;
 // Display Server name and Release
 $account_details_config['enable_server_rel'] = true;
 // Display Server name Release and version
 $account_details_config['enable_server_ver'] = false;
+	//===================================================
 
 // Display Server CPU Load
 $account_details_config['enable_server_cpu'] = true;
@@ -68,14 +83,7 @@ $account_details_config['enable_server_memory'] = true;
 
 // Display Server Uptime
 $account_details_config['enable_server_uptime'] = true;
-///////////////////////////////////////////////////////////////////////////////////////////
-
-
-// Display Browser Information
-$account_details_config['enable_browser'] = true;
-
-// Display Resolution Settings
-$account_details_config['enable_resolution'] = true;
+//====================================================
 
 // For the next three URL/host variables, you can use these
 // characters for dynamic replacement:
@@ -127,7 +135,7 @@ $account_details_config['smtp_auth_required_else'] = true;  // SMTP auth require
 
 
 // Add a (recommended) note to the SSL port numbers header?
-$account_details_config['recommendssl'] = true; //TODO Doesn't work as expexted
+$account_details_config['recommendssl'] = true; // TODO Doesn't work as expexted
 
 // Add a newline between the port numbers and the port notes
 // if false - put in pharentesises instead
