@@ -31,4 +31,9 @@ $config['plugins'] = array('account_details');
 
 Enjoy!
 
+Screenshots
+-----------
+
+![Alt text](/tests/screenshot.png?raw=true "Account Details Screenshot")
+
 More to come
