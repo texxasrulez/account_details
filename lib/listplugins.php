@@ -1,5 +1,5 @@
 <?php
-function rcmail_plugins_list($attrib)
+function rcmail_ad_plugin_list($attrib)
 {
     global $RCMAIL;
 

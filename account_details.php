@@ -274,7 +274,7 @@ class account_details extends rcube_plugin
 		
 		if ($this->config['rc_pluginlist']) {
 			$table->add('top', '&nbsp;&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('installedplugins') . ':'));
-			$table->add('value', rcmail_plugins_list($attrib));
+			$table->add('value', rcmail_ad_plugin_list($attrib));
 			$table->add('title', '&nbsp;');
 			$table->add('value', '&nbsp;');
 			}

@@ -1,6 +1,6 @@
 Account Details Roundcube Plugins
 
-I have merged 3 plugins, userinfo, moreuserinfo and serverinfo into one .. 
+I have merged 3 plugins, userinfo, moreuserinfo and serverinfo into one and then added a lot of my own ideas .. 
 
 Account Details Plugin for Roundcube
 
@@ -15,6 +15,7 @@ Adds tab in Setting for more user info.
 * Server URL, port and other useful info
 * CalDAV URL;s
 * CardDAV URL's
+* and more
 
 You can enable/disable certain things via the config.inc.php
 
