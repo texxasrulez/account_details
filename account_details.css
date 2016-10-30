@@ -24,16 +24,17 @@ div.settingsbox-account-details-custom div.boxcontent {
 
 table.account-details {
 	margin: 0;
-	padding: 0px 0 0px 0;
+	padding: 0px 0px 0px 0px;
 	width: 100%;
 	overflow: auto;
 }
 
 
 table.account-details td {
-	padding: 0 0 0 0;
+	padding: 0 0 3px 0;
 	overflow: auto;
-	background: #eee;
+/*	background: #eee; */
+
 }
 
 
@@ -94,4 +95,43 @@ td.bottom_bold {
 
 td.paypal {
     text-align: right;
+}
+
+table.account-details-list {
+	margin: 0;
+	padding: 0px 0 0px 0;
+	width: auto;
+	text-align: left;
+	overflow: auto;
+}
+
+
+table.account-details-list td {
+	padding: 0 25px 0px 0;
+	overflow: auto;
+/*	background: #eee; */
+
+}
+
+
+table.account-details-list td.header {
+	padding-top: 0px;
+	overflow: auto;
+	
+}
+
+table.account-details-list td.headerfirst {
+	overflow: auto;
+	
+}
+
+table.account-details-list td.title {
+	padding-right: 10px;
+	overflow: auto;
+	
+}
+
+table.account-details-list td.categorynote {
+	font-style: italic;
+	overflow: auto;
 }

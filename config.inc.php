@@ -4,7 +4,7 @@
 	Account Details options
 	default config last updated in version 2009-09-26
 	
-	To hide a row, do not remove the variable, but set it: ''
+	To hide a row, do not remove the variable, but set it: 'false'
 
 */
 

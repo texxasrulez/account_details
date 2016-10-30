@@ -34,12 +34,15 @@ function rcmail_ad_plugin_list($attrib)
     ksort($plugin_info, SORT_LOCALE_STRING);
 
     $table = new html_table($attrib);
+	$table = new html_table(array('cols' => 4, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'account-details-list'));
 
     // add table header
-    $table->add_header('name', $RCMAIL->gettext('plugin'));
+    $table->add_header('name', $RCMAIL->gettext('plugin') . '&nbsp;' . $RCMAIL->gettext('namex'));
     $table->add_header('version', $RCMAIL->gettext('version'));
     $table->add_header('license', $RCMAIL->gettext('license'));
     $table->add_header('source', $RCMAIL->gettext('source'));
+	
+	html::tag('hr');
 
     foreach ($plugin_info as $name => $data) {
         $uri = $data['src_uri'] ?: $data['uri'];
