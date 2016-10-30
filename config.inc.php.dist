@@ -39,7 +39,7 @@ $account_details_config['useipinfo'] = true; // Displays IP, City and Region pro
 $account_details_config['enable_support'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'The Great State of Texas'; // Cannot be blank. Messes with tables
+$account_details_config['location'] = 'Klaatu Nebula'; // Cannot be blank. Messes with tables
 
 //========= Mailbox Details ==========================
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
