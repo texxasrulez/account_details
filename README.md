@@ -1,4 +1,5 @@
 Account Details Roundcube Plugins
+---------------------------------
 
 I have merged 3 plugins, userinfo, moreuserinfo and serverinfo into one .. 
 
