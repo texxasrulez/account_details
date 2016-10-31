@@ -23,7 +23,7 @@ Installation
 -------------
 Upload contents to '/roundcube_location/plugins/account_details/'.
 
-Copy folder named 'copy_to_web_root' into your webroot. Basically want your url like 'http(s):domain.ltd/tutorials/etc/'
+Copy folder named 'copy_to_web_root' into your webroot. Basically want your url like 'http(s)://domain.ltd/tutorials/dir_structure/'
 I just have empty html index files. You can customized your tutorials to suit your needs and custom to your services.
 
 Enable plugin via config.inc.php with
