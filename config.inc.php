@@ -15,13 +15,11 @@ $account_details_config = array();
 $account_details_config['enable_paypal'] = true;
 
 // === ACCOUNT/WEBMAIL/SERVER INFO ===================
-// Display Roundcube Version
+// Display Roundcube Info
+$account_details_config['display_rc'] = true;
 $account_details_config['display_rc_version'] = true;
 // Display Plugin List
 $account_details_config['rc_pluginlist'] = true;
-
-// Display PHP Version
-$account_details_config['display_php_version'] = true;
 
 // Enable display of used/total quota
 $account_details_config['enable_userid'] = true;
@@ -33,13 +31,13 @@ $account_details_config['display_lastlogin'] = true;
 
 // Enable User IP Address
 $account_details_config['enable_ip'] = true; // Simple IP Address from your system IP Only - Shows LAN IP if behind firewall
-$account_details_config['useipinfo'] = false; // Displays IP, City and Region provided by http://ipinfo.io/ - Free up to 1000 hits a day - No Registration required
+$account_details_config['useipinfo'] = true; // Displays IP, City and Region provided by http://ipinfo.io/ - Free up to 1000 hits a day - No Registration required
 
 // Display Support URL - If enabled, Be sure and fill this out in Roundcubes main config.inc.php if not specified during installation
 $account_details_config['enable_support'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'The Great State of Texas'; // Cannot be blank. Messes with tables
+$account_details_config['location'] = 'The Klaatu Nebula'; // Cannot be blank. Messes with tables
 
 //========= Mailbox Details ==========================
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
@@ -83,6 +81,12 @@ $account_details_config['enable_server_memory'] = true;
 
 // Display Server Uptime
 $account_details_config['enable_server_uptime'] = true;
+// Display PHP Server 
+$account_details_config['display_php_version'] = true;
+// Display HTTP Server 
+$account_details_config['display_http_server'] = true;
+// Display Server Admin Email 
+$account_details_config['display_admin_email'] = true;
 //====================================================
 
 // For the next three URL/host variables, you can use these

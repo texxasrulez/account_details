@@ -41,8 +41,6 @@ function rcmail_ad_plugin_list($attrib)
     $table->add_header('version', $RCMAIL->gettext('version'));
     $table->add_header('license', $RCMAIL->gettext('license'));
     $table->add_header('source', $RCMAIL->gettext('source'));
-	
-	html::tag('hr');
 
     foreach ($plugin_info as $name => $data) {
         $uri = $data['src_uri'] ?: $data['uri'];
