@@ -11,7 +11,7 @@ Adds tab in Setting for more user info.
 * Operating System
 * Web Browser
 * Video Resolution
-* Mailbox Stats (Still a work in progress - only Inbox works)
+* Mailbox Stats
 * Server URL, port and other useful info
 * CalDAV URL;s
 * CardDAV URL's
