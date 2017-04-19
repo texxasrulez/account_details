@@ -4,7 +4,7 @@
     "description": "Sample plugin that adds a new tab to the settings section to display additional information about the current user.",
     "homepage": "https://github.com/texxasrulez/Account-Details-for-Roundcube",
     "license": "GPLv3+",
-    "version": "1.1.0",
+    "version": "2.0",
     "authors": [
         {
             "name": "Gene Hawkins",
@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.6.0",
         "roundcube/plugin-installer": ">=0.1.3"
     }
 }
