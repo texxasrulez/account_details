@@ -452,7 +452,7 @@ class account_details extends rcube_plugin
           }
         }
         $table->add('title','&nbsp;&#9679; ' . $key);
-        $table->add('', html::tag('input', array('value' => $url, 'onclick' => 'select_all(this)', 'name' => 'url',  'type' => 'text', 'size' => '100')));
+        $table->add('', html::tag('input', array('class' => 'glowing-border', 'value' => $url, 'onclick' => 'select_all(this)', 'name' => $key,  'type' => 'text')));
       }
       if($clients == '' && $rcmail->config->get('account_details_show_tutorial_links', true)){
         $clients = ('');
@@ -493,7 +493,7 @@ class account_details extends rcube_plugin
           }
         }
         $table->add('title', '&nbsp;&#9679; ' . $key);
-        $table->add('', html::tag('input', array('value' => $url, 'onclick' => 'select_all(this)', 'name' => 'url',  'type' => 'text', 'size' => '100')));
+        $table->add('', html::tag('input', array('value' => $url, 'onclick' => 'select_all(this)', 'name' => $key,  'type' => 'text')));
       }
       if($clients == '' && $rcmail->config->get('account_details_show_tutorial_links', true)){
         $clients = html::tag('hr');
