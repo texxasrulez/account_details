@@ -16,7 +16,8 @@ class account_details extends rcube_plugin
         $this->add_texts('localization/', array('account_details'));
         $this->register_action('plugin.account_details', array($this, 'infostep'));
         $this->include_script('account_details.js');
-        $this->include_script('lib/clippy.js');
+//        $this->include_script('lib/copybutton.js');
+//        $this->include_script('lib/rc_check.js');
 		$this->include_stylesheet('account_details.css');
 		require($this->home . '/lib/mail_count.php');
 		require($this->home . '/lib/Browser.php');
@@ -100,6 +101,7 @@ class account_details extends rcube_plugin
 	
 	$domainpart = $temp[1] ? $temp[1] : 'default';
     $skin = $rcmail->config->get('skin', 'classic');
+	$url_box_length = $this->config['urlboxlength'];
 	
 	$table = new html_table(array('cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'account-details'));
     $table = new html_table(array('class' => 'account-details', 'cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0));
@@ -174,7 +176,7 @@ class account_details extends rcube_plugin
 		if (!empty($this->config['enable_support'])) {				
 			$support_url = $rcmail->config->get('support_url');
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('support') . ':'));
-			$table->add('value', html::tag('a', array('href' => $support_url, 'title' => 'Link to your Mail Providers Support Page', 'target' => '_blank'), $support_url));
+			$table->add('value', html::tag('a', array('href' => $support_url, 'title' => $this->gettext('supporturl'), 'target' => '_blank'), $support_url));
 			}
 		
 		if (!empty($this->config['enable_osystem'])) {
@@ -231,17 +233,17 @@ class account_details extends rcube_plugin
 			$table->add('value', $this->config['location']);
 			}
 			
-		if (!empty($this->config['enable_server_name'])) {
+		if (!empty($this->config['enable_server_osname'])) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('os')  . ':')));
 			$table->add('value', php_uname ("s"));
 			}
 			
-		if (!empty($this->config['enable_server_rel'])) {
+		if (!empty($this->config['enable_server_osrel'])) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('os')  . ':')));
 			$table->add('value', php_uname ("s") . " - " . php_uname ("r"));
 			}
 			
-		if (!empty($this->config['enable_server_ver'])) {
+		if (!empty($this->config['enable_server_osver'])) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('os')  . ':')));
 			$table->add('value', php_uname ("s") . " - " . php_uname ("r") . " - " . php_uname ("v"));
 			}
@@ -272,8 +274,9 @@ class account_details extends rcube_plugin
 			}
 		
 		if (!empty($this->config['display_admin_email'])) {
+			$webmaster_email = $_SERVER[SERVER_ADMIN];
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . '&nbsp;' .  'Admin ' . rcube_utils::rep_specialchars_output($this->gettext('email') . ':')));
-			$table->add('value', $_SERVER[SERVER_ADMIN]);
+			$table->add('value', html::tag('a', array('href' => 'mailto:' . $webmaster_email, 'title' => $this->gettext('contactadmin')), $webmaster_email));
 			}
 			
 		// Add custom fields
@@ -409,14 +412,14 @@ class account_details extends rcube_plugin
 		
 		$rc_url = $this->gettext('version');
 		if ($this->config['display_rc_version']) {
-			$table->add('title', '&nbsp;&#9679;&nbsp;' . html::tag('a', array('href' => 'http://roundcube.net', 'title' => 'Roundcube Webmail', 'target' => '_blank'), 'Roundcube &nbsp;' . $rc_url) . ':');
-			$table->add('value', RCMAIL_VERSION);
+			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('currver') . ':'));
+			$table->add('value',  'RC v' . RCMAIL_VERSION);
 		}
 		
 		$webmail_url = $this->_host_replace($this->config['webmail_url']);
 		if (!empty($this->config['hostname'])) {
 			$table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('web_url') . ':'));
-			$table->add('value', html::tag('a', array('href' => $webmail_url, 'title' => 'Main URL to access your email', 'target' => '_top'), $webmail_url));
+			$table->add('value', html::tag('a', array('href' => $webmail_url, 'title' => $this->gettext('web_url_alt'), 'target' => '_top'), $webmail_url));
 		}
 		
 		if ($this->config['rc_pluginlist']) {
@@ -452,7 +455,7 @@ class account_details extends rcube_plugin
           }
         }
         $table->add('title','&nbsp;&#9679; ' . $key);
-        $table->add('', html::tag('input', array('class' => 'glowing-border', 'value' => $url, 'onclick' => 'select_all(this)', 'name' => $key,  'type' => 'text')));
+        $table->add('', html::tag('input', array('id' => $url, 'class' => 'account-details', 'value' => $url, 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
       }
       if($clients == '' && $rcmail->config->get('account_details_show_tutorial_links', true)){
         $clients = ('');
@@ -493,7 +496,7 @@ class account_details extends rcube_plugin
           }
         }
         $table->add('title', '&nbsp;&#9679; ' . $key);
-        $table->add('', html::tag('input', array('value' => $url, 'onclick' => 'select_all(this)', 'name' => $key,  'type' => 'text')));
+        $table->add('', html::tag('input', array('id' => $url, 'class' => 'account-details', 'value' => $url, 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
       }
       if($clients == '' && $rcmail->config->get('account_details_show_tutorial_links', true)){
         $clients = html::tag('hr');
