@@ -10,9 +10,14 @@
 
 $account_details_config = array();
 
-
-// DONATION - Just trying to get paid. You can turn off Paypal Button here
+// DONATION - Just trying to get paid. You can hide Paypal Button here
 $account_details_config['enable_paypal'] = true;
+
+// Bullet Style - Default &#9679;
+$account_details_config['bulletstyle'] = '&#9679;'; // Insert your favorite unicode here. https://www.w3schools.com/charsets/ref_utf_misc_symbols.asp
+
+// URL Text box length - Good if you have a long domain name
+$account_details_config['urlboxlength'] = '90'; // Numbers only
 
 // === ACCOUNT/WEBMAIL/SERVER INFO ===================
 // Display Roundcube Info
@@ -66,11 +71,11 @@ $account_details_config['enable_resolution'] = true;
 $account_details_config['enable_server_os'] = true; // Only one of the 3 options below should be true otherwise multiple tables will show OS.
 	//==== Enable only one out of 3 below ===============
 // Display only Server name
-$account_details_config['enable_server_name'] = false;
+$account_details_config['enable_server_os_name'] = true;
 // Display Server name and Release
-$account_details_config['enable_server_rel'] = true;
+$account_details_config['enable_server_os_rel'] = false;
 // Display Server name Release and version
-$account_details_config['enable_server_ver'] = false;
+$account_details_config['enable_server_os_ver'] = false;
 	//===================================================
 
 // Display Server CPU Load
@@ -105,12 +110,9 @@ $account_details_config['webmail_url'] = '%p://%s/mail/';
 // Server hostname
 $account_details_config['hostname'] = '%S';
 // If you have different server host names per protocol
-$account_details_config['hostname_smtp'] = 'smtp.%S';
-$account_details_config['hostname_imap'] = 'imap.%S';
-$account_details_config['hostname_pop'] = 'pop.%S';
-
-// Enable CalDAV and CardDAV URL's
-$account_details_config['enable_dav_urls'] = true;
+$account_details_config['hostname_smtp'] = 'smtp.domain.com';
+$account_details_config['hostname_imap'] = 'imap.domain.com';
+$account_details_config['hostname_pop'] = 'pop.domain.com';
 
 // === SERVER CAPABILITIES ==========================================
 
@@ -119,7 +121,7 @@ $account_details_config['enable_dav_urls'] = true;
 $account_details_config['port_smtp'] = array('25');
 $account_details_config['port_imap'] = array('143');
 $account_details_config['port_pop'] = array('110');
-$account_details_config['port_smtp-ssl'] = array('587');
+$account_details_config['port_smtp-ssl'] = array('465');
 $account_details_config['port_imap-ssl'] = array('993');
 $account_details_config['port_pop-ssl'] = array('995');
 
@@ -144,6 +146,9 @@ $account_details_config['recommendssl'] = true; // TODO Doesn't work as expexted
 // Add a newline between the port numbers and the port notes
 // if false - put in pharentesises instead
 $account_details_config['pn_newline'] = false;
+
+// Enable CalDAV and CardDAV URL's
+$account_details_config['enable_dav_urls'] = true;
 
 // === CUSTOM INFORMATION: ADD TO SERVER INFO BOX ======================
 
@@ -196,9 +201,9 @@ $account_details_config['pn_newline'] = false;
 
 // Include a file with customized text in it's own box at the bottom
 // This implementation is limited - PHP not possible, no language handling
-//$account_details_config['enable_custombox'] = true; //TODO
-//$account_details_config['custombox_header'] = 'Help a Brotha Out!';
-//$account_details_config['custombox_file'] = 'plugins/account_details/custom_includes/example_box_1.html';
+$account_details_config['enable_custombox'] = false; //TODO
+$account_details_config['custombox_header'] = 'Help a Brotha Out!';
+$account_details_config['custombox_file'] = 'plugins/account_details/custom_includes/example_box_1.html';
 
 $account_details_config['intro'] = 'plugins/account_details/custom_includes/intro.html';
 $account_details_config['paypal'] = 'plugins/account_details/custom_includes/paypal.html';
