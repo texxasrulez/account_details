@@ -231,17 +231,17 @@ class account_details extends rcube_plugin
 			$table->add('value', $this->config['location']);
 			}
 			
-		if (!empty($this->config['enable_server_osname'])) {
+		if (!empty($this->config['enable_server_os_name'])) {
 			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('os')  . ':')));
 			$table->add('value', php_uname ("s"));
 			}
 			
-		if (!empty($this->config['enable_server_osrel'])) {
+		if (!empty($this->config['enable_server_os_rel'])) {
 			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('os')  . ':')));
 			$table->add('value', php_uname ("s") . " - " . php_uname ("r"));
 			}
 			
-		if (!empty($this->config['enable_server_osver'])) {
+		if (!empty($this->config['enable_server_os_ver'])) {
 			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('os')  . ':')));
 			$table->add('value', php_uname ("s") . " - " . php_uname ("r") . " - " . php_uname ("v"));
 			}
