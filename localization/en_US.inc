@@ -2,51 +2,61 @@
 
 /*
  +-----------------------------------------------------------------------+
- | plugins/account_details/localization/<lang>.inc                              |
+ | plugins/account_details/localization/<lang>.inc                       |
  |                                                                       |
- | Localization file of the Roundcube Webmail Account Details plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
+ | Localization file of the Roundcube Webmail Account Details plugin     |
  |                                                                       |
  +-----------------------------------------------------------------------+
 
 */
 
 $labels = array();
+$labels['addressbook'] = 'Contacts';
 $labels['account_details'] = 'Account Details';
 $labels['account_details_mo'] = 'Account Details Plugin';
 $labels['and'] = 'and';
+$labels['android'] = 'Android';
 $labels['archive'] = 'Archive';
 $labels['auth'] = 'Authentication';
 $labels['authrequired'] = 'Authentication Required';
 $labels['back'] = 'Back';
 $labels['browser-user-agent'] = 'User Agent';
+$labels['caldav'] = 'CalDAV';
+$labels['caldavsync'] = 'CalDAV-sync';
 $labels['calendars'] = 'Calendars';
+$labels['carddav'] = 'CardDAV';
+$labels['carddavsync'] = 'CardDAV-sync';
 $labels['clear_trash'] = 'Empty Trash';
 $labels['clients'] = 'Recommended clients which support %s protocol';
+$labels['contactadmin'] = 'Send an email to Webmail Administrator';
+$labels['contacteditor'] = 'Contact Editor';
 $labels['copiedtoclipboard'] = 'Copied to clipboard';
 $labels['copytoclipboard'] = 'Copy to clipboard';
 $labels['cpu'] = 'CPU Load';
 $labels['created'] = 'Created';
-$labels['currver'] = 'Current Version';
+$labels['currver'] = 'Current Version Installed';
+$labels['days'] = 'Days,';
 $labels['description'] = 'Get detailed information about your account.';
 $labels['default'] = 'Default';
 $labels['defaultidentity'] = 'Name';
 $labels['details'] = 'Details';
+$labels['downloadupdate'] = 'Download Newest Version of Roundcube';
 $labels['emailaddress'] = 'Email Address';
 $labels['encryption'] = 'Encryption';
+$labels['htmlserver'] = 'HTML Server';
 $labels['hostname'] = 'Hostname';
+$labels['hours'] = 'Hours,';
 $labels['imap'] = 'Incoming IMAP';
 $labels['imap-ssl'] = 'Incoming IMAP-SSL';
 $labels['ipaddress'] = 'Current IP Address';
-$labels['iplocation'] = 'IP Address from';
-$labels['latestversion'] = 'Latest Version';
+$labels['iphone'] = 'iPhone';
+$labels['is_available'] = 'is available for ';
+$labels['latestversion'] = 'Latest Version Online';
+$labels['licenseagreement'] = 'Read the License Agreement';
+$labels['lightning'] = 'Lightning';
 $labels['mailboxdetails'] = 'Mailbox Details';
+$labels['minutes'] = 'Minutes and';
 $labels['memory'] = 'Memory';
-$labels['no'] = 'No';
 $labels['os'] = 'Operating System';
 $labels['php_version'] = 'PHP Version';
 $labels['pluginname'] = 'Account Details';
@@ -57,17 +67,21 @@ $labels['port'] = 'Port';
 $labels['portnumbers'] = 'Port Numbers';
 $labels['portnumbersencrypted'] = 'Encrypted Connection';
 $labels['portnumbersregular'] = 'Unencrypted Connection';
-$labels['rc_version'] = 'Roundcube Version';
+$labels['rc_version'] = 'Current Roundcube Version';
 $labels['rcdetails'] = 'Roundcube Details';
 $labels['recommended'] = 'SSL Recommended';
 $labels['resolution'] = 'Screen Resolution';
+$labels['seconds'] = 'Seconds';
 $labels['serverinformation'] = 'Server Information';
 $labels['serverlocation'] = 'Server Location';
 $labels['servermemory'] = 'Server Memory';
 $labels['smtp'] = 'Outgoing SMTP';
 $labels['smtp-ssl'] = 'Outgoing SMTP-SSL';
+$labels['sogoconn'] = 'SOGO Connector';
 $labels['spaauthsupported'] = '&nbsp; SPA password encryption supported';
 $labels['storagequota'] = 'Total Storage';
+$labels['supporturl'] = 'Link to your Mail Providers Support Page';
+$labels['thunderbird'] = 'Thunderbird';
 $labels['total'] = 'Total';
 $labels['tutorial'] = 'Tutorial &nbsp;&nbsp;';
 $labels['uptime'] = 'Uptime';
@@ -82,8 +96,7 @@ $labels['webbrowser'] = 'Web Browser';
 $labels['webmail'] = 'Webmail';
 $labels['webmailsystem'] = 'Webmail system';
 $labels['web_url'] = 'Webmail URL';
-$labels['yes'] = 'Yes';
-
+$labels['web_url_alt'] = 'URL to access your Webmail';
 
 // %s will be excanged with the appropiate "SMTP after *" below
 $labels['openrelaylocal'] = 'Permitted to send when on same network as server';
