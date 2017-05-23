@@ -34,7 +34,7 @@ function rcmail_ad_plugin_list($attrib)
     ksort($plugin_info, SORT_LOCALE_STRING);
 
     $table = new html_table($attrib);
-	$table = new html_table(array('cols' => 4, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'account-details-list'));
+	$table = new html_table(array('cols' => 4, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'account_details-list'));
 
     // add table header
     $table->add_header('name', $RCMAIL->gettext('plugin') . '&nbsp;' . $RCMAIL->gettext('namex'));
