@@ -10,22 +10,21 @@
 class account_details extends rcube_plugin
 {
     public $task    = 'settings';
-    public $rc;
-    public $engine;
-    public $ui;
 
     function init()
     {
+        $this->rc = rcube::get_instance();
         $this->add_texts('localization/', array('account_details'));
         $this->register_action('plugin.account_details', array($this, 'infostep'));
-        $this->include_script('account_details.js');
+        $this->add_hook('settings_actions', array($this, 'settings_actions'));
 		$this->include_stylesheet($this->local_skin_path() .'/account_details.css');
 		require($this->home . '/lib/mail_count.php');
 		require($this->home . '/lib/Browser.php');
 		require($this->home . '/lib/OS.php');
-		require($this->home . '/lib/CPU.php');
+		require($this->home . '/lib/CPU_usage.php');
 		require($this->home . '/lib/listplugins.php');
 		require($this->home . '/lib/getip.php');
+        
     }
     
 		private function _load_config()
@@ -64,26 +63,30 @@ class account_details extends rcube_plugin
     function infostep()
     {
 		
-        $this->register_handler('plugin.body', array($this, 'infohtml'));		
-        $this->register_action('plugin.account_details', array($this, 'infostep'));
-        $rcmail = rcmail::get_instance();
-		$rcmail->output->set_pagetitle($this->gettext('account_details'));
-		$rcmail->output->send('plugin');
+        $this->api->output->add_handler('plugin.body', array($this, 'infohtml'));
+		$this->api->output->set_pagetitle($this->gettext('account_details'));
+		$this->api->output->send('plugin');
 		
     }
     
-    function settings_tab($p)
-	{
-		// add sauserprefs tab
-		$p['actions'][] = array('action' => 'plugin.account_details', 'class' => 'account_details', 'label' => 'account_details.account_details', 'title' => 'account_details.account_details_mo', 'role' => 'button', 'aria-disabled' => 'false', 'tabindex' => '0');
-		return $p;
-	}
+    function settings_actions($args)
+    {
+        // register as settings action
+        $args['actions'][] = array(
+            'action'   => 'plugin.account_details',
+            'class'    => 'account_details',
+            'label'    => 'account_details',
+            'title'    => 'account_details_title',
+            'domain'   => 'account_details',
+        );
+
+        return $args;
+    }
 
     function infohtml()
     {	
 		$this->_load_config();
-		$rcmail = rcmail::get_instance();
-		$user = $rcmail->user;
+		$user = $this->rc->user;
 		
 			// Set commalist variables from config and language file
 		if ($this->config['pn_newline']) {
@@ -109,10 +112,9 @@ class account_details extends rcube_plugin
 	$secs = $uptime%60;
 	
 	$domainpart = $temp[1] ? $temp[1] : 'default';
-    $skin = $rcmail->config->get('skin', 'larry');
 	$url_box_length = $this->config['urlboxlength'];
 	
-	$table = new html_table(array('cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'settings-section'));
+	$table = new html_table(array('cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'account_details'));
     $table = new html_table(array('class' => 'account_details', 'cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0));
 	
     $table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('userdet') . ':')));
@@ -130,7 +132,7 @@ class account_details extends rcube_plugin
     $table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('email') . ':'));
     $table->add('value', rcube_utils::rep_specialchars_output($identity['email']));
 	
-    $date_format = $rcmail->config->get('date_format', 'm/d/Y') . ' ' . $rcmail->config->get('time_format', 'H:i');
+    $date_format = $this->rc->config->get('date_format', 'm/d/Y') . ' ' . $this->rc->config->get('time_format', 'H:i');
     if(date('Y', strtotime($user->data['created'])) > 1970){
       $created = new DateTime($user->data['created']);
 	  if ($this->config['display_create']) {
@@ -144,17 +146,17 @@ class account_details extends rcube_plugin
     $table->add('', rcube_utils::rep_specialchars_output(date_format($lastlogin, $date_format)));
 	}
  				
-			$rcmail->storage_connect(true);
-			$imap = $rcmail->imap;
+			$this->rc->storage_connect(true);
+			$imap = $this->rc->imap;
 		
 			$quota = $imap->get_quota();
 			
 		if (!empty($this->config['enable_quota'])) {			
 		if (quota) {
-				$quotatotal = rcmail::get_instance()->show_bytes($quota['total'] * 1024);
-				$quotaused = rcmail::get_instance()->show_bytes($quota['used'] * 1024) . ' (' . $quota['percent'] . '%)';
+				$quotatotal = $this->rc->show_bytes($quota['total'] * 1024);
+				$quotaused = $this->rc->show_bytes($quota['used'] * 1024) . ' (' . $quota['percent'] . '%)';
 
-		if ($quota && ($quota['total']==0 && $rcmail->config->get('quota_zero_as_unlimited'))) {
+		if ($quota && ($quota['total']==0 && $this->rc->config->get('quota_zero_as_unlimited'))) {
 				$quotatotal = 'unlimited';
 			}
 				
@@ -178,7 +180,7 @@ class account_details extends rcube_plugin
 			}
 			
 		if (!empty($this->config['enable_support'])) {				
-			$support_url = $rcmail->config->get('support_url');
+			$support_url = $this->rc->config->get('support_url');
 			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('support') . ':'));
 			$table->add('value', html::tag('a', array('href' => $support_url, 'title' => $this->gettext('supporturl'), 'target' => '_blank'), $support_url));
 			}
@@ -254,7 +256,7 @@ class account_details extends rcube_plugin
 			
 		if (!empty($this->config['enable_server_memory'])) {
 			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('memory')  . ':')));
-			$table->add('value', rcmail::get_instance()->show_bytes(round(memory_get_usage(),2)) . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('used')));
+			$table->add('value', $this->rc->show_bytes(round(memory_get_usage(),2)) . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('used')));
 			}
 			
 		if (!empty($this->config['enable_server_cpu'])) {
@@ -434,8 +436,6 @@ class account_details extends rcube_plugin
 		if ($this->config['rc_pluginlist']) {
 			$table->add('top', '&nbsp;&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('installedplugins') . ':'));
 			$table->add('value', rcmail_ad_plugin_list($attrib));
-		} else {
-			$table->add('', '');
 		}
 	}
 		
@@ -443,9 +443,9 @@ class account_details extends rcube_plugin
     $cals = array();
     $user = $username;
     if(class_exists('calendar')){
-      $query = 'SELECT user_id, caldav_user, caldav_pass, caldav_url, name from ' . rcmail::get_instance()->db->table_name('caldav_calendars') . ' WHERE user_id=?';
-      $sql_result = $rcmail->db->query($query, $rcmail->user->ID);
-      while ($sql_result && ($sql_arr = $rcmail->db->fetch_assoc($sql_result))) {
+      $query = 'SELECT user_id, caldav_user, caldav_pass, caldav_url, name from ' . $this->rc->db->table_name('caldav_calendars') . ' WHERE user_id=?';
+      $sql_result = $this->rc->db->query($query, $this->rc->user->ID);
+      while ($sql_result && ($sql_arr = $this->rc->db->fetch_assoc($sql_result))) {
         $cals[$sql_arr['name']] = $sql_arr;
       }
     }
@@ -454,7 +454,7 @@ class account_details extends rcube_plugin
       $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('calendars') . ':&nbsp;&sup' . $i . ';'));
       $table->add('', '');
       ksort($cals);
-      $repl = $rcmail->config->get('caldav_url_replace', false);
+      $repl = $this->rc->config->get('caldav_url_replace', false);
       foreach($cals as $key => $cal){
         $temp = explode('?', $cal['caldav_url'], 2);
         $url = slashify($temp[0]) . ($temp[1] ? ('?' . $temp[1]) : '');
@@ -466,27 +466,27 @@ class account_details extends rcube_plugin
         $table->add('title','&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . $key);
         $table->add('', html::tag('input', array('id' => $url, 'class' => 'account_details', 'value' => $url, 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
       }
-      if($clients == '' && $rcmail->config->get('account_details_show_tutorial_links', true)){
+      if($clients == '' && $this->rc->config->get('account_details_show_tutorial_links', true)){
         $clients = ('');
       }
-      if($i > 0 && $rcmail->config->get('account_details_show_tutorial_links', true)){
+      if($i > 0 && $this->rc->config->get('account_details_show_tutorial_links', true)){
         $clients .= html::tag('hr') . '&nbsp;&sup' . $i . ';&nbsp;' . sprintf($this->gettext('clients'), $this->gettext('caldav')) . ':' . html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'https://www.mozilla.org/en-US/thunderbird/all.html', 'target' => '_blank'), $this->gettext('thunderbird'));
         $clients .= ' + ' . html::tag('a', array('href' => 'https://addons.mozilla.org/en-US/thunderbird/addon/lightning/', 'target' => '_blank'), $this->gettext('lightning'));
-        $url = $rcmail->config->get('caldav_thunderbird','../tutorials/thunderbird-caldav');
+        $url = $this->rc->config->get('caldav_thunderbird','../tutorials/thunderbird-caldav');
         $clients .= html::tag('a', array('href' => $url, 'target' =>'_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), $this->gettext('thunderbird') . '&nbsp;' . $this->gettext('tutorial')));
-        $url = $rcmail->config->get('caldav_android_app','https://play.google.com/store/apps/details?id=org.dmfs.caldav.lib&hl=en');
+        $url = $this->rc->config->get('caldav_android_app','https://play.google.com/store/apps/details?id=org.dmfs.caldav.lib&hl=en');
         $clients .= html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'http://www.android.com/', 'target' => '_blank'), $this->gettext('android')) . ' + ' . html::tag('a', array('href' => $url, 'target' => '_blank'), $this->gettext('caldavsync'));
-        $url = $rcmail->config->get('caldav_android','../tutorials/android-caldav');
+        $url = $this->rc->config->get('caldav_android','../tutorials/android-caldav');
         $clients .= html::tag('a', array('href' => $url, 'target' =>'_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), $this->gettext('android') . '&nbsp;' . $this->gettext('tutorial')));
-        $url = $rcmail->config->get('caldav_iphone','../tutorials/iphone-caldav');
+        $url = $this->rc->config->get('caldav_iphone','../tutorials/iphone-caldav');
         $clients .= html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'http://www.apple.com/iphone/', 'target' => '_blank'), $this->gettext('iphone')) . html::tag('a', array('href' => $url, 'target' => '_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), $this->gettext('iphone') . '&nbsp;' . $this->gettext('tutorial'))) . html::tag('br') . html::tag('br');
       }
     }
     $addressbooks = array();
     if(class_exists('carddav')){
-      $query = 'SELECT user_id, username, password, url, name from ' . rcmail::get_instance()->db->table_name('carddav_addressbooks') . ' WHERE user_id=?';
-      $sql_result = $rcmail->db->query($query, $rcmail->user->ID);
-      while ($sql_result && ($sql_arr = $rcmail->db->fetch_assoc($sql_result))) {
+      $query = 'SELECT user_id, username, password, url, name from ' . $this->rc->db->table_name('carddav_addressbooks') . ' WHERE user_id=?';
+      $sql_result = $this->rc->db->query($query, $this->rc->user->ID);
+      while ($sql_result && ($sql_arr = $this->rc->db->fetch_assoc($sql_result))) {
         $addressbooks[$sql_arr['name']] = $sql_arr;
       }
     }
@@ -495,7 +495,7 @@ class account_details extends rcube_plugin
       $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('addressbook') . ':&nbsp;&sup' . $i . ';'));
       $table->add('', '');
       ksort($addressbooks);
-      $repl = $rcmail->config->get('carddav_url_replace', false);
+      $repl = $this->rc->config->get('carddav_url_replace', false);
       foreach($addressbooks as $key => $addressbook){
         $temp = explode('?', $addressbook['url'], 2);
         $url = slashify($temp[0]) . ($temp[1] ? ('?' . $temp[1]) : '');
@@ -507,22 +507,22 @@ class account_details extends rcube_plugin
         $table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . $key);
         $table->add('', html::tag('input', array('id' => $url, 'class' => 'account_details', 'value' => $url, 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
       }
-      if($clients == '' && $rcmail->config->get('account_details_show_tutorial_links', true)){
+      if($clients == '' && $this->rc->config->get('account_details_show_tutorial_links', true)){
         $clients = html::tag('hr');
       }
-      if($i > 0 && $rcmail->config->get('account_details_show_tutorial_links', true)){
+      if($i > 0 && $this->rc->config->get('account_details_show_tutorial_links', true)){
         $clients .= '&nbsp;&sup' . $i . ';&nbsp;' . sprintf($this->gettext('clients'), $this->gettext('carddav')) . ':' . html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'http://www.mozilla.org/en-US/thunderbird/all.html', 'target' => '_blank'), $this->gettext('thunderbird'));
-        $url = $rcmail->config->get('carddav_thunderbird','../tutorials/thunderbird-carddav');
+        $url = $this->rc->config->get('carddav_thunderbird','../tutorials/thunderbird-carddav');
         $clients .= ' + ' . html::tag('a', array('href' => 'https://sogo.nu/download.html#/frontends', 'target' => '_blank'), $this->gettext('sogoconn')) . html::tag('a', array('href' => $url, 'target' =>'_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), 'Thunderbird ' . $this->gettext('tutorial')));
-        $url = $rcmail->config->get('carddav_android_app','https://play.google.com/store/apps/details?id=org.dmfs.carddav.sync&hl=en');
+        $url = $this->rc->config->get('carddav_android_app','https://play.google.com/store/apps/details?id=org.dmfs.carddav.sync&hl=en');
         $clients .= html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'http://www.android.com/', 'target' => '_blank'), $this->gettext('android')) . ' + ' . html::tag('a', array('href' => $url, 'target' => '_blank'), $this->gettext('carddavsync'));
-        $url = $rcmail->config->get('carddav_android_app_editor','https://play.google.com/store/apps/details?id=org.dmfs.android.contacts&hl=en');
+        $url = $this->rc->config->get('carddav_android_app_editor','https://play.google.com/store/apps/details?id=org.dmfs.android.contacts&hl=en');
         if($url){
           $clients .=  ' + ' . html::tag('a', array('href' => $url, 'target' => '_blank'), $this->gettext('contacteditor'));
         }
-			$url = $rcmail->config->get('carddav_android','../tutorials/android-carddav');
+			$url = $this->rc->config->get('carddav_android','../tutorials/android-carddav');
 			$clients .= html::tag('a', array('href' => $url, 'target' =>'_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), $this->gettext('android') . '&nbsp;' . $this->gettext('tutorial')));
-			$url = $rcmail->config->get('carddav_iphone','../tutorials/iphone-carddav');
+			$url = $this->rc->config->get('carddav_iphone','../tutorials/iphone-carddav');
 			$clients .= html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'http://www.apple.com/iphone/', 'target' => '_blank'), $this->gettext('iphone')) . html::tag('a', array('href' => $url, 	'target' => '_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), $this->gettext('iphone') . '&nbsp;' . $this->gettext('tutorial'))) . html::tag('br') . html::tag('br');
 			}
 		}
@@ -636,8 +636,7 @@ class account_details extends rcube_plugin
 	private function _host_replace($host) {
 	// Does some replacements in a host string
 
-		$rcmail = rcmail::get_instance();
-		$user = $rcmail->user;
+		$user = $this->rc->user;
 
 		$host = str_replace('%h', $user->data['mail_host'], $host);
 		$host = str_replace('%s', $_SERVER['SERVER_NAME'], $host);
