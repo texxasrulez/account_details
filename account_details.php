@@ -23,7 +23,7 @@ class account_details extends rcube_plugin
 		require($this->home . '/lib/mail_count.php');
 		require($this->home . '/lib/Browser.php');
 		require($this->home . '/lib/OS.php');
-		require($this->home . '/lib/CPU_usage.php');
+		require($this->home . '/lib/CPU.php');
 		require($this->home . '/lib/listplugins.php');
 		require($this->home . '/lib/getip.php');
     }
