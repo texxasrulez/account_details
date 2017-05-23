@@ -10,11 +10,8 @@
 
 $account_details_config = array();
 
-// DONATION - Just trying to get paid. You can hide Paypal Button here
-$account_details_config['enable_paypal'] = true;
-
 // Bullet Style - Default &#9679;
-$account_details_config['bulletstyle'] = '&#9679;'; // Insert your favorite unicode here. https://www.w3schools.com/charsets/ref_utf_misc_symbols.asp
+$account_details_config['bulletstyle'] = '&#9775;'; // Insert your favorite unicode here. https://www.w3schools.com/charsets/ref_utf_misc_symbols.asp
 
 // URL Text box length - Good if you have a long domain name
 $account_details_config['urlboxlength'] = '90'; // Numbers only
@@ -23,6 +20,13 @@ $account_details_config['urlboxlength'] = '90'; // Numbers only
 // Display Roundcube Info
 $account_details_config['display_rc'] = true;
 $account_details_config['display_rc_version'] = true;
+$account_details_config['display_rc_release'] = true;
+
+/* Hourly Cron Job is required to be setup as follows: 
+ * curl https://api.github.com/repos/roundcube/roundcubemail/releases | grep tag_name | grep -o "[0-9].[0-9].[0-9]\{1,\}" | sort -n | tail -1 >> /path_to_roundcube/plugins/account_details/rc_latest.txt
+*/
+$account_details_config['rc_latest'] = 'plugins/account_details/rc_latest.txt';
+
 // Display Plugin List
 $account_details_config['rc_pluginlist'] = true;
 
@@ -42,7 +46,7 @@ $account_details_config['useipinfo'] = true; // Displays IP, City and Region pro
 $account_details_config['enable_support'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'The Klaatu Nebula'; // Cannot be blank. Messes with tables
+$account_details_config['location'] = 'The Great State of Texas'; // Cannot be blank. Messes with tables
 
 //========= Mailbox Details ==========================
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
@@ -71,11 +75,11 @@ $account_details_config['enable_resolution'] = true;
 $account_details_config['enable_server_os'] = true; // Only one of the 3 options below should be true otherwise multiple tables will show OS.
 	//==== Enable only one out of 3 below ===============
 // Display only Server name
-$account_details_config['enable_server_os_name'] = true;
+$account_details_config['enable_server_os_name'] = false;
 // Display Server name and Release
 $account_details_config['enable_server_os_rel'] = false;
 // Display Server name Release and version
-$account_details_config['enable_server_os_ver'] = false;
+$account_details_config['enable_server_os_ver'] = true;
 	//===================================================
 
 // Display Server CPU Load
@@ -110,9 +114,9 @@ $account_details_config['webmail_url'] = '%p://%s/mail/';
 // Server hostname
 $account_details_config['hostname'] = '%S';
 // If you have different server host names per protocol
-$account_details_config['hostname_smtp'] = 'smtp.domain.com';
-$account_details_config['hostname_imap'] = 'imap.domain.com';
-$account_details_config['hostname_pop'] = 'pop.domain.com';
+$account_details_config['hostname_smtp'] = 'mx.%H';
+$account_details_config['hostname_imap'] = 'mx.%H';
+$account_details_config['hostname_pop'] = 'mx.%H';
 
 // === SERVER CAPABILITIES ==========================================
 
