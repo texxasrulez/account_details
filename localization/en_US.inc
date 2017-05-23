@@ -13,7 +13,7 @@
 $labels = array();
 $labels['addressbook'] = 'Contacts';
 $labels['account_details'] = 'Account Details';
-$labels['account_details_mo'] = 'Account Details Plugin';
+$labels['account_details_title'] = 'Account Details Plugin';
 $labels['and'] = 'and';
 $labels['android'] = 'Android';
 $labels['archive'] = 'Archive';
