@@ -40,6 +40,6 @@ Screenshots
 -----------
 With All Details enabled
 
-![Alt text](/tests/screenshot.png?raw=true "Account Details Screenshot")
+![Alt text](/tests/ad-screenshot.png?raw=true "Account Details Screenshot")
 
 More to come
