@@ -42,8 +42,4 @@ With All Details enabled
 
 ![Alt text](/tests/screenshot.png?raw=true "Account Details Screenshot")
 
-With All Details disabled
-
-![Alt text](/tests/screenshot2.png?raw=true "Account Details Screenshot")
-
 More to come
