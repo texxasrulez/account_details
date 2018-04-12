@@ -31,7 +31,7 @@ $config['plugins'] = array('account_details');
 
 Make an hourly cronjob with your web credentials as follows for Roundcube Version Checking:
 
-`curl https://api.github.com/repos/roundcube/roundcubemail/releases | grep tag_name | grep -o "[0-9].[0-9].[0-9]\{1,\}" | sort -n | tail -1 >> /path_to_roundcube/plugins/account_details/rc_latest.txt`
+`curl https://api.github.com/repos/roundcube/roundcubemail/releases | grep tag_name | grep -o "[0-9].[0-9].[0-9]\{1,\}" | sort -n | tail -1 > /path_to_roundcube/plugins/account_details/rc_latest.txt`
 
 
 Enjoy!
