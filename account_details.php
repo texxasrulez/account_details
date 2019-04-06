@@ -152,7 +152,7 @@ class account_details extends rcube_plugin
 			$quota = $imap->get_quota();
 			
 		if (!empty($this->config['enable_quota'])) {			
-		if (quota) {
+		if ('quota') {
 				$quotatotal = $this->rc->show_bytes($quota['total'] * 1024);
 				$quotaused = $this->rc->show_bytes($quota['used'] * 1024) . ' (' . $quota['percent'] . '%)';
 
@@ -207,7 +207,7 @@ class account_details extends rcube_plugin
 			$table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('mailboxdetails') . ':')));
 			$table->add('', '');
 			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('inbox') . ':'));
-			$table->add('value', $imap->count('INBOX', 'UNSEEN') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;' . $imap->count(INBOX, 'ALL') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('total') . '&nbsp;-&nbsp;' . round($imap->folder_size('INBOX')/ 1024 / 1024,2) . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('MB')))));
+			$table->add('value', $imap->count('INBOX', 'UNSEEN') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;' . $imap->count('INBOX', 'ALL') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('total') . '&nbsp;-&nbsp;' . round($imap->folder_size('INBOX')/ 1024 / 1024,2) . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('MB')))));
 			
 		if (!empty($this->config['enable_drafts'])) {
 			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('drafts') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('folder') . ':')));
@@ -281,7 +281,7 @@ class account_details extends rcube_plugin
 		
 		if (!empty($this->config['display_admin_email'])) {
 			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . '&nbsp;' .  'Admin ' . rcube_utils::rep_specialchars_output($this->gettext('email') . ':')));
-			$table->add('value', html::tag('a', array('href' => 'mailto:' . $_SERVER[SERVER_ADMIN], 'title' => $this->gettext('contactadmin')), $_SERVER[SERVER_ADMIN]));
+			$table->add('value', html::tag('a', array('href' => 'mailto:' . $_SERVER['SERVER_ADMIN'], 'title' => $this->gettext('contactadmin')), $_SERVER['SERVER_ADMIN']));
 			}
 			
 		// Add custom fields
@@ -544,7 +544,7 @@ class account_details extends rcube_plugin
 		
 	global $table;
 	
-	if (count($this->config[$arrayname]) > 0) {
+	if (is_array($this->config[$arrayname]) > 0) {
 			
 			foreach ($this->config[$arrayname] as $key => $arrayvalue) {
 				

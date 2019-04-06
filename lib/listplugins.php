@@ -51,9 +51,9 @@ function rcmail_ad_plugin_list($attrib)
         $table->add_row();
         $table->add('name', rcube::Q($data['name'] ?: $name));
         $table->add('version', rcube::Q($data['version']));
-        $table->add('license', $data['license_uri'] ? html::a(array('target' => '_blank', href=> rcube::Q($data['license_uri'])),
+        $table->add('license', $data['license_uri'] ? html::a(array('target' => '_blank', 'href'=> rcube::Q($data['license_uri'])),
             rcube::Q($data['license'])) : $data['license']);
-        $table->add('source', $uri ? html::a(array('target' => '_blank', href=> rcube::Q($uri)),
+        $table->add('source', $uri ? html::a(array('target' => '_blank', 'href'=> rcube::Q($uri)),
             rcube::Q($RCMAIL->gettext('download'))) : '');
     }
 

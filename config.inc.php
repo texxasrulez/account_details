@@ -46,7 +46,7 @@ $account_details_config['useipinfo'] = true; // Displays IP, City and Region pro
 $account_details_config['enable_support'] = true;
 
 // Server location (Example: 'City, Country')
-$account_details_config['location'] = 'The Great State of Texas'; // Cannot be blank. Messes with tables
+$account_details_config['location'] = 'Los Angeles California'; // Cannot be blank. Messes with tables
 
 //========= Mailbox Details ==========================
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
@@ -114,9 +114,9 @@ $account_details_config['webmail_url'] = '%p://%s/mail/';
 // Server hostname
 $account_details_config['hostname'] = '%S';
 // If you have different server host names per protocol
-$account_details_config['hostname_smtp'] = 'mx.%H';
-$account_details_config['hostname_imap'] = 'mx.%H';
-$account_details_config['hostname_pop'] = 'mx.%H';
+$account_details_config['hostname_smtp'] = 'smtp.dreamhost.com';
+$account_details_config['hostname_imap'] = 'imap.dreamhost.com';
+$account_details_config['hostname_pop'] = 'pop.dreamhost.com';
 
 // === SERVER CAPABILITIES ==========================================
 
@@ -145,7 +145,7 @@ $account_details_config['smtp_auth_required_else'] = true;  // SMTP auth require
 
 
 // Add a (recommended) note to the SSL port numbers header?
-$account_details_config['recommendssl'] = true; // TODO Doesn't work as expexted
+$account_details_config['recommendssl'] = false; // TODO Doesn't work as expexted
 
 // Add a newline between the port numbers and the port notes
 // if false - put in pharentesises instead
