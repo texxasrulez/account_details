@@ -2,7 +2,7 @@
 
 if (window.rcmail) {
   rcmail.addEventListener('init', function() {
-    // <span id="settingstabdefault" class="tablink"><roundcube:button command="preferences" type="link" label="preferences" title="editpreferences" /></span>
+    // <span id="settingstabdefault" class="tablink"><roundcube:button type="link" command="preferences" type="link" label="preferences" title="editpreferences" /></span>
     var tab = $('<span>').attr('id', 'settingstabpluginaccount_details').addClass('tablink');
 
     $('<a>').attr('href', rcmail.env.comm_path + '&_action=plugin.account_details')

@@ -63,7 +63,7 @@ class account_details extends rcube_plugin
     function infostep()
     {
 		
-        $this->api->output->add_handler('plugin.body', array($this, 'infohtml'));
+        $this->register_handler('plugin.body', array($this, 'infohtml'));
 		$this->api->output->set_pagetitle($this->gettext('account_details'));
 		$this->api->output->send('plugin');
 		
@@ -76,6 +76,7 @@ class account_details extends rcube_plugin
             'action'   => 'plugin.account_details',
             'class'    => 'account_details',
             'label'    => 'account_details',
+			'type'     => 'link',
             'title'    => 'account_details_title',
             'domain'   => 'account_details',
         );
@@ -464,7 +465,7 @@ class account_details extends rcube_plugin
           }
         }
         $table->add('title','&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . $key);
-        $table->add('', html::tag('input', array('id' => $url, 'class' => 'account_details', 'value' => $url, 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
+        $table->add('', html::tag('input', array('id' => $url, 'class' => 'account_details', 'value' => str_replace('%40', '@', $url), 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
       }
       if($clients == '' && $this->rc->config->get('account_details_show_tutorial_links', true)){
         $clients = ('');
@@ -505,7 +506,7 @@ class account_details extends rcube_plugin
           }
         }
         $table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . $key);
-        $table->add('', html::tag('input', array('id' => $url, 'class' => 'account_details', 'value' => $url, 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
+        $table->add('', html::tag('input', array('id' => $url, 'class' => 'account_details', 'value' => str_replace(':443', '', $url), 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
       }
       if($clients == '' && $this->rc->config->get('account_details_show_tutorial_links', true)){
         $clients = html::tag('hr');
@@ -528,11 +529,14 @@ class account_details extends rcube_plugin
 		}
 	}
 	
-	$out = html::div(array('class' => 'main'), html::div(array('class' => 'boxtitle'), $this->gettext('account_details') . ' for ' . $identity['name'])) . html::div(array('class' => 'scroller'), $table->show() . $clients);
+		// Add custom fields
+		$this->_custom_fields('customfields_bottom');
+
+		$out = html::div(array('class' => 'settingsbox-account_details'), html::div(array('class' => 'boxtitle'), $this->gettext('account_details') . ' for ' . $identity['name'])) . html::div(array('class' => 'boxcontent scroller'), $table->show() . $clients);
 	
 			if ($this->config['enable_custombox']) {
 			
-			$out .= html::div(array('class' => 'settingsbox settingsbox-account_details-custom'), html::div(array('class' => 'boxtitle'), $this->config['custombox_header']) . html::div(array('class' => 'boxcontent'), $this->_print_file_contents($this->config['custombox_file'])));
+			$out .= html::div(array('class' => 'settingsbox-account_details-custom'), html::div(array('class' => 'boxtitle'), $this->config['custombox_header']) . html::div(array('class' => 'boxcontent'), $this->_print_file_contents($this->config['custombox_file'])));
 		} 
 	
     return $out;
@@ -636,6 +640,7 @@ class account_details extends rcube_plugin
 	private function _host_replace($host) {
 	// Does some replacements in a host string
 
+		$this->rc = rcube::get_instance();
 		$user = $this->rc->user;
 
 		$host = str_replace('%h', $user->data['mail_host'], $host);
