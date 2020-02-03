@@ -1,14 +1,14 @@
 {
-    "name": "roundcube/account_details",
+    "name": "texxasrulez/Account-Details-for-Roundcube",
     "type": "roundcube-plugin",
-    "description": "Sample plugin that adds a new tab to the settings section to display additional information about the current user.",
+    "description": "Display additional information for the current user and much more.",
     "homepage": "https://github.com/texxasrulez/Account-Details-for-Roundcube",
     "license": "GPLv3+",
     "version": "3.3",
     "authors": [
         {
             "name": "Gene Hawkins",
-            "email": "texxasrulez@gmail.com",
+            "email": "texxasrulez@yahoo.com",
             "role": "Lead"
         }
     ],
