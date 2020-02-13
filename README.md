@@ -1,6 +1,4 @@
-# Account Details Roundcube Plugins #
-
-**Account Details Plugin for Roundcube**
+# Account Details Roundcube Plugin #
 
 Adds tab in Setting for more user info. 
 * Identities
@@ -14,9 +12,11 @@ Adds tab in Setting for more user info.
 * CalDAV URL;s
 * CardDAV URL's
 * and more
+
 You can enable/disable certain things via the config.inc.php
 
 **Installation**
+
 Upload contents to '/roundcube_location/plugins/account_details/'.
 
 Copy folder named 'copy_to_web_root' into your webroot. Your url should look like this => 'http(s):domain.ltd/tutorials/etc/'
@@ -41,7 +41,7 @@ No Zelle in your banks mobile app, no problem, just click [Paypal](https://paypa
 
 I appreciate the interest in this plugin and hope all the best ...
 
-**Screenshots**
+**Screenshot**
 -----------
 With All Details enabled
 
