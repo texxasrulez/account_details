@@ -535,8 +535,10 @@ class account_details extends rcube_plugin
 		$out = html::div(array('class' => 'settingsbox-account_details'), html::div(array('class' => 'boxtitle'), $this->gettext('account_details') . ' for ' . $identity['name'])) . html::div(array('class' => 'box formcontent scroller'), $table->show() . $clients);
 	
 			if ($this->config['enable_custombox']) {
+			/*
+			$out .= html::div(array('class' => 'settingsbox-account_details-custom'), html::div(array('class' => 'boxtitle'), $this->config['custombox_header']) . html::div(array('class' => 'box formcontent'), $this->_print_file_contents($this->config['custombox_file'])));*/
 			
-			$out .= html::div(array('class' => 'settingsbox-account_details-custom'), html::div(array('class' => 'boxtitle'), $this->config['custombox_header']) . html::div(array('class' => 'box formcontent'), $this->_print_file_contents($this->config['custombox_file'])));
+		$out = html::div(array('class' => 'settingsbox-account_details'), html::div(array('class' => 'boxtitle'), $this->gettext('account_details') . ' for ' . $identity['name'])) . html::div(array('class' => 'box formcontent scroller'), $table->show() . $clients . $this->_print_file_contents($this->config['custombox_file']));
 		} 
 	
     return $out;
