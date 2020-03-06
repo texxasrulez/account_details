@@ -19,9 +19,6 @@ You can enable/disable certain things via the config.inc.php
 
 Upload contents to '/roundcube_location/plugins/account_details/'.
 
-Copy folder named 'copy_to_web_root' into your webroot. Your url should look like this => 'http(s):domain.ltd/tutorials/etc/'
-I just have empty html index files. You can customize your tutorials to suit your needs and custom to your site.
-
 Enable plugin via config.inc.php with
 
 $config['plugins'] = array('account_details');
