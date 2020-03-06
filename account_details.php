@@ -467,21 +467,6 @@ class account_details extends rcube_plugin
         $table->add('title','&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . $key);
         $table->add('', html::tag('input', array('id' => $url, 'class' => 'account_details', 'value' => str_replace('%40', '@', $url), 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
       }
-      if($clients == '' && $this->rc->config->get('account_details_show_tutorial_links', true)){
-        $clients = ('');
-      }
-      if($i > 0 && $this->rc->config->get('account_details_show_tutorial_links', true)){
-        $clients .= html::tag('hr') . '&nbsp;&sup' . $i . ';&nbsp;' . sprintf($this->gettext('clients'), $this->gettext('caldav')) . ':' . html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'https://www.mozilla.org/en-US/thunderbird/all.html', 'target' => '_blank'), $this->gettext('thunderbird'));
-        $clients .= ' + ' . html::tag('a', array('href' => 'https://addons.mozilla.org/en-US/thunderbird/addon/lightning/', 'target' => '_blank'), $this->gettext('lightning'));
-        $url = $this->rc->config->get('caldav_thunderbird','../tutorials/thunderbird-caldav');
-        $clients .= html::tag('a', array('href' => $url, 'target' =>'_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), $this->gettext('thunderbird') . '&nbsp;' . $this->gettext('tutorial')));
-        $url = $this->rc->config->get('caldav_android_app','https://play.google.com/store/apps/details?id=org.dmfs.caldav.lib&hl=en');
-        $clients .= html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'http://www.android.com/', 'target' => '_blank'), $this->gettext('android')) . ' + ' . html::tag('a', array('href' => $url, 'target' => '_blank'), $this->gettext('caldavsync'));
-        $url = $this->rc->config->get('caldav_android','../tutorials/android-caldav');
-        $clients .= html::tag('a', array('href' => $url, 'target' =>'_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), $this->gettext('android') . '&nbsp;' . $this->gettext('tutorial')));
-        $url = $this->rc->config->get('caldav_iphone','../tutorials/iphone-caldav');
-        $clients .= html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'http://www.apple.com/iphone/', 'target' => '_blank'), $this->gettext('iphone')) . html::tag('a', array('href' => $url, 'target' => '_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), $this->gettext('iphone') . '&nbsp;' . $this->gettext('tutorial'))) . html::tag('br') . html::tag('br');
-      }
     }
     $addressbooks = array();
     if(class_exists('carddav')){
@@ -508,24 +493,6 @@ class account_details extends rcube_plugin
         $table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . $key);
         $table->add('', html::tag('input', array('id' => $url, 'class' => 'account_details', 'value' => str_replace(':443', '', $url), 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
       }
-      if($clients == '' && $this->rc->config->get('account_details_show_tutorial_links', true)){
-        $clients = html::tag('hr');
-      }
-      if($i > 0 && $this->rc->config->get('account_details_show_tutorial_links', true)){
-        $clients .= '&nbsp;&sup' . $i . ';&nbsp;' . sprintf($this->gettext('clients'), $this->gettext('carddav')) . ':' . html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'http://www.mozilla.org/en-US/thunderbird/all.html', 'target' => '_blank'), $this->gettext('thunderbird'));
-        $url = $this->rc->config->get('carddav_thunderbird','../tutorials/thunderbird-carddav');
-        $clients .= ' + ' . html::tag('a', array('href' => 'https://sogo.nu/download.html#/frontends', 'target' => '_blank'), $this->gettext('sogoconn')) . html::tag('a', array('href' => $url, 'target' =>'_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), 'Thunderbird ' . $this->gettext('tutorial')));
-        $url = $this->rc->config->get('carddav_android_app','https://play.google.com/store/apps/details?id=org.dmfs.carddav.sync&hl=en');
-        $clients .= html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'http://www.android.com/', 'target' => '_blank'), $this->gettext('android')) . ' + ' . html::tag('a', array('href' => $url, 'target' => '_blank'), $this->gettext('carddavsync'));
-        $url = $this->rc->config->get('carddav_android_app_editor','https://play.google.com/store/apps/details?id=org.dmfs.android.contacts&hl=en');
-        if($url){
-          $clients .=  ' + ' . html::tag('a', array('href' => $url, 'target' => '_blank'), $this->gettext('contacteditor'));
-        }
-			$url = $this->rc->config->get('carddav_android','../tutorials/android-carddav');
-			$clients .= html::tag('a', array('href' => $url, 'target' =>'_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), $this->gettext('android') . '&nbsp;' . $this->gettext('tutorial')));
-			$url = $this->rc->config->get('carddav_iphone','../tutorials/iphone-carddav');
-			$clients .= html::tag('br') . '&nbsp;&nbsp;- ' . html::tag('a', array('href' => 'http://www.apple.com/iphone/', 'target' => '_blank'), $this->gettext('iphone')) . html::tag('a', array('href' => $url, 	'target' => '_blank'), html::tag('div', array('style' => 'display:inline;float:right;'), $this->gettext('iphone') . '&nbsp;' . $this->gettext('tutorial'))) . html::tag('br') . html::tag('br');
-			}
 		}
 	}
 	
