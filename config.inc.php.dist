@@ -114,9 +114,9 @@ $account_details_config['webmail_url'] = '%p://%s/mail/';
 // Server hostname
 $account_details_config['hostname'] = '%S';
 // If you have different server host names per protocol
-$account_details_config['hostname_smtp'] = 'mx.%H';
-$account_details_config['hostname_imap'] = 'mx.%H';
-$account_details_config['hostname_pop'] = 'mx.%H';
+$account_details_config['hostname_smtp'] = 'smtp.%S';
+$account_details_config['hostname_imap'] = 'imap.%S';
+$account_details_config['hostname_pop'] = 'pop.%S';
 
 // === SERVER CAPABILITIES ==========================================
 
@@ -125,7 +125,7 @@ $account_details_config['hostname_pop'] = 'mx.%H';
 $account_details_config['port_smtp'] = array('25');
 $account_details_config['port_imap'] = array('143');
 $account_details_config['port_pop'] = array('110');
-$account_details_config['port_smtp-ssl'] = array('465');
+$account_details_config['port_smtp-ssl'] = array('587');
 $account_details_config['port_imap-ssl'] = array('993');
 $account_details_config['port_pop-ssl'] = array('995');
 
