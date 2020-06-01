@@ -1,4 +1,4 @@
-# Account Details for Roundcube Plugin #
+# Account Details for Roundcube Plugin
 
 Adds tab in Setting for more user info. 
 * Identities
