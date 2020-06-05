@@ -30,8 +30,8 @@ class account_details extends rcube_plugin
 		private function _load_config()
 	{
 		
-		$fpath_config_dist	= $this->home . '/config.inc.php.dist';
 		$fpath_config 		= $this->home . '/config.inc.php';
+		$fpath_config_dist	= $this->home . '/config.inc.php.dist';
 		
 		if (is_file($fpath_config_dist) and is_readable($fpath_config_dist))
 			$found_config_dist = true;
