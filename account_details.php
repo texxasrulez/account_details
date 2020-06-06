@@ -1,14 +1,5 @@
 <?php
-
-/**
- * Sample plugin that adds a new tab to the settings section
- * to display some information about the current user
- */
- 
-// error_log(print_r($variable, TRUE)); // I only have this here for development
- 
-class account_details extends rcube_plugin
-{
+class account_details extends rcube_plugin {
     public $task    = 'settings';
 
     function init()
@@ -23,32 +14,26 @@ class account_details extends rcube_plugin
 		require($this->home . '/lib/OS.php');
 		require($this->home . '/lib/CPU_usage.php');
 		require($this->home . '/lib/listplugins.php');
-		require($this->home . '/lib/getip.php');
-        
+		require($this->home . '/lib/getip.php');        
     }
     
 		private function _load_config()
-	{
-		
+	{		
 		$fpath_config 		= $this->home . '/config.inc.php';
-		$fpath_config_dist	= $this->home . '/config.inc.php.dist';
-		
+		$fpath_config_dist	= $this->home . '/config.inc.php.dist';		
 		if (is_file($fpath_config_dist) and is_readable($fpath_config_dist))
 			$found_config_dist = true;
 		if (is_file($fpath_config) and is_readable($fpath_config))
-			$found_config = true;
-		
+			$found_config = true;		
 		if ($found_config_dist or $found_config) {
 			ob_start();
-
 			if ($found_config_dist) {
 				include($fpath_config_dist);
 				$account_details_config_dist = $account_details_config;
 			}
 			if ($found_config) {
 				include($fpath_config);
-			}
-			
+			}			
 			$config_array = array_merge($account_details_config_dist, $account_details_config);
 			$this->config = $config_array;
 			ob_end_clean();
@@ -61,12 +46,10 @@ class account_details extends rcube_plugin
 	}
 	
     function infostep()
-    {
-		
+    {		
         $this->register_handler('plugin.body', array($this, 'infohtml'));
 		$this->api->output->set_pagetitle($this->gettext('account_details'));
-		$this->api->output->send('plugin');
-		
+		$this->api->output->send('plugin');		
     }
     
     function settings_actions($args)
@@ -80,7 +63,6 @@ class account_details extends rcube_plugin
             'title'    => 'account_details_title',
             'domain'   => 'account_details',
         );
-
         return $args;
     }
 
@@ -137,25 +119,23 @@ class account_details extends rcube_plugin
     if(date('Y', strtotime($user->data['created'])) > 1970){
       $created = new DateTime($user->data['created']);
 	  if ($this->config['display_create']) {
-      $table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('created') . ':'));
-      $table->add('', rcube_utils::rep_specialchars_output(date_format($created, $date_format)));
+		$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('created') . ':'));
+		$table->add('', rcube_utils::rep_specialchars_output(date_format($created, $date_format)));
 		}
 	}
 	$lastlogin = new DateTime($user->data['last_login']);
 	if ($this->config['display_lastlogin']) {
-    $table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('last') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('login') . ':')));
-    $table->add('', rcube_utils::rep_specialchars_output(date_format($lastlogin, $date_format)));
-	}
- 				
+		$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('last') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('login') . ':')));
+		$table->add('', rcube_utils::rep_specialchars_output(date_format($lastlogin, $date_format)));
+	} 				
 			$this->rc->storage_connect(true);
-			$imap = $this->rc->imap;
-		
+			$imap = $this->rc->imap;		
 			$quota = $imap->get_quota();
 			
 		if (!empty($this->config['enable_quota'])) {			
 		if ('quota') {
-				$quotatotal = $this->rc->show_bytes($quota['total'] * 1024);
-				$quotaused = $this->rc->show_bytes($quota['used'] * 1024) . ' (' . $quota['percent'] . '%)';
+			$quotatotal = $this->rc->show_bytes($quota['total'] * 1024);
+			$quotaused = $this->rc->show_bytes($quota['used'] * 1024) . ' (' . $quota['percent'] . '%)';
 
 		if ($quota && ($quota['total']==0 && $this->rc->config->get('quota_zero_as_unlimited'))) {
 				$quotatotal = 'unlimited';
@@ -201,8 +181,7 @@ class account_details extends rcube_plugin
 			$table->add('top', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('webbrowser') . ': <br/>' . '&nbsp;&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('version') . ': <br/>' . '&nbsp;&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' .  rcube_utils::rep_specialchars_output($this->gettext('browser-user-agent') . ': <br/>' . ''))));
 			$table->add('value', $browser);	
 				}
-			}
-			
+			}			
 			
 		if (!empty($this->config['enable_mailbox'])) {
 			$table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('mailboxdetails') . ':')));
@@ -301,8 +280,7 @@ class account_details extends rcube_plugin
 				$imap_notes_regular = ' (' . $this->gettext('spaauthsupported') . ')';
 			if ($this->config['spa_support_pop'])
 				$pop_notes_regular = ' (' . $this->gettext('spaauthsupported') . ')';
-		} 
-		
+		}		
 
 		if (!empty($this->config['smtp_auth_required_always'])) {
 			$smtp_notes_array_all[] = $this->gettext('authrequired');
@@ -344,11 +322,10 @@ class account_details extends rcube_plugin
 		if (!empty($smtp_notes_array_regular))
 			$smtp_notes_regular = ucfirst($this->_separated_list($smtp_notes_array_regular, $and = false, $sentences = true, $commalist_ucfirst, $pn_parentheses, $pn_newline));
 		if (!empty($smtp_notes_array_regular))
-			$smtp_notes_encrypted = ucfirst($this->_separated_list($smtp_notes_array_encrypted, $and = false, $sentences = true, $commalist_ucfirst, $pn_parentheses, $pn_newline));
-			
-		
+			$smtp_notes_encrypted = ucfirst($this->_separated_list($smtp_notes_array_encrypted, $and = false, $sentences = true, $commalist_ucfirst, $pn_parentheses, $pn_newline));			
+
 		// Port numbers - regular
-		
+
 		if (!empty($this->config['port_smtp'] or !empty($this->config['port_imap']) or !empty($this->config['port_pop']) or count($this->config['customfields_regularports']) > 0)) {
 		
 			$table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('portnumbers') . ' - ' . $this->gettext('portnumbersregular'))));
@@ -529,8 +506,7 @@ class account_details extends rcube_plugin
 					$table->add_row();
 				} elseif ($coltype == 'title' or $coltype == 'value') {
 					$table->add($coltype, $coltext);
-				}
-				
+				}				
 				$coltype = '';
 				$coltext = '';
 				
@@ -538,11 +514,11 @@ class account_details extends rcube_plugin
 		}
 		
 		return false;
-	}
-	
+	}	
 	
 	private function _separated_list($array, $and = false, $sentences = false, $ucfirst = false, $parentheses = false, $newline = false)
 	{
+
 	// Return array as a separated list
 		$str = '';
 		$size = count($array);
@@ -550,16 +526,13 @@ class account_details extends rcube_plugin
 		if ($sentences)
 			$separator = ". ";
 		else
-			$separator = ", ";
-		
+			$separator = ", ";		
 		if ($parentheses and $newline)
 			$str .= '<span class="fieldnote-parentheses fieldnote-newline">(';
 		elseif ($parentheses)
 			$str .= '<span class="fieldnote-parentheses"> (';
 		elseif ($newline)
 			$str .= '<span class="fieldnote-newline">';
-		
-		
 		foreach ($array as $item) {
 			if ($i == 0 and $ucfirst)
 				$item = ucfirst($item);
@@ -572,8 +545,7 @@ class account_details extends rcube_plugin
 				if ($and)
 					$str .= ' ' . $this->gettext('and') . ' ';
 				else 
-					$str .= $separator;
-				
+					$str .= $separator;				
 			}
 			if ($i == $size and $sentences and count($array) > 1)
 				$str .= '.';
@@ -607,34 +579,26 @@ class account_details extends rcube_plugin
 	}
 	
 	private function _host_replace($host) {
+		
 	// Does some replacements in a host string
-
-		$this->rc = rcube::get_instance();
-		$user = $this->rc->user;
-
-		$host = str_replace('%h', $user->data['mail_host'], $host);
-		$host = str_replace('%s', $_SERVER['SERVER_NAME'], $host);
-
-		if(empty($_SERVER['HTTPS']))
-			$protocol = 'http';
-		else 
-			$protocol = 'https';	
-		$host = str_replace('%p', $protocol, $host);
+	$this->rc = rcube::get_instance();
+	$user = $this->rc->user;
+	$host = str_replace('%h', $user->data['mail_host'], $host);
+	$host = str_replace('%s', $_SERVER['SERVER_NAME'], $host);
+	if(empty($_SERVER['HTTPS']))
+		$protocol = 'http';
+	else 
+		$protocol = 'https';	
+	$host = str_replace('%p', $protocol, $host);		
+	$stripped_h_array = explode('.', $user->data['mail_host']);
+	array_shift($stripped_h_array);
+	$stripped_s_array = explode('.', $_SERVER['SERVER_NAME']);
+	array_shift($stripped_s_array);
+	$stripped_h = implode('.', $stripped_h_array);
+	$stripped_s = implode('.', $stripped_s_array);
+	$host = str_replace('%H', $stripped_h, $host);
+	$host = str_replace('%S', $stripped_s, $host);		
+	return $host;
 		
-		$stripped_h_array = explode('.', $user->data['mail_host']);
-		array_shift($stripped_h_array);
-		$stripped_s_array = explode('.', $_SERVER['SERVER_NAME']);
-		array_shift($stripped_s_array);
-		$stripped_h = implode('.', $stripped_h_array);
-		$stripped_s = implode('.', $stripped_s_array);
-		$host = str_replace('%H', $stripped_h, $host);
-		$host = str_replace('%S', $stripped_s, $host);
-		
-		return $host;
-		
-	}
-	
-	
+	}	
 }
-
-?>
