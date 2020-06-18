@@ -52,8 +52,8 @@ $account_details_config['location'] = 'The Great State of Texas'; // Cannot be b
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
 $account_details_config['enable_mailbox'] = true;
 // Enable or Disable Individual Folders - 'enable_mailbox' Must be true
-$account_details_config['enable_drafts'] = true; 
-$account_details_config['enable_sent'] = true; 
+$account_details_config['enable_drafts'] = true;
+$account_details_config['enable_sent'] = true;
 $account_details_config['enable_junk'] = true; 
 $account_details_config['enable_trash'] = true; 
 $account_details_config['enable_archive'] = true; 
@@ -90,11 +90,11 @@ $account_details_config['enable_server_memory'] = true;
 
 // Display Server Uptime
 $account_details_config['enable_server_uptime'] = true;
-// Display PHP Server 
+// Display PHP Server
 $account_details_config['display_php_version'] = true;
-// Display HTTP Server 
+// Display HTTP Server
 $account_details_config['display_http_server'] = true;
-// Display Server Admin Email 
+// Display Server Admin Email
 $account_details_config['display_admin_email'] = true;
 //====================================================
 
@@ -102,10 +102,10 @@ $account_details_config['display_admin_email'] = true;
 // characters for dynamic replacement:
 //     %p is replaced with the current protocol (http or https)
 //     %h is replaced with the current mail server name
-//     %H is replaced with the current mail server name;
+//     %H is replaced with the current mail server name
 //        everything to and including the fist dot stripped
 //     %s is replaced with current http server name
-//     %S is replaced with current http server name;
+//     %S is replaced with current http server name
 //        everything to and including the fist dot stripped
 
 // Webmail URL
@@ -143,7 +143,6 @@ $account_details_config['smtp_after_pop'] = false;          // SMTP after POP su
 $account_details_config['smtp_after_imap'] = false;         // SMTP after POP support
 $account_details_config['smtp_auth_required_else'] = true;  // SMTP auth required if not
 
-
 // Add a (recommended) note to the SSL port numbers header?
 $account_details_config['recommendssl'] = true; // TODO Doesn't work as expexted
 
@@ -156,7 +155,7 @@ $account_details_config['enable_dav_urls'] = true;
 
 // === CUSTOM INFORMATION: ADD TO SERVER INFO BOX ======================
 
-// You can add customized fields at the end of each category, or add fields to 
+// You can add customized fields at the end of each category, or add fields to
 // the bottom of Server Information box. These main variable name defines
 // where to add the content:
 //     $account_details_config['customfields_account'][]
@@ -198,8 +197,6 @@ $account_details_config['enable_dav_urls'] = true;
 //$account_details_config['customfields_bottom'][] = array('type' => 'value', 'text' => 'Yellow');
 //$account_details_config['customfields_bottom'][] = array('type' => 'wholeline',
 //     'text' => $this->_print_file_contents('plugins/account_details/custom_includes/example_field_1.html'));
-
-
 
 // === CUSTOM INFORMATION: SEPARATE BOX AT BOTTOM OF PAGE ===================
 

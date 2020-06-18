@@ -15,4 +15,3 @@ if (window.rcmail) {
     rcmail.register_command('plugin.account_details', function() { rcmail.goto_url('plugin.account_details') }, true);
   })
 }
-
