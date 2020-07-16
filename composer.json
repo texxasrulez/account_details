@@ -1,5 +1,5 @@
 {
-    "name": "texxasrulez/account_details",
+    "name": "account_details",
     "type": "roundcube-plugin",
     "description": "Display additional information for the current user and much more.",
     "homepage": "https://github.com/texxasrulez/Account-Details-for-Roundcube",
