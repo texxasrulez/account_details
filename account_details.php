@@ -21,20 +21,21 @@ class account_details extends rcube_plugin {
 	{
 		$fpath_config 		= $this->home . '/config.inc.php';
 		$fpath_config_dist	= $this->home . '/config.inc.php.dist';
-		if (is_file($fpath_config_dist) and is_readable($fpath_config_dist))
+		
+		if (is_file($fpath_config_dist ?? null) and is_readable($fpath_config_dist ?? null))
 			$found_config_dist = true;
-		if (is_file($fpath_config) and is_readable($fpath_config))
+		if (is_file($fpath_config ?? null) and is_readable($fpath_config ?? null))
 			$found_config = true;
-		if ($found_config_dist or $found_config) {
+		if ($found_config_dist ?? null or $found_config ?? null) {
 			ob_start();
-			if ($found_config_dist) {
-				include($fpath_config_dist);
+			if ($found_config_dist ?? null) {
+				include($fpath_config_dist ?? null);
 				$account_details_config_dist = $account_details_config;
 			}
 			if ($found_config) {
-				include($fpath_config);
+				include($fpath_config ?? null);
 			}
-			$config_array = array_merge($account_details_config_dist, $account_details_config);
+			$config_array = array_merge($account_details_config_dist ?? null, $account_details_config ?? null);
 			$this->config = $config_array;
 			ob_end_clean();
 		} else {
@@ -88,13 +89,14 @@ class account_details extends rcube_plugin {
 	$height = " <script>document.write(screen.height); </script>";
 
 		// Server Uptime Info
-	$uptime = shell_exec("cut -d. -f1 /proc/uptime");
-	$days = floor($uptime/60/60/24);
-	$hours = $uptime/60/60%24;
-	$mins = $uptime/60%60;
-	$secs = $uptime%60;
+	$str   = @file_get_contents('/proc/uptime');
+	$num   = floatval($str);
+	$secs  = fmod($num, 60); $num = (int)($num / 60);
+	$mins  = $num % 60;      $num = (int)($num / 60);
+	$hours = $num % 24;      $num = (int)($num / 24);
+	$days  = $num;
 
-	$domainpart = $temp[1] ? $temp[1] : 'default';
+	$domainpart = $temp[1] ?? null ? $temp[1] : 'default';
 	$url_box_length = $this->config['urlboxlength'];
 
 	$table = new html_table(array('cols' => 2, 'cellpadding' => 0, 'cellspacing' => 0, 'class' => 'account_details'));
@@ -129,7 +131,7 @@ class account_details extends rcube_plugin {
 		$table->add('', rcube_utils::rep_specialchars_output(date_format($lastlogin, $date_format)));
 	}
 			$this->rc->storage_connect(true);
-			$imap = $this->rc->imap;
+			$imap = $this->rc->get_storage();
 			$quota = $imap->get_quota();
 
 		if (!empty($this->config['enable_quota'])) {
@@ -150,14 +152,8 @@ class account_details extends rcube_plugin {
 			}
 
 		if (!empty($this->config['enable_ip'])) {
-		if (!empty($this->config['useipinfo'])) {
-			$locationdetails = json_decode(file_get_contents("http://ipinfo.io/"));
-			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('ipaddress') . ':'));
-			$table->add('value', $locationdetails->ip . '&nbsp;-&nbsp;' . $locationdetails->city . ',&nbsp;' . $locationdetails->region . '&nbsp; (' . $locationdetails->country . ')');
-			} else {
 			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('ipaddress') . ':'));
 			$table->add('value', get_client_ip_server());
-				}
 			}
 
 		if (!empty($this->config['enable_support'])) {
@@ -170,7 +166,7 @@ class account_details extends rcube_plugin {
 			$table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('usystem') . ':')));
 			$table->add('', '');
 			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('os') . ':'));
-			$table->add('value', os_info($uagent));
+			$table->add('value', os_info(empty($uagent)));
 
 		if (!empty($this->config['enable_resolution'])) {
 			$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('resolution') . ':'));
@@ -315,14 +311,14 @@ class account_details extends rcube_plugin {
 		}
 
 		// We summarize the correct arrays
-		$smtp_notes_array_regular = array_merge((array)$smtp_notes_array_all, (array)$smtp_notes_array_regularonly);
-		$smtp_notes_array_encrypted = array_merge((array)$smtp_notes_array_all, (array)$smtp_notes_array_encryptedonly);
+		$smtp_notes_array_regular = array_merge((array)$smtp_notes_array_all, (array)!empty($smtp_notes_array_regularonly));
+		$smtp_notes_array_encrypted = array_merge((array)$smtp_notes_array_all, (array)!empty($smtp_notes_array_encryptedonly));
 
 		// If we have some info in the SMTP information arrays, make them ready for printing
 		if (!empty($smtp_notes_array_regular))
-			$smtp_notes_regular = ucfirst($this->_separated_list($smtp_notes_array_regular, $and = false, $sentences = true, $commalist_ucfirst, $pn_parentheses, $pn_newline));
+			$smtp_notes_regular = ucfirst($this->_separated_list($smtp_notes_array_regular, $and = false, $sentences = true, !empty($commalist_ucfirst), $pn_parentheses, $pn_newline));
 		if (!empty($smtp_notes_array_regular))
-			$smtp_notes_encrypted = ucfirst($this->_separated_list($smtp_notes_array_encrypted, $and = false, $sentences = true, $commalist_ucfirst, $pn_parentheses, $pn_newline));			
+			$smtp_notes_encrypted = ucfirst($this->_separated_list($smtp_notes_array_encrypted, $and = false, $sentences = true, !empty($commalist_ucfirst), $pn_parentheses, $pn_newline));			
 
 		// Port numbers - regular
 
@@ -339,17 +335,17 @@ class account_details extends rcube_plugin {
 
 			if (!empty($this->config['port_smtp'])) {
 				$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('smtp') . ':'));
-				$table->add('value', $this->_host_replace($this->config['hostname_smtp']) . ':' . $this->_separated_list($this->config['port_smtp'], $and = true) . $smtp_notes_regular);
+				$table->add('value', $this->_host_replace($this->config['hostname_smtp']) . ':' . $this->_separated_list($this->config['port_smtp'], $and = true) . !empty($smtp_notes_regular));
 			}
 
 			if (!empty($this->config['port_imap'])) {
 				$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('imap') . ':'));
-				$table->add('value', $this->_host_replace($this->config['hostname_imap']) . ':' . $this->_separated_list($this->config['port_imap'], $and = true) . $imap_notes_regular);
+				$table->add('value', $this->_host_replace($this->config['hostname_imap']) . ':' . $this->_separated_list($this->config['port_imap'], $and = true) . !empty($imap_notes_regular));
 			}
 
 			if (!empty($this->config['port_pop'])) {
 				$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('pop') . ':'));
-				$table->add('value', $this->_host_replace($this->config['hostname_pop']) . ':' . $this->_separated_list($this->config['port_pop'], $and = true) . $pop_notes_regular);
+				$table->add('value', $this->_host_replace($this->config['hostname_pop']) . ':' . $this->_separated_list($this->config['port_pop'], $and = true) . !empty($pop_notes_regular));
 			}
 
 			// Add custom fields
@@ -370,17 +366,17 @@ class account_details extends rcube_plugin {
 
 			if (!empty($this->config['port_smtp-ssl'])) {
 				$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('smtp-ssl') . ':'));
-				$table->add('value', $this->_host_replace($this->config['hostname_smtp']) . ':' . $this->_separated_list($this->config['port_smtp-ssl'], $and = true) . $smtp_notes_encrypted);
+				$table->add('value', $this->_host_replace($this->config['hostname_smtp']) . ':' . $this->_separated_list($this->config['port_smtp-ssl'], $and = true) . !empty($smtp_notes_encrypted));
 			}
 
 			if (!empty($this->config['port_imap-ssl'])) {
 				$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('imap-ssl') . ':'));
-				$table->add('value', $this->_host_replace($this->config['hostname_imap']) . ':' . $this->_separated_list($this->config['port_imap-ssl'], $and = true) . $imap_notes_encrypted);
+				$table->add('value', $this->_host_replace($this->config['hostname_imap']) . ':' . $this->_separated_list($this->config['port_imap-ssl'], $and = true) . !empty($imap_notes_encrypted));
 			}
 
 			if (!empty($this->config['port_pop-ssl'])) {
 				$table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('pop-ssl') . ':'));
-				$table->add('value', $this->_host_replace($this->config['hostname_pop']) . ':' . $this->_separated_list($this->config['port_pop-ssl'], $and = true) . $pop_notes_encrypted);
+				$table->add('value', $this->_host_replace($this->config['hostname_pop']) . ':' . $this->_separated_list($this->config['port_pop-ssl'], $and = true) . !empty($pop_notes_encrypted));
 			}
 
 			// Add custom fields
@@ -413,15 +409,15 @@ class account_details extends rcube_plugin {
 
 		if ($this->config['rc_pluginlist']) {
 			$table->add('top', '&nbsp;&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('installedplugins') . ':'));
-			$table->add('value', rcmail_ad_plugin_list($attrib));
+			$table->add('value', rcmail_ad_plugin_list(!empty($attrib)));
 		}
 	}
 
 	if (!empty($this->config['enable_dav_urls'])) {
     $cals = array();
-    $user = $username;
+    $user = !empty($username);
     if(class_exists('calendar')){
-      $query = 'SELECT user_id, caldav_user, caldav_pass, caldav_url, name from ' . $this->rc->db->table_name('caldav_calendars') . ' WHERE user_id=?';
+      $query = 'SELECT user_id, caldav_user, caldav_pass, caldav_url, user_id from ' . $this->rc->db->table_name('caldav_sources') . ' WHERE user_id=?';
       $sql_result = $this->rc->db->query($query, $this->rc->user->ID);
       while ($sql_result && ($sql_arr = $this->rc->db->fetch_assoc($sql_result))) {
         $cals[$sql_arr['name']] = $sql_arr;
@@ -447,21 +443,21 @@ class account_details extends rcube_plugin {
     }
     $addressbooks = array();
     if(class_exists('carddav')){
-      $query = 'SELECT user_id, username, password, url, name from ' . $this->rc->db->table_name('carddav_addressbooks') . ' WHERE user_id=?';
+      $query = 'SELECT id, accountname, username, password, discovery_url from ' . $this->rc->db->table_name('carddav_accounts') . ' WHERE user_id=?';
       $sql_result = $this->rc->db->query($query, $this->rc->user->ID);
       while ($sql_result && ($sql_arr = $this->rc->db->fetch_assoc($sql_result))) {
-        $addressbooks[$sql_arr['name']] = $sql_arr;
+        $addressbooks[$sql_arr['accountname'] ?? null] = $sql_arr;
       }
     }
     if(count($addressbooks) > 0){
       $i ++;
-      $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('addressbook') . ':&nbsp;&sup' . $i . ';'));
+      $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('addressbook') . ':&nbsp;&sup' . !empty($i) . ';'));
       $table->add('', '');
       ksort($addressbooks);
       $repl = $this->rc->config->get('carddav_url_replace', false);
       foreach($addressbooks as $key => $addressbook){
-        $temp = explode('?', $addressbook['url'], 2);
-        $url = slashify($temp[0]) . ($temp[1] ? ('?' . $temp[1]) : '');
+        $temp = explode('?', $addressbook['url'] ?? null, 2);
+        $url = slashify($temp[0] ?? null) . ($temp[1] ?? null ? ('?' . $temp[1] ?? null) : '');
          if(is_array($repl)){
           foreach($repl as $key1 => $val){
             $url = str_replace($key1, $val, $url);
@@ -476,13 +472,13 @@ class account_details extends rcube_plugin {
 		// Add custom fields
 		$this->_custom_fields('customfields_bottom');
 
-		$out = html::div(array('class' => 'settingsbox-account_details'), html::div(array('class' => 'boxtitle'), $this->gettext('account_details') . ' for ' . $identity['name'])) . html::div(array('class' => 'box formcontent scroller'), $table->show() . $clients);
+		$out = html::div(array('class' => 'settingsbox-account_details'), html::div(array('class' => 'boxtitle'), $this->gettext('account_details') . ' for ' . $identity['name'])) . html::div(array('class' => 'box formcontent scroller'), $table->show() . !empty($clients));
 
 			if ($this->config['enable_custombox']) {
 			/*
 			$out .= html::div(array('class' => 'settingsbox-account_details-custom'), html::div(array('class' => 'boxtitle'), $this->config['custombox_header']) . html::div(array('class' => 'box formcontent'), $this->_print_file_contents($this->config['custombox_file'])));*/
 
-		$out = html::div(array('class' => 'settingsbox-account_details'), html::div(array('class' => 'boxtitle'), $this->gettext('account_details') . ' for ' . $identity['name'])) . html::div(array('class' => 'box formcontent scroller'), $table->show() . $clients . $this->_print_file_contents($this->config['custombox_file']));
+		$out = html::div(array('class' => 'settingsbox-account_details'), html::div(array('class' => 'boxtitle'), $this->gettext('account_details') . ' for ' . $identity['name'])) . html::div(array('class' => 'box formcontent scroller'), $table->show() . !empty($clients) . $this->_print_file_contents($this->config['custombox_file']));
 		}
 
     return $out;
@@ -494,7 +490,7 @@ class account_details extends rcube_plugin {
 
 	global $table;
 
-	if (is_array($this->config[$arrayname]) > 0) {
+	if (is_array(empty($this->config[$arrayname])) > 0) {
 
 			foreach ($this->config[$arrayname] as $key => $arrayvalue) {
 
