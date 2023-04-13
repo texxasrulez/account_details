@@ -16,28 +16,6 @@
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
 */
 
-
-
-
-
-<?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-
 $labels = array();
 $labels['account'] = 'Account User Data';
 $labels['account_details'] = 'Account Data';
@@ -72,7 +50,7 @@ $labels['mailbox'] = 'Mailbox Details';
 $labels['no'] = 'Nee';
 $labels['php_version'] = 'PHP Version';
 $labels['pluginname'] = 'Account Details';
-$labels['plugindescription'] = 'Geeft elementaire accountgegevens, zoals IMAP, POP en SMTP-server protocollen, standaard Identity, CalDAV & CardDAV URL's en andere gegevens van de gebruiker.';
+$labels['plugindescription'] = 'Geeft elementaire accountgegevens, zoals IMAP, POP en SMTP-server protocollen, standaard Identity, CalDAV & CardDAV URLs en andere gegevens van de gebruiker.';
 $labels['pop'] = 'Inkomende POP';
 $labels['pop-ssl'] = 'Inkomende POP-SSL';
 $labels['port'] = 'Port';
