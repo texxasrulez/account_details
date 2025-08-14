@@ -1,22 +1,98 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-$labels['userinfo'] = '사용자 정보';
-$labels['created'] = '생성함';
-$labels['lastlogin'] = '마지막 로그인';
-$labels['defaultidentity'] = '기본 신원';
+// Auto-generated from en_US.inc via DeepL (ko_KR)
+$labels = array();
+$labels["addressbook"] = "연락처";
+$labels["account_details"] = "계정 세부 정보";
+$labels["account_details_title"] = "계정 세부 정보 플러그인";
+$labels["and"] = "그리고";
+$labels["android"] = "Android";
+$labels["archive"] = "아카이브";
+$labels["auth"] = "인증";
+$labels["authrequired"] = "인증 필요";
+$labels["back"] = "뒤로";
+$labels["browser-user-agent"] = "사용자 에이전트";
+$labels["caldav"] = "CalDAV";
+$labels["caldavsync"] = "CalDAV 동기화";
+$labels["calendars"] = "캘린더";
+$labels["carddav"] = "CardDAV";
+$labels["carddavsync"] = "CardDAV-sync";
+$labels["clear_trash"] = "휴지통 비우기";
+$labels["clients"] = "S 프로토콜을 지원하는 권장 클라이언트";
+$labels["contactadmin"] = "웹메일 관리자에게 이메일 보내기";
+$labels["contacteditor"] = "편집자에게 문의";
+$labels["copiedtoclipboard"] = "클립보드에 복사";
+$labels["copytoclipboard"] = "클립보드에 복사";
+$labels["cpu"] = "CPU 부하";
+$labels["created"] = "생성됨";
+$labels["currver"] = "현재 설치된 버전";
+$labels["days"] = "일(들),";
+$labels["description"] = "계정에 대한 자세한 정보를 확인하세요.";
+$labels["default"] = "기본값";
+$labels["defaultidentity"] = "이름";
+$labels["details"] = "세부 정보";
+$labels["downloadupdate"] = "라운드큐브 최신 버전 다운로드";
+$labels["emailaddress"] = "이메일 주소";
+$labels["encryption"] = "암호화";
+$labels["htmlserver"] = "HTML 서버";
+$labels["hostname"] = "호스트 이름";
+$labels["hours"] = "시간(시간),";
+$labels["imap"] = "수신 IMAP";
+$labels["imap-ssl"] = "수신 IMAP-SSL";
+$labels["ipaddress"] = "현재 IP 주소";
+$labels["iphone"] = "iPhone";
+$labels["is_available"] = "에 사용할 수 있는 최신 버전은";
+$labels["latestversion"] = "최신 버전 온라인";
+$labels["licenseagreement"] = "라이선스 계약 읽기";
+$labels["lightning"] = "Lightning";
+$labels["mailboxdetails"] = "사용자 사서함 세부 정보";
+$labels["minutes"] = "분 및";
+$labels["memory"] = "메모리";
+$labels["os"] = "운영 체제";
+$labels["php_version"] = "PHP 버전";
+$labels["pluginname"] = "계정 세부 정보";
+$labels["plugindescription"] = "IMAP, POP 및 SMTP 서버 프로토콜, 기본 신원, 사용자의 CalDAV 및 CardDAV URL과 같은 기본 계정 정보 및 기타 세부 정보를 표시합니다.";
+$labels["pop"] = "수신 POP";
+$labels["pop-ssl"] = "수신 POP-SSL";
+$labels["port"] = "포트";
+$labels["portnumbers"] = "포트 번호";
+$labels["portnumbersencrypted"] = "암호화된 연결";
+$labels["portnumbersregular"] = "암호화되지 않은 연결";
+$labels["rc_version"] = "현재 라운드큐브 버전";
+$labels["rcdetails"] = "라운드큐브 세부 정보";
+$labels["recommended"] = "SSL 권장";
+$labels["resolution"] = "화면 해상도";
+$labels["roundcube"] = "라운드큐브";
+$labels["seconds"] = "초";
+$labels["serverinformation"] = "서버 정보";
+$labels["serverlocation"] = "서버 위치";
+$labels["servermemory"] = "서버 메모리";
+$labels["smtp"] = "발신 SMTP";
+$labels["smtp-ssl"] = "발신 SMTP-SSL";
+$labels["sogoconn"] = "SOGO 커넥터";
+$labels["spaauthsupported"] = "SPA 비밀번호 암호화 지원";
+$labels["storagequota"] = "총 스토리지";
+$labels["supporturl"] = "메일 서비스 제공업체 지원 페이지로 연결되는 링크";
+$labels["thunderbird"] = "썬더버드";
+$labels["total"] = "합계";
+$labels["tutorial"] = "튜토리얼 <p>;";
+$labels["uptime"] = "가동 시간";
+$labels["usystem"] = "사용자 시스템 세부 정보";
+$labels["url"] = "URL";
+$labels["usedstorage"] = "중고 스토리지";
+$labels["userdet"] = "사용자 세부 정보";
+$labels["userinfo"] = "사용자 정보";
+$labels["userid"] = "시스템 사용자 ID";
+$labels["used"] = "사용됨";
+$labels["webbrowser"] = "웹 브라우저";
+$labels["webmail"] = "웹 메일";
+$labels["webmailsystem"] = "웹 메일 시스템";
+$labels["web_url"] = "웹 메일 URL";
+$labels["web_url_alt"] = "웹메일에 액세스할 수 있는 URL";
+$labels["openrelaylocal"] = "서버와 동일한 네트워크에 있을 때 전송 허용";
+$labels["authrequired_local"] = "서버와 동일한 네트워크에 있는 경우를 제외하고 인증이 필요합니다.";
+$labels["authrequired_local_smtpafter"] = "서버와 동일한 네트워크에 있는 경우를 제외하고 인증 또는 %s가 필요합니다.";
+$labels["authrequired_smtpafter"] = "인증 또는 %s 필요";
+$labels["smtpafterpop"] = "POP 이후 SMTP";
+$labels["smtpafterimap"] = "IMAP 이후 SMTP";
+$labels["smtpafterpopimap"] = "POP/IMAP 이후 SMTP";
 ?>

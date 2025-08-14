@@ -1,22 +1,98 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-$labels['userinfo'] = 'Πληροφορίες χρήστη ';
-$labels['created'] = 'Δημιουργηθηκε';
-$labels['lastlogin'] = 'Τελευταια συνδεση';
-$labels['defaultidentity'] = 'Προκαθορισμένη ταυτότητα';
+// Auto-generated from en_US.inc via DeepL (el_GR)
+$labels = array();
+$labels["addressbook"] = "Επαφές";
+$labels["account_details"] = "Λεπτομέρειες λογαριασμού";
+$labels["account_details_title"] = "Λεπτομέρειες λογαριασμού Plugin";
+$labels["and"] = "και";
+$labels["android"] = "Android";
+$labels["archive"] = "Αρχείο";
+$labels["auth"] = "Αυθεντικοποίηση";
+$labels["authrequired"] = "Απαιτείται έλεγχος ταυτότητας";
+$labels["back"] = "Πίσω";
+$labels["browser-user-agent"] = "Πράκτορας χρήστη";
+$labels["caldav"] = "CalDAV";
+$labels["caldavsync"] = "CalDAV-sync";
+$labels["calendars"] = "Ημερολόγια";
+$labels["carddav"] = "CardDAV";
+$labels["carddavsync"] = "CardDAV-sync";
+$labels["clear_trash"] = "Αδειάστε τα σκουπίδια";
+$labels["clients"] = "Συνιστώμενοι πελάτες που υποστηρίζουν το πρωτόκολλο %s";
+$labels["contactadmin"] = "Στείλτε ένα email στον Διαχειριστή Webmail";
+$labels["contacteditor"] = "Επικοινωνήστε με τον συντάκτη";
+$labels["copiedtoclipboard"] = "Αντιγραφή στο πρόχειρο";
+$labels["copytoclipboard"] = "Αντιγραφή στο πρόχειρο";
+$labels["cpu"] = "Φορτίο CPU";
+$labels["created"] = "Δημιουργήθηκε";
+$labels["currver"] = "Τρέχουσα έκδοση Εγκατεστημένη";
+$labels["days"] = "Ημέρα(ες),";
+$labels["description"] = "Λάβετε λεπτομερείς πληροφορίες σχετικά με το λογαριασμό σας.";
+$labels["default"] = "Προεπιλογή";
+$labels["defaultidentity"] = "Όνομα";
+$labels["details"] = "Λεπτομέρειες";
+$labels["downloadupdate"] = "Κατεβάστε την τελευταία έκδοση του Roundcube";
+$labels["emailaddress"] = "Διεύθυνση ηλεκτρονικού ταχυδρομείου";
+$labels["encryption"] = "Κρυπτογράφηση";
+$labels["htmlserver"] = "Διακομιστής HTML";
+$labels["hostname"] = "Όνομα κεντρικού υπολογιστή";
+$labels["hours"] = "Ώρα(ες),";
+$labels["imap"] = "Εισερχόμενο IMAP";
+$labels["imap-ssl"] = "Εισερχόμενο IMAP-SSL";
+$labels["ipaddress"] = "Τρέχουσα διεύθυνση IP";
+$labels["iphone"] = "iPhone";
+$labels["is_available"] = "είναι η τελευταία διαθέσιμη έκδοση για";
+$labels["latestversion"] = "Τελευταία έκδοση σε απευθείας σύνδεση";
+$labels["licenseagreement"] = "Διαβάστε τη Συμφωνία Άδειας Χρήσης";
+$labels["lightning"] = "Αστραπή";
+$labels["mailboxdetails"] = "Λεπτομέρειες γραμματοκιβωτίου χρήστη";
+$labels["minutes"] = "Λεπτό(τα) και";
+$labels["memory"] = "Μνήμη";
+$labels["os"] = "Λειτουργικό σύστημα";
+$labels["php_version"] = "Έκδοση PHP";
+$labels["pluginname"] = "Λεπτομέρειες λογαριασμού";
+$labels["plugindescription"] = "Εμφανίζει βασικές πληροφορίες λογαριασμού, όπως τα πρωτόκολλα διακομιστών IMAP, POP & SMTP, την προεπιλεγμένη ταυτότητα, τις διευθύνσεις URL CalDAV & CardDAV του χρήστη και άλλες λεπτομέρειες.";
+$labels["pop"] = "Εισερχόμενη POP";
+$labels["pop-ssl"] = "Εισερχόμενο POP-SSL";
+$labels["port"] = "Λιμάνι";
+$labels["portnumbers"] = "Αριθμοί θυρών";
+$labels["portnumbersencrypted"] = "Κρυπτογραφημένη σύνδεση";
+$labels["portnumbersregular"] = "Μη κρυπτογραφημένη σύνδεση";
+$labels["rc_version"] = "Τρέχουσα έκδοση Roundcube";
+$labels["rcdetails"] = "Λεπτομέρειες Roundcube";
+$labels["recommended"] = "Συνιστάται SSL";
+$labels["resolution"] = "Ανάλυση οθόνης";
+$labels["roundcube"] = "Roundcube";
+$labels["seconds"] = "Δεύτερος(ες)";
+$labels["serverinformation"] = "Πληροφορίες διακομιστή";
+$labels["serverlocation"] = "Τοποθεσία διακομιστή";
+$labels["servermemory"] = "Μνήμη διακομιστή";
+$labels["smtp"] = "Εξερχόμενο SMTP";
+$labels["smtp-ssl"] = "Εξερχόμενο SMTP-SSL";
+$labels["sogoconn"] = "Συνδετήρας SOGO";
+$labels["spaauthsupported"] = "Υποστήριξη κρυπτογράφησης κωδικού πρόσβασης SPA";
+$labels["storagequota"] = "Συνολική αποθήκευση";
+$labels["supporturl"] = "Σύνδεσμος προς τη σελίδα υποστήριξης του παρόχου αλληλογραφίας σας";
+$labels["thunderbird"] = "Thunderbird";
+$labels["total"] = "Σύνολο";
+$labels["tutorial"] = "Σεμινάριο &nbsp;&nbsp,";
+$labels["uptime"] = "Χρόνος διαθεσιμότητας";
+$labels["usystem"] = "Λεπτομέρειες συστήματος χρήστη";
+$labels["url"] = "URL";
+$labels["usedstorage"] = "Χρησιμοποιημένη αποθήκευση";
+$labels["userdet"] = "Λεπτομέρειες χρήστη";
+$labels["userinfo"] = "Πληροφορίες χρήστη";
+$labels["userid"] = "Αναγνωριστικό χρήστη συστήματος";
+$labels["used"] = "Μεταχειρισμένο";
+$labels["webbrowser"] = "Πρόγραμμα περιήγησης στο Web";
+$labels["webmail"] = "Webmail";
+$labels["webmailsystem"] = "Σύστημα Webmail";
+$labels["web_url"] = "URL Webmail";
+$labels["web_url_alt"] = "URL για πρόσβαση στο Webmail σας";
+$labels["openrelaylocal"] = "Επιτρέπεται η αποστολή όταν βρίσκεται στο ίδιο δίκτυο με τον διακομιστή";
+$labels["authrequired_local"] = "Απαιτείται πιστοποίηση ταυτότητας, εκτός αν βρίσκεται στο ίδιο δίκτυο με τον διακομιστή";
+$labels["authrequired_local_smtpafter"] = "Απαιτείται έλεγχος ταυτότητας ή %s, εκτός αν βρίσκεστε στο ίδιο δίκτυο με το διακομιστή";
+$labels["authrequired_smtpafter"] = "Απαιτείται έλεγχος ταυτότητας ή %s";
+$labels["smtpafterpop"] = "SMTP μετά από POP";
+$labels["smtpafterimap"] = "SMTP μετά το IMAP";
+$labels["smtpafterpopimap"] = "SMTP μετά από POP/IMAP";
 ?>

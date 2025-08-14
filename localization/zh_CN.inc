@@ -1,22 +1,98 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-$labels['userinfo'] = '用户信息';
-$labels['created'] = '创建于';
-$labels['lastlogin'] = '最近登录';
-$labels['defaultidentity'] = '默认身份';
+// Auto-generated from en_US.inc via DeepL (zh_CN)
+$labels = array();
+$labels["addressbook"] = "联系方式";
+$labels["account_details"] = "账户详情";
+$labels["account_details_title"] = "账户详细信息插件";
+$labels["and"] = "和";
+$labels["android"] = "安卓";
+$labels["archive"] = "档案";
+$labels["auth"] = "认证";
+$labels["authrequired"] = "需要验证";
+$labels["back"] = "返回";
+$labels["browser-user-agent"] = "用户代理";
+$labels["caldav"] = "CalDAV";
+$labels["caldavsync"] = "CalDAV-sync";
+$labels["calendars"] = "日历";
+$labels["carddav"] = "CardDAV";
+$labels["carddavsync"] = "CardDAV-sync";
+$labels["clear_trash"] = "清空垃圾桶";
+$labels["clients"] = "支持 %s 协议的推荐客户端";
+$labels["contactadmin"] = "向 Webmail 管理员发送电子邮件";
+$labels["contacteditor"] = "联系编辑";
+$labels["copiedtoclipboard"] = "复制到剪贴板";
+$labels["copytoclipboard"] = "复制到剪贴板";
+$labels["cpu"] = "CPU 负载";
+$labels["created"] = "创建";
+$labels["currver"] = "当前安装的版本";
+$labels["days"] = "天";
+$labels["description"] = "获取有关您账户的详细信息。";
+$labels["default"] = "默认值";
+$labels["defaultidentity"] = "名称";
+$labels["details"] = "详细信息";
+$labels["downloadupdate"] = "下载最新版 Roundcube";
+$labels["emailaddress"] = "电子邮件地址";
+$labels["encryption"] = "加密";
+$labels["htmlserver"] = "HTML 服务器";
+$labels["hostname"] = "主机名";
+$labels["hours"] = "小时";
+$labels["imap"] = "传入的 IMAP";
+$labels["imap-ssl"] = "传入 IMAP-SSL";
+$labels["ipaddress"] = "当前 IP 地址";
+$labels["iphone"] = "iPhone";
+$labels["is_available"] = "的最新版本。";
+$labels["latestversion"] = "最新在线版本";
+$labels["licenseagreement"] = "阅读许可协议";
+$labels["lightning"] = "闪电";
+$labels["mailboxdetails"] = "用户邮箱详细信息";
+$labels["minutes"] = "分钟和";
+$labels["memory"] = "内存";
+$labels["os"] = "操作系统";
+$labels["php_version"] = "PHP 版本";
+$labels["pluginname"] = "账户详情";
+$labels["plugindescription"] = "显示基本账户信息，如 IMAP、POP 和 SMTP 服务器协议、默认身份、用户的 CalDAV 和 CardDAV URL 以及其他详细信息。";
+$labels["pop"] = "传入的 POP";
+$labels["pop-ssl"] = "传入 POP-SSL";
+$labels["port"] = "港口";
+$labels["portnumbers"] = "端口号";
+$labels["portnumbersencrypted"] = "加密连接";
+$labels["portnumbersregular"] = "未加密连接";
+$labels["rc_version"] = "当前的 Roundcube 版本";
+$labels["rcdetails"] = "圆立方详细信息";
+$labels["recommended"] = "建议使用 SSL";
+$labels["resolution"] = "屏幕分辨率";
+$labels["roundcube"] = "圆立方";
+$labels["seconds"] = "第二";
+$labels["serverinformation"] = "服务器信息";
+$labels["serverlocation"] = "服务器位置";
+$labels["servermemory"] = "服务器内存";
+$labels["smtp"] = "外发 SMTP";
+$labels["smtp-ssl"] = "传出 SMTP-SSL";
+$labels["sogoconn"] = "SOGO 连接器";
+$labels["spaauthsupported"] = "支持 SPA 密码加密";
+$labels["storagequota"] = "总存储量";
+$labels["supporturl"] = "链接至邮件提供商支持页面";
+$labels["thunderbird"] = "雷鸟";
+$labels["total"] = "总计";
+$labels["tutorial"] = "教程 &nbsp;&nbsp；";
+$labels["uptime"] = "正常运行时间";
+$labels["usystem"] = "用户系统详细信息";
+$labels["url"] = "网址";
+$labels["usedstorage"] = "二手仓库";
+$labels["userdet"] = "用户详细信息";
+$labels["userinfo"] = "用户信息";
+$labels["userid"] = "系统用户 ID";
+$labels["used"] = "二手";
+$labels["webbrowser"] = "网络浏览器";
+$labels["webmail"] = "网络邮件";
+$labels["webmailsystem"] = "网络邮件系统";
+$labels["web_url"] = "网络邮件 URL";
+$labels["web_url_alt"] = "访问 Webmail 的 URL";
+$labels["openrelaylocal"] = "与服务器在同一网络时允许发送";
+$labels["authrequired_local"] = "需要身份验证，与服务器在同一网络时除外";
+$labels["authrequired_local_smtpafter"] = "需要身份验证或 %s，与服务器在同一网络时除外";
+$labels["authrequired_smtpafter"] = "需要验证或 %s";
+$labels["smtpafterpop"] = "POP 之后的 SMTP";
+$labels["smtpafterimap"] = "IMAP 之后的 SMTP";
+$labels["smtpafterpopimap"] = "POP/IMAP 之后的 SMTP";
 ?>

@@ -2,7 +2,14 @@
 class account_details extends rcube_plugin {
     public $task    = 'settings';
 
-    function init()
+    
+
+    /** @var rcube */
+    private $rc;
+
+    /** @var array */
+    private $config = [];
+function init()
     {
         $this->rc = rcube::get_instance();
         $this->add_texts('localization/', array('account_details'));
@@ -14,37 +21,55 @@ class account_details extends rcube_plugin {
 		require($this->home . '/lib/OS.php');
 		require($this->home . '/lib/CPU_usage.php');
 		require($this->home . '/lib/listplugins.php');
+		require($this->home . '/lib/DavDiscoveryService.php');
 		require($this->home . '/lib/getip.php');        
     }
 
-		private function _load_config()
-	{
-		$fpath_config 		= $this->home . '/config.inc.php';
-		$fpath_config_dist	= $this->home . '/config.inc.php.dist';
-		
-		if (is_file($fpath_config_dist ?? null) and is_readable($fpath_config_dist ?? null))
-			$found_config_dist = true;
-		if (is_file($fpath_config ?? null) and is_readable($fpath_config ?? null))
-			$found_config = true;
-		if ($found_config_dist ?? null or $found_config ?? null) {
-			ob_start();
-			if ($found_config_dist ?? null) {
-				include($fpath_config_dist ?? null);
-				$account_details_config_dist = $account_details_config;
-			}
-			if ($found_config) {
-				include($fpath_config ?? null);
-			}
-			$config_array = array_merge($account_details_config_dist ?? null, $account_details_config ?? null);
-			$this->config = $config_array;
-			ob_end_clean();
-		} else {
-			raise_error(array(
-				'code' => 527,
-				'type' => 'php',
-				'message' => "Failed to load Account Details plugin config"), true, true);
-		}
-	}
+private function _load_config()
+{
+    $dist = $this->home . '/config.inc.php.dist';
+    $conf = $this->home . '/config.inc.php';
+
+    $acc_dist = [];
+    $acc_user = [];
+
+    // load .dist
+    if (is_file($dist) && is_readable($dist)) {
+        // isolate variables inside include
+        $account_details_config = [];
+        $config = null;
+        include $dist;
+        // prefer $account_details_config but accept legacy $config
+        if (isset($account_details_config) && is_array($account_details_config)) {
+            $acc_dist = $account_details_config;
+        } elseif (isset($config) && is_array($config)) {
+            $acc_dist = $config;
+        }
+    }
+
+    // load user config
+    if (is_file($conf) && is_readable($conf)) {
+        $account_details_config = [];
+        $config = null;
+        include $conf;
+        if (isset($account_details_config) && is_array($account_details_config)) {
+            $acc_user = $account_details_config;
+        } elseif (isset($config) && is_array($config)) {
+            $acc_user = $config;
+        }
+    }
+
+    if (!$acc_dist && !$acc_user) {
+        raise_error([
+            'code' => 527,
+            'type' => 'php',
+            'message' => 'Failed to load Account Details plugin config',
+        ], true, true);
+    }
+
+    // user overrides dist
+    $this->config = array_replace((array)$acc_dist, (array)$acc_user);
+}
 
     function infostep()
     {
@@ -69,7 +94,8 @@ class account_details extends rcube_plugin {
 
     function infohtml()
     {
-		$this->_load_config();
+		
+		$i = 0;$this->_load_config();
 		$user = $this->rc->user;
 
 		// Set commalist variables from config and language file
@@ -409,65 +435,47 @@ class account_details extends rcube_plugin {
 
 		if ($this->config['rc_pluginlist']) {
 			$table->add('top', '&nbsp;&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('installedplugins') . ':'));
-			$table->add('value', rcmail_ad_plugin_list(!empty($attrib)));
+			# $table->add('value', rcmail_ad_plugin_list([]));
+			// or, if you want to control the table id/class:
+			$table->add('value', rcmail_ad_plugin_list(['id' => 'rcmpluginlist', 'class' => 'rcm-plugin-list']));
+
 		}
 	}
 
 	if (!empty($this->config['enable_dav_urls'])) {
-    $cals = array();
-    $user = !empty($username);
-    if(class_exists('calendar')){
-      $query = 'SELECT user_id, caldav_user, caldav_pass, caldav_url, user_id from ' . $this->rc->db->table_name('caldav_sources') . ' WHERE user_id=?';
-      $sql_result = $this->rc->db->query($query, $this->rc->user->ID);
-      while ($sql_result && ($sql_arr = $this->rc->db->fetch_assoc($sql_result))) {
-        $cals[$sql_arr['name']] = $sql_arr;
-      }
-    }
-    if(count($cals) > 0){
-      $i ++;
-      $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('calendars') . ':&nbsp;&sup' . $i . ';'));
-      $table->add('', '');
-      ksort($cals);
-      $repl = $this->rc->config->get('caldav_url_replace', false);
-      foreach($cals as $key => $cal){
-        $temp = explode('?', $cal['caldav_url'], 2);
-        $url = slashify($temp[0]) . ($temp[1] ? ('?' . $temp[1]) : '');
-         if(is_array($repl)){
-          foreach($repl as $key => $val){
-            $url = str_replace($key, $val, $url);
-          }
+            $svc = new DavDiscoveryService($this, $this->home);
+            $resources = $svc->discover(true); // DB-first
+
+            // CALDAV
+            $calitems = $resources['caldav'];
+            if (!empty($calitems)) {
+                $i++;
+                $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('calendars') . ':&nbsp;&sup' . $i . ';'));
+                $table->add('', '');
+                foreach ($calitems as $idx => $item) {
+                    $name = rcube::Q($item['name']);
+                    $url  = rcube::Q($item['url']);
+                    $input_id = 'dav-url-cal-' . $idx;
+                    $table->add('title','&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . $name);
+                    $table->add('', html::tag('input', array('id' => $input_id, 'class' => 'account_details', 'value' => $url, 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $name,  'type' => 'text', 'size' => $url_box_length)));
+                }
+            }
+
+            // CARDDAV
+            $abitems = $resources['carddav'];
+            if (!empty($abitems)) {
+                $i++;
+                $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('addressbook') . ':&nbsp;&sup' . $i . ';'));
+                $table->add('', '');
+                foreach ($abitems as $idx => $item) {
+                    $name = rcube::Q($item['name']);
+                    $url  = rcube::Q($item['url']);
+                    $input_id = 'dav-url-card-' . $idx;
+                    $table->add('title','&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . $name);
+                    $table->add('', html::tag('input', array('id' => $input_id, 'class' => 'account_details', 'value' => $url, 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $name,  'type' => 'text', 'size' => $url_box_length)));
+                }
+            }
         }
-        $table->add('title','&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . $key);
-        $table->add('', html::tag('input', array('id' => $url, 'class' => 'account_details', 'value' => str_replace('%40', '@', $url), 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
-      }
-    }
-    $addressbooks = array();
-    if(class_exists('carddav')){
-      $query = 'SELECT id, accountname, username, password, discovery_url from ' . $this->rc->db->table_name('carddav_accounts') . ' WHERE user_id=?';
-      $sql_result = $this->rc->db->query($query, $this->rc->user->ID);
-      while ($sql_result && ($sql_arr = $this->rc->db->fetch_assoc($sql_result))) {
-        $addressbooks[$sql_arr['accountname'] ?? null] = $sql_arr;
-      }
-    }
-    if(count($addressbooks) > 0){
-      $i ++;
-      $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('addressbook') . ':&nbsp;&sup' . !empty($i) . ';'));
-      $table->add('', '');
-      ksort($addressbooks);
-      $repl = $this->rc->config->get('carddav_url_replace', false);
-      foreach($addressbooks as $key => $addressbook){
-        $temp = explode('?', $addressbook['url'] ?? null, 2);
-        $url = slashify($temp[0] ?? null) . ($temp[1] ?? null ? ('?' . $temp[1] ?? null) : '');
-         if(is_array($repl)){
-          foreach($repl as $key1 => $val){
-            $url = str_replace($key1, $val, $url);
-          }
-        }
-        $table->add('title', '&nbsp;' .  $this->config['bulletstyle'] . '&nbsp;' . $key);
-        $table->add('', html::tag('input', array('id' => $url, 'class' => 'account_details', 'value' => str_replace(':443', '', $url), 'onclick' => 'this.setSelectionRange(0, this.value.length)', 'name' => $key,  'type' => 'text', 'size' => $url_box_length)));
-      }
-		}
-	}
 
 		// Add custom fields
 		$this->_custom_fields('customfields_bottom');

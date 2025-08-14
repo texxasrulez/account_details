@@ -1,22 +1,98 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-$labels['userinfo'] = 'Потребителска информация';
-$labels['created'] = 'Създаден';
-$labels['lastlogin'] = 'Последен вход';
-$labels['defaultidentity'] = 'Самоличност по подразбиране';
+// Auto-generated from en_US.inc via DeepL (bg_BG)
+$labels = array();
+$labels["addressbook"] = "Контакти";
+$labels["account_details"] = "Данни за сметката";
+$labels["account_details_title"] = "Подробности за профила Plugin";
+$labels["and"] = "и";
+$labels["android"] = "Android";
+$labels["archive"] = "Архив";
+$labels["auth"] = "Удостоверяване";
+$labels["authrequired"] = "Изисква се удостоверяване";
+$labels["back"] = "Обратно";
+$labels["browser-user-agent"] = "Потребителски агент";
+$labels["caldav"] = "CalDAV";
+$labels["caldavsync"] = "CalDAV-sync";
+$labels["calendars"] = "Календари";
+$labels["carddav"] = "CardDAV";
+$labels["carddavsync"] = "CardDAV-sync";
+$labels["clear_trash"] = "Празен боклук";
+$labels["clients"] = "Препоръчани клиенти, които поддържат протокол %s";
+$labels["contactadmin"] = "Изпращане на имейл до администратора на уеб поща";
+$labels["contacteditor"] = "Редактор за контакт";
+$labels["copiedtoclipboard"] = "Копиране в клипборда";
+$labels["copytoclipboard"] = "Копиране в клипборда";
+$labels["cpu"] = "Натоварване на процесора";
+$labels["created"] = "Създаден";
+$labels["currver"] = "Инсталирана текуща версия";
+$labels["days"] = "Ден(и),";
+$labels["description"] = "Получете подробна информация за профила си.";
+$labels["default"] = "По подразбиране";
+$labels["defaultidentity"] = "Име";
+$labels["details"] = "Подробности";
+$labels["downloadupdate"] = "Изтегляне на най-новата версия на Roundcube";
+$labels["emailaddress"] = "Имейл адрес";
+$labels["encryption"] = "Криптиране";
+$labels["htmlserver"] = "HTML сървър";
+$labels["hostname"] = "Име на хоста";
+$labels["hours"] = "Час(и),";
+$labels["imap"] = "Входящ IMAP";
+$labels["imap-ssl"] = "Входящи IMAP-SSL";
+$labels["ipaddress"] = "Текущ IP адрес";
+$labels["iphone"] = "iPhone";
+$labels["is_available"] = "е най-новата налична версия за";
+$labels["latestversion"] = "Последна версия онлайн";
+$labels["licenseagreement"] = "Прочетете лицензионното споразумение";
+$labels["lightning"] = "Мълния";
+$labels["mailboxdetails"] = "Подробности за пощенската кутия на потребителя";
+$labels["minutes"] = "Минута(и) и";
+$labels["memory"] = "Памет";
+$labels["os"] = "Операционна система";
+$labels["php_version"] = "Версия на PHP";
+$labels["pluginname"] = "Данни за сметката";
+$labels["plugindescription"] = "Показва основна информация за акаунта, като протоколи на сървърите IMAP, POP и SMTP, идентичност по подразбиране, URL адреси на CalDAV и CardDAV на потребителя и други подробности.";
+$labels["pop"] = "Входящ POP";
+$labels["pop-ssl"] = "Входящ POP-SSL";
+$labels["port"] = "Пристанище";
+$labels["portnumbers"] = "Номера на портове";
+$labels["portnumbersencrypted"] = "Криптирана връзка";
+$labels["portnumbersregular"] = "Некриптирана връзка";
+$labels["rc_version"] = "Текуща версия на Roundcube";
+$labels["rcdetails"] = "Подробности за Roundcube";
+$labels["recommended"] = "Препоръчва се SSL";
+$labels["resolution"] = "Резолюция на екрана";
+$labels["roundcube"] = "Кръгъл куб";
+$labels["seconds"] = "Втори(и)";
+$labels["serverinformation"] = "Информация за сървъра";
+$labels["serverlocation"] = "Местоположение на сървъра";
+$labels["servermemory"] = "Памет на сървъра";
+$labels["smtp"] = "Изходящ SMTP";
+$labels["smtp-ssl"] = "Изходящ SMTP-SSL";
+$labels["sogoconn"] = "Съединител SOGO";
+$labels["spaauthsupported"] = "&nbsp; Поддържа се криптиране на паролата на SPA";
+$labels["storagequota"] = "Общо съхранение";
+$labels["supporturl"] = "Връзка към страницата за поддръжка на доставчиците на поща";
+$labels["thunderbird"] = "Thunderbird";
+$labels["total"] = "Общо";
+$labels["tutorial"] = "Наръчник &nbsp;&nbsp;";
+$labels["uptime"] = "Време за работа";
+$labels["usystem"] = "Подробности за системата на потребителя";
+$labels["url"] = "URL";
+$labels["usedstorage"] = "Използвано съхранение";
+$labels["userdet"] = "Подробности за потребителя";
+$labels["userinfo"] = "Информация за потребителя";
+$labels["userid"] = "Идентификатор на потребителя на системата";
+$labels["used"] = "Използван";
+$labels["webbrowser"] = "Уеб браузър";
+$labels["webmail"] = "Уебмейл";
+$labels["webmailsystem"] = "Система за уеб поща";
+$labels["web_url"] = "URL адрес на уеб поща";
+$labels["web_url_alt"] = "URL адрес за достъп до вашата уеб поща";
+$labels["openrelaylocal"] = "Разрешено е да се изпраща, когато е в същата мрежа като сървъра";
+$labels["authrequired_local"] = "Изисква се удостоверяване на автентичността, освен когато е в същата мрежа като сървъра";
+$labels["authrequired_local_smtpafter"] = "Изисква се удостоверяване на автентичността или %s, освен когато е в същата мрежа като сървъра";
+$labels["authrequired_smtpafter"] = "Изисква се удостоверяване или %s";
+$labels["smtpafterpop"] = "SMTP след POP";
+$labels["smtpafterimap"] = "SMTP след IMAP";
+$labels["smtpafterpopimap"] = "SMTP след POP/IMAP";
 ?>

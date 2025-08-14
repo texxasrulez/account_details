@@ -1,22 +1,98 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-$labels['userinfo'] = 'Informácie o používateľovi';
-$labels['created'] = 'Vytvorené';
-$labels['lastlogin'] = 'Posledné prihlásenie';
-$labels['defaultidentity'] = 'Predvolená identita';
+// Auto-generated from en_US.inc via DeepL (sk_SK)
+$labels = array();
+$labels["addressbook"] = "Kontakty";
+$labels["account_details"] = "Podrobnosti o účte";
+$labels["account_details_title"] = "Podrobnosti o účte Plugin";
+$labels["and"] = "a";
+$labels["android"] = "Android";
+$labels["archive"] = "Archív";
+$labels["auth"] = "Overovanie";
+$labels["authrequired"] = "Požadované overenie";
+$labels["back"] = "Späť";
+$labels["browser-user-agent"] = "Používateľský agent";
+$labels["caldav"] = "CalDAV";
+$labels["caldavsync"] = "CalDAV-sync";
+$labels["calendars"] = "Kalendáre";
+$labels["carddav"] = "CardDAV";
+$labels["carddavsync"] = "CardDAV-sync";
+$labels["clear_trash"] = "Prázdny odpadkový kôš";
+$labels["clients"] = "Odporúčaní klienti, ktorí podporujú protokol %s";
+$labels["contactadmin"] = "Odoslanie e-mailu správcovi webovej pošty";
+$labels["contacteditor"] = "Kontakt na redaktora";
+$labels["copiedtoclipboard"] = "Skopírované do schránky";
+$labels["copytoclipboard"] = "Kopírovanie do schránky";
+$labels["cpu"] = "Zaťaženie CPU";
+$labels["created"] = "Vytvorené";
+$labels["currver"] = "Aktuálna nainštalovaná verzia";
+$labels["days"] = "Deň(y),";
+$labels["description"] = "Získajte podrobné informácie o svojom účte.";
+$labels["default"] = "Predvolené nastavenie";
+$labels["defaultidentity"] = "Názov";
+$labels["details"] = "Podrobnosti na";
+$labels["downloadupdate"] = "Stiahnite si najnovšiu verziu Roundcube";
+$labels["emailaddress"] = "E-mailová adresa";
+$labels["encryption"] = "Šifrovanie";
+$labels["htmlserver"] = "Server HTML";
+$labels["hostname"] = "Hostname";
+$labels["hours"] = "Hodina(y),";
+$labels["imap"] = "Prichádzajúci IMAP";
+$labels["imap-ssl"] = "Prichádzajúci IMAP-SSL";
+$labels["ipaddress"] = "Aktuálna IP adresa";
+$labels["iphone"] = "iPhone";
+$labels["is_available"] = "je najnovšia verzia dostupná pre";
+$labels["latestversion"] = "Najnovšia verzia online";
+$labels["licenseagreement"] = "Prečítajte si licenčnú zmluvu";
+$labels["lightning"] = "Blesk";
+$labels["mailboxdetails"] = "Podrobnosti o poštovej schránke používateľa";
+$labels["minutes"] = "Minúta(y) a";
+$labels["memory"] = "Pamäť";
+$labels["os"] = "Operačný systém";
+$labels["php_version"] = "Verzia PHP";
+$labels["pluginname"] = "Podrobnosti o účte";
+$labels["plugindescription"] = "Zobrazuje základné informácie o účte, ako sú protokoly serverov IMAP, POP a SMTP, predvolená identita, adresy URL CalDAV a CardDAV používateľa a ďalšie podrobnosti.";
+$labels["pop"] = "Prichádzajúce POP";
+$labels["pop-ssl"] = "Prichádzajúci POP-SSL";
+$labels["port"] = "Prístav";
+$labels["portnumbers"] = "Čísla portov";
+$labels["portnumbersencrypted"] = "Šifrované pripojenie";
+$labels["portnumbersregular"] = "Nešifrované pripojenie";
+$labels["rc_version"] = "Aktuálna verzia Roundcube";
+$labels["rcdetails"] = "Podrobnosti o okrúhlej kocke";
+$labels["recommended"] = "Odporúčané SSL";
+$labels["resolution"] = "Rozlíšenie obrazovky";
+$labels["roundcube"] = "Okrúhla kocka";
+$labels["seconds"] = "Druhý(é)";
+$labels["serverinformation"] = "Informácie o serveri";
+$labels["serverlocation"] = "Umiestnenie servera";
+$labels["servermemory"] = "Pamäť servera";
+$labels["smtp"] = "Odchádzajúci SMTP";
+$labels["smtp-ssl"] = "Odchádzajúci SMTP-SSL";
+$labels["sogoconn"] = "Konektor SOGO";
+$labels["spaauthsupported"] = "&nbsp; Podporované šifrovanie hesla SPA";
+$labels["storagequota"] = "Celkové skladovanie";
+$labels["supporturl"] = "Prepojenie na stránku podpory poskytovateľov pošty";
+$labels["thunderbird"] = "Thunderbird";
+$labels["total"] = "Celkom";
+$labels["tutorial"] = "Výučba &nbsp;&nbsp;";
+$labels["uptime"] = "Čas prevádzky";
+$labels["usystem"] = "Podrobnosti o používateľskom systéme";
+$labels["url"] = "ADRESA URL";
+$labels["usedstorage"] = "Použité úložisko";
+$labels["userdet"] = "Podrobnosti o používateľovi";
+$labels["userinfo"] = "Informácie pre používateľa";
+$labels["userid"] = "ID používateľa systému";
+$labels["used"] = "Použité";
+$labels["webbrowser"] = "Webový prehľadávač";
+$labels["webmail"] = "Webmail";
+$labels["webmailsystem"] = "Systém webovej pošty";
+$labels["web_url"] = "Adresa URL webmailu";
+$labels["web_url_alt"] = "Adresa URL na prístup k webovej pošte";
+$labels["openrelaylocal"] = "Povolené odosielať, keď je v rovnakej sieti ako server";
+$labels["authrequired_local"] = "Vyžaduje sa overenie, okrem prípadov, keď je server v rovnakej sieti";
+$labels["authrequired_local_smtpafter"] = "Vyžaduje sa overenie alebo %s, okrem prípadov, keď je server v rovnakej sieti";
+$labels["authrequired_smtpafter"] = "Vyžaduje sa overenie alebo %s";
+$labels["smtpafterpop"] = "SMTP po POP";
+$labels["smtpafterimap"] = "SMTP po IMAP";
+$labels["smtpafterpopimap"] = "SMTP po POP/IMAP";
 ?>

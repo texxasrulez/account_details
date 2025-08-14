@@ -1,98 +1,98 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-
+// Auto-generated from en_US.inc via DeepL (nl_NL)
 $labels = array();
-$labels['account'] = 'Account User Data';
-$labels['account_details'] = 'Account Data';
-$labels['accountinformation'] = 'Account Data';
-$labels['and'] = 'en';
-$labels['auth'] = 'Authenticatie';
-$labels['addressbooks'] = 'Adresboeken';
-$labels['archive'] = 'Archiefmap';
-$labels['authrequired'] = 'Authenticatie nodig';
-$labels['back'] = 'Terug';
-$labels['calendars'] = 'Kalendars';
-$labels['clients'] = 'Aanbevolen klanten die %s  protocol ondersteunen';
-$labels['copiedtoclipboard'] = 'Gekopieerd naar het klembord';
-$labels['copytoclipboard'] = 'Kopieer naar klembord';
-$labels['created'] = 'Aangemaakt';
-$labels['description'] = 'Krijg gedetailleerde informatie over uw account.';
-$labels['default'] = 'Standaard';
-$labels['defaultidentity'] = 'Naam';
-$labels['drafts'] = 'Concepten Folder';
-$labels['emailaddress'] = 'E-mailadres';
-$labels['enable_support'] = 'ondersteuning URL';
-$labels['encryption'] = 'Encryptie';
-$labels['hostname'] = 'Hostname';
-$labels['imap'] = 'Inkomende IMAP';
-$labels['imap-ssl'] = 'Inkomende IMAP-SSL';
-$labels['inbox'] = 'Inbox';
-$labels['ipaddress'] = 'Huidige IP-adres';
-$labels['junk'] = 'Junk Folder';
-$labels['lastlogin'] = 'Laatste aanmelding';
-$labels['location'] = 'Server Location';
-$labels['mailbox'] = 'Mailbox Details';
-$labels['no'] = 'Nee';
-$labels['php_version'] = 'PHP Version';
-$labels['pluginname'] = 'Account Details';
-$labels['plugindescription'] = 'Geeft elementaire accountgegevens, zoals IMAP, POP en SMTP-server protocollen, standaard Identity, CalDAV & CardDAV URLs en andere gegevens van de gebruiker.';
-$labels['pop'] = 'Inkomende POP';
-$labels['pop-ssl'] = 'Inkomende POP-SSL';
-$labels['port'] = 'Port';
-$labels['portnumbers'] = 'Port numbers';
-$labels['portnumbersencrypted'] = 'versleutelde verbinding met de mailserver';
-$labels['portnumbersregular'] = 'regelmatige verbinding met de mailserver';
-$labels['rc_version'] = 'Roundcube Version';
-$labels['recommended'] = 'SSL Aanbevolen';
-$labels['sent'] = 'Verzonden Folder';
-$labels['serverinfo'] = 'Server Details';
-$labels['serverinformation'] = 'Server Informatie';
-$labels['server'] = 'Server';
-$labels['size'] = 'K';
-$labels['smtp'] = 'Uitgaande SMTP';
-$labels['smtp-ssl'] = 'Uitgaande SMTP-SSL';
-$labels['spaauthsupported'] = '&nbsp; SPA wachtwoord-encryptie ondersteund';
-$labels['storagequota'] = 'Opslagruimte';
-$labels['trash'] = 'Trash Folder';
-$labels['total'] = 'Totaal';
-$labels['tutorial'] = 'Tutorial &nbsp;&nbsp;';
-$labels['unread'] = 'Ongelezen';
-$labels['url'] = 'URL';
-$labels['usedstorage'] = 'Tweedehands opslag';
-$labels['yes'] = 'Ja';
-$labels['userinfo'] = 'Gebruikersinformatie';
-$labels['userid'] = 'System User ID';
-$labels['username'] = 'Gebruikersnaam';
-$labels['webmail'] = 'Webmail';
-$labels['webmailsystem'] = 'Webmail Systeem';
-$labels['web_url'] = 'Webmail URL';
-
-
-// %s will be excanged with the appropiate "SMTP after *" below
-$labels['openrelaylocal'] = 'Toegestaan ​​wanneer op hetzelfde netwerk als server te sturen';
-$labels['authrequired_local'] = 'Verificatie vereist, behalve wanneer op hetzelfde netwerk als server';
-$labels['authrequired_local_smtpafter'] = 'Authenticatie of %s is vereist, behalve wanneer op hetzelfde netwerk als server';
-$labels['authrequired_smtpafter'] = 'Authenticatie of %s is vereist';
-
-// "SMTP after *" are to some extent known technical terminologies.
-// For some languages it will probably be correct to not translate "after"
-$labels['smtpafterpop'] = 'SMTP na POP';
-$labels['smtpafterimap'] = 'SMTP na IMAP';
-$labels['smtpafterpopimap'] = 'SMTP na POP/IMAP';
-
+$labels["addressbook"] = "Contacten";
+$labels["account_details"] = "Accountgegevens";
+$labels["account_details_title"] = "Accountgegevens Plugin";
+$labels["and"] = "en";
+$labels["android"] = "Android";
+$labels["archive"] = "Archief";
+$labels["auth"] = "Authenticatie";
+$labels["authrequired"] = "Verificatie vereist";
+$labels["back"] = "Terug";
+$labels["browser-user-agent"] = "Gebruikersagent";
+$labels["caldav"] = "CalDAV";
+$labels["caldavsync"] = "CalDAV-sync";
+$labels["calendars"] = "Kalenders";
+$labels["carddav"] = "CardDAV";
+$labels["carddavsync"] = "CardDAV-sync";
+$labels["clear_trash"] = "Prullenbak legen";
+$labels["clients"] = "Aanbevolen clients die protocol %s ondersteunen";
+$labels["contactadmin"] = "Stuur een e-mail naar de beheerder van Webmail";
+$labels["contacteditor"] = "Contact Redacteur";
+$labels["copiedtoclipboard"] = "Gekopieerd naar klembord";
+$labels["copytoclipboard"] = "Kopiëren naar klembord";
+$labels["cpu"] = "CPU-belasting";
+$labels["created"] = "Gemaakt";
+$labels["currver"] = "Huidige geïnstalleerde versie";
+$labels["days"] = "Dag(en),";
+$labels["description"] = "Krijg gedetailleerde informatie over je account.";
+$labels["default"] = "Standaard";
+$labels["defaultidentity"] = "Naam";
+$labels["details"] = "Details";
+$labels["downloadupdate"] = "Download de nieuwste versie van Roundcube";
+$labels["emailaddress"] = "E-mailadres";
+$labels["encryption"] = "Encryptie";
+$labels["htmlserver"] = "HTML-server";
+$labels["hostname"] = "Hostnaam";
+$labels["hours"] = "Uur(en),";
+$labels["imap"] = "Inkomende IMAP";
+$labels["imap-ssl"] = "Inkomend IMAP-SSL";
+$labels["ipaddress"] = "Huidig IP-adres";
+$labels["iphone"] = "iPhone";
+$labels["is_available"] = "is de nieuwste versie die beschikbaar is voor";
+$labels["latestversion"] = "Laatste versie online";
+$labels["licenseagreement"] = "Lees de licentieovereenkomst";
+$labels["lightning"] = "Bliksem";
+$labels["mailboxdetails"] = "Details gebruikersmailbox";
+$labels["minutes"] = "Minuut(en) en";
+$labels["memory"] = "Geheugen";
+$labels["os"] = "Besturingssysteem";
+$labels["php_version"] = "PHP versie";
+$labels["pluginname"] = "Accountgegevens";
+$labels["plugindescription"] = "Toont basis accountinformatie zoals IMAP, POP & SMTP serverprotocollen, standaard identiteit, CalDAV & CardDAV URL's van de gebruiker en andere details.";
+$labels["pop"] = "Inkomende POP";
+$labels["pop-ssl"] = "Inkomende POP-SSL";
+$labels["port"] = "Haven";
+$labels["portnumbers"] = "Poortnummers";
+$labels["portnumbersencrypted"] = "Gecodeerde verbinding";
+$labels["portnumbersregular"] = "Onversleutelde verbinding";
+$labels["rc_version"] = "Huidige Roundcube-versie";
+$labels["rcdetails"] = "Details Ronde Kubus";
+$labels["recommended"] = "SSL aanbevolen";
+$labels["resolution"] = "Schermresolutie";
+$labels["roundcube"] = "Roundcube";
+$labels["seconds"] = "Tweede(n)";
+$labels["serverinformation"] = "Serverinformatie";
+$labels["serverlocation"] = "Serverlocatie";
+$labels["servermemory"] = "Servergeheugen";
+$labels["smtp"] = "Uitgaande SMTP";
+$labels["smtp-ssl"] = "Uitgaande SMTP-SSL";
+$labels["sogoconn"] = "SOGO-aansluiting";
+$labels["spaauthsupported"] = "&nbsp; SPA-wachtwoordcodering ondersteund";
+$labels["storagequota"] = "Totale opslag";
+$labels["supporturl"] = "Link naar de ondersteuningspagina van uw e-mailprovider";
+$labels["thunderbird"] = "Thunderbird";
+$labels["total"] = "Totaal";
+$labels["tutorial"] = "Handleiding &nbsp;&nbsp;";
+$labels["uptime"] = "Uptime";
+$labels["usystem"] = "Systeemgegevens gebruiker";
+$labels["url"] = "URL";
+$labels["usedstorage"] = "Gebruikte opslag";
+$labels["userdet"] = "Details gebruiker";
+$labels["userinfo"] = "Info voor de gebruiker";
+$labels["userid"] = "Gebruikers-ID systeem";
+$labels["used"] = "Gebruikt";
+$labels["webbrowser"] = "Webbrowser";
+$labels["webmail"] = "Webmail";
+$labels["webmailsystem"] = "Webmail systeem";
+$labels["web_url"] = "Webmail URL";
+$labels["web_url_alt"] = "URL voor toegang tot uw Webmail";
+$labels["openrelaylocal"] = "Verzenden toegestaan wanneer op hetzelfde netwerk als de server";
+$labels["authrequired_local"] = "Authenticatie vereist, behalve wanneer op hetzelfde netwerk als de server";
+$labels["authrequired_local_smtpafter"] = "Authenticatie of %s vereist, behalve wanneer op hetzelfde netwerk als de server";
+$labels["authrequired_smtpafter"] = "Authenticatie of %s vereist";
+$labels["smtpafterpop"] = "SMTP na POP";
+$labels["smtpafterimap"] = "SMTP na IMAP";
+$labels["smtpafterpopimap"] = "SMTP na POP/IMAP";
 ?>

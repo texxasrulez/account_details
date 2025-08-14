@@ -1,22 +1,98 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-$labels['userinfo'] = 'Informação do utilizador';
-$labels['created'] = 'Criado';
-$labels['lastlogin'] = 'Último acesso';
-$labels['defaultidentity'] = 'Identidade pré-definida';
+// Auto-generated from en_US.inc via DeepL (pt_PT)
+$labels = array();
+$labels["addressbook"] = "Contactos";
+$labels["account_details"] = "Dados da conta";
+$labels["account_details_title"] = "Plugin de dados da conta";
+$labels["and"] = "e";
+$labels["android"] = "Android";
+$labels["archive"] = "Arquivo";
+$labels["auth"] = "Autenticação";
+$labels["authrequired"] = "Autenticação necessária";
+$labels["back"] = "Voltar";
+$labels["browser-user-agent"] = "Agente do utilizador";
+$labels["caldav"] = "CalDAV";
+$labels["caldavsync"] = "CalDAV-sync";
+$labels["calendars"] = "Calendários";
+$labels["carddav"] = "CartãoDAV";
+$labels["carddavsync"] = "CardDAV-sync";
+$labels["clear_trash"] = "Esvaziar o lixo";
+$labels["clients"] = "Clientes recomendados que suportam o protocolo %s";
+$labels["contactadmin"] = "Enviar uma mensagem de correio eletrónico ao Administrador do Webmail";
+$labels["contacteditor"] = "Contactar o editor";
+$labels["copiedtoclipboard"] = "Copiado para a área de transferência";
+$labels["copytoclipboard"] = "Copiar para a área de transferência";
+$labels["cpu"] = "Carga da CPU";
+$labels["created"] = "Criado";
+$labels["currver"] = "Versão atual instalada";
+$labels["days"] = "Dia(s),";
+$labels["description"] = "Obter informações pormenorizadas sobre a sua conta.";
+$labels["default"] = "Predefinição";
+$labels["defaultidentity"] = "Nome";
+$labels["details"] = "Detalhes";
+$labels["downloadupdate"] = "Descarregar a versão mais recente do Roundcube";
+$labels["emailaddress"] = "Endereço de correio eletrónico";
+$labels["encryption"] = "Encriptação";
+$labels["htmlserver"] = "Servidor HTML";
+$labels["hostname"] = "Nome do anfitrião";
+$labels["hours"] = "Hora(s),";
+$labels["imap"] = "IMAP de entrada";
+$labels["imap-ssl"] = "IMAP-SSL de entrada";
+$labels["ipaddress"] = "Endereço IP atual";
+$labels["iphone"] = "iPhone";
+$labels["is_available"] = "é a versão mais recente disponível para";
+$labels["latestversion"] = "Última versão online";
+$labels["licenseagreement"] = "Ler o Contrato de Licença";
+$labels["lightning"] = "Relâmpagos";
+$labels["mailboxdetails"] = "Detalhes da caixa de correio do utilizador";
+$labels["minutes"] = "Minuto(s) e";
+$labels["memory"] = "Memória";
+$labels["os"] = "Sistema operativo";
+$labels["php_version"] = "Versão PHP";
+$labels["pluginname"] = "Dados da conta";
+$labels["plugindescription"] = "Apresenta informações básicas sobre a conta, como os protocolos de servidor IMAP, POP e SMTP, a identidade predefinida, os URLs CalDAV e CardDAV do utilizador e outros detalhes.";
+$labels["pop"] = "POP de entrada";
+$labels["pop-ssl"] = "POP-SSL de entrada";
+$labels["port"] = "Porto";
+$labels["portnumbers"] = "Números de porta";
+$labels["portnumbersencrypted"] = "Ligação encriptada";
+$labels["portnumbersregular"] = "Ligação não encriptada";
+$labels["rc_version"] = "Versão atual do Roundcube";
+$labels["rcdetails"] = "Detalhes do Roundcube";
+$labels["recommended"] = "SSL Recomendado";
+$labels["resolution"] = "Resolução do ecrã";
+$labels["roundcube"] = "Cubo redondo";
+$labels["seconds"] = "Segundo(s)";
+$labels["serverinformation"] = "Informações sobre o servidor";
+$labels["serverlocation"] = "Localização do servidor";
+$labels["servermemory"] = "Memória do servidor";
+$labels["smtp"] = "SMTP de saída";
+$labels["smtp-ssl"] = "SMTP-SSL de saída";
+$labels["sogoconn"] = "Conector SOGO";
+$labels["spaauthsupported"] = "Suporte para encriptação de palavras-passe SPA";
+$labels["storagequota"] = "Armazenamento total";
+$labels["supporturl"] = "Ligação à página de suporte dos fornecedores de correio";
+$labels["thunderbird"] = "Thunderbird";
+$labels["total"] = "Total";
+$labels["tutorial"] = "Tutorial &nbsp;&nbsp;";
+$labels["uptime"] = "Tempo de atividade";
+$labels["usystem"] = "Detalhes do sistema do utilizador";
+$labels["url"] = "URL";
+$labels["usedstorage"] = "Armazenamento usado";
+$labels["userdet"] = "Detalhes do utilizador";
+$labels["userinfo"] = "Informações do utilizador";
+$labels["userid"] = "ID do utilizador do sistema";
+$labels["used"] = "Usado";
+$labels["webbrowser"] = "Navegador Web";
+$labels["webmail"] = "Webmail";
+$labels["webmailsystem"] = "Sistema de Webmail";
+$labels["web_url"] = "URL do Webmail";
+$labels["web_url_alt"] = "URL para aceder ao seu Webmail";
+$labels["openrelaylocal"] = "Permitido enviar quando na mesma rede que o servidor";
+$labels["authrequired_local"] = "Autenticação necessária, exceto quando na mesma rede que o servidor";
+$labels["authrequired_local_smtpafter"] = "É necessária autenticação ou %s, exceto se estiver na mesma rede que o servidor";
+$labels["authrequired_smtpafter"] = "Autenticação ou %s necessário";
+$labels["smtpafterpop"] = "SMTP após POP";
+$labels["smtpafterimap"] = "SMTP depois de IMAP";
+$labels["smtpafterpopimap"] = "SMTP após POP/IMAP";
 ?>

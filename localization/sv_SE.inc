@@ -1,22 +1,98 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-$labels['userinfo'] = 'Användarinfo';
-$labels['created'] = 'Skapad';
-$labels['lastlogin'] = 'Senast inloggad';
-$labels['defaultidentity'] = 'Standardidentitet';
+// Auto-generated from en_US.inc via DeepL (sv_SE)
+$labels = array();
+$labels["addressbook"] = "Kontaktpersoner";
+$labels["account_details"] = "Kontouppgifter";
+$labels["account_details_title"] = "Plugin för kontouppgifter";
+$labels["and"] = "och";
+$labels["android"] = "Android";
+$labels["archive"] = "Arkiv";
+$labels["auth"] = "Autentisering";
+$labels["authrequired"] = "Autentisering krävs";
+$labels["back"] = "Tillbaka";
+$labels["browser-user-agent"] = "Användaragent";
+$labels["caldav"] = "CalDAV";
+$labels["caldavsync"] = "CalDAV-synkronisering";
+$labels["calendars"] = "Kalendrar";
+$labels["carddav"] = "KortDAV";
+$labels["carddavsync"] = "CardDAV-synkronisering";
+$labels["clear_trash"] = "Töm papperskorgen";
+$labels["clients"] = "Rekommenderade klienter som stöder %s protokoll";
+$labels["contactadmin"] = "Skicka ett e-postmeddelande till administratören för webbmail";
+$labels["contacteditor"] = "Kontakta redaktören";
+$labels["copiedtoclipboard"] = "Kopieras till urklipp";
+$labels["copytoclipboard"] = "Kopiera till urklipp";
+$labels["cpu"] = "CPU-belastning";
+$labels["created"] = "Skapad";
+$labels["currver"] = "Aktuell version installerad";
+$labels["days"] = "Dag(ar),";
+$labels["description"] = "Få detaljerad information om ditt konto.";
+$labels["default"] = "Standard";
+$labels["defaultidentity"] = "Namn";
+$labels["details"] = "Detaljer";
+$labels["downloadupdate"] = "Ladda ner senaste versionen av Roundcube";
+$labels["emailaddress"] = "E-postadress";
+$labels["encryption"] = "Kryptering";
+$labels["htmlserver"] = "HTML-server";
+$labels["hostname"] = "Värdnamn";
+$labels["hours"] = "Timme(r),";
+$labels["imap"] = "Inkommande IMAP";
+$labels["imap-ssl"] = "Inkommande IMAP-SSL";
+$labels["ipaddress"] = "Aktuell IP-adress";
+$labels["iphone"] = "iPhone";
+$labels["is_available"] = "är den senaste tillgängliga versionen för";
+$labels["latestversion"] = "Senaste versionen online";
+$labels["licenseagreement"] = "Läs licensavtalet";
+$labels["lightning"] = "Blixten";
+$labels["mailboxdetails"] = "Detaljer om användarens brevlåda";
+$labels["minutes"] = "Minut(er) och";
+$labels["memory"] = "Minne";
+$labels["os"] = "Operativsystem";
+$labels["php_version"] = "PHP-version";
+$labels["pluginname"] = "Kontouppgifter";
+$labels["plugindescription"] = "Visar grundläggande kontoinformation som IMAP-, POP- och SMTP-serverprotokoll, standardidentitet, användarens CalDAV- och CardDAV-URL:er och andra detaljer.";
+$labels["pop"] = "Inkommande POP";
+$labels["pop-ssl"] = "Inkommande POP-SSL";
+$labels["port"] = "Port";
+$labels["portnumbers"] = "Portnummer";
+$labels["portnumbersencrypted"] = "Krypterad anslutning";
+$labels["portnumbersregular"] = "Okrypterad anslutning";
+$labels["rc_version"] = "Nuvarande Roundcube-version";
+$labels["rcdetails"] = "Runda kuben Detaljer";
+$labels["recommended"] = "SSL rekommenderas";
+$labels["resolution"] = "Skärmupplösning";
+$labels["roundcube"] = "Rund kub";
+$labels["seconds"] = "Sekund(er)";
+$labels["serverinformation"] = "Serverinformation";
+$labels["serverlocation"] = "Serverns plats";
+$labels["servermemory"] = "Serverminne";
+$labels["smtp"] = "Utgående SMTP";
+$labels["smtp-ssl"] = "Utgående SMTP-SSL";
+$labels["sogoconn"] = "SOGO-kontakt";
+$labels["spaauthsupported"] = "Stöd för kryptering av SPA-lösenord";
+$labels["storagequota"] = "Total Storage";
+$labels["supporturl"] = "Länk till din supportsida för e-postleverantörer";
+$labels["thunderbird"] = "Åskfågel";
+$labels["total"] = "Totalt";
+$labels["tutorial"] = "Handledning &nbsp;&nbsp;";
+$labels["uptime"] = "Drifttid";
+$labels["usystem"] = "Detaljer om användarsystemet";
+$labels["url"] = "URL";
+$labels["usedstorage"] = "Begagnad förvaring";
+$labels["userdet"] = "Användardetaljer";
+$labels["userinfo"] = "Användarinformation";
+$labels["userid"] = "Systemets användar-ID";
+$labels["used"] = "Begagnad";
+$labels["webbrowser"] = "Webbläsare";
+$labels["webmail"] = "Webbmail";
+$labels["webmailsystem"] = "Webmail-system";
+$labels["web_url"] = "URL för webbmail";
+$labels["web_url_alt"] = "URL för att komma åt din webbmail";
+$labels["openrelaylocal"] = "Tillåtet att skicka när man befinner sig i samma nätverk som servern";
+$labels["authrequired_local"] = "Autentisering krävs, utom när du befinner dig i samma nätverk som servern";
+$labels["authrequired_local_smtpafter"] = "Autentisering eller %s krävs, utom när du befinner dig i samma nätverk som servern";
+$labels["authrequired_smtpafter"] = "Autentisering eller %s krävs";
+$labels["smtpafterpop"] = "SMTP efter POP";
+$labels["smtpafterimap"] = "SMTP efter IMAP";
+$labels["smtpafterpopimap"] = "SMTP efter POP/IMAP";
 ?>

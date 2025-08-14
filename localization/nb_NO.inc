@@ -1,22 +1,98 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-$labels['userinfo'] = 'Brukerinformasjon';
-$labels['created'] = 'Opprettet';
-$labels['lastlogin'] = 'Sist logget inn';
-$labels['defaultidentity'] = 'Standard identitet';
+// Auto-generated from en_US.inc via DeepL (nb_NO)
+$labels = array();
+$labels["addressbook"] = "Kontaktpersoner";
+$labels["account_details"] = "Kontodetaljer";
+$labels["account_details_title"] = "Plugin for kontoopplysninger";
+$labels["and"] = "og";
+$labels["android"] = "Android";
+$labels["archive"] = "Arkiv";
+$labels["auth"] = "Autentisering";
+$labels["authrequired"] = "Autentisering kreves";
+$labels["back"] = "Tilbake";
+$labels["browser-user-agent"] = "Brukeragent";
+$labels["caldav"] = "CalDAV";
+$labels["caldavsync"] = "CalDAV-synkronisering";
+$labels["calendars"] = "Kalendere";
+$labels["carddav"] = "CardDAV";
+$labels["carddavsync"] = "CardDAV-synkronisering";
+$labels["clear_trash"] = "Tøm papirkurven";
+$labels["clients"] = "Anbefalte klienter som støtter %s-protokollen";
+$labels["contactadmin"] = "Send en e-post til Webmail Administrator";
+$labels["contacteditor"] = "Kontakt redaktør";
+$labels["copiedtoclipboard"] = "Kopieres til utklippstavlen";
+$labels["copytoclipboard"] = "Kopier til utklippstavlen";
+$labels["cpu"] = "CPU-belastning";
+$labels["created"] = "Opprettet";
+$labels["currver"] = "Gjeldende versjon installert";
+$labels["days"] = "Dag(er),";
+$labels["description"] = "Få detaljert informasjon om kontoen din.";
+$labels["default"] = "Standard";
+$labels["defaultidentity"] = "Navn";
+$labels["details"] = "Detaljer";
+$labels["downloadupdate"] = "Last ned siste versjon av Roundcube";
+$labels["emailaddress"] = "E-postadresse";
+$labels["encryption"] = "Kryptering";
+$labels["htmlserver"] = "HTML-server";
+$labels["hostname"] = "Vertsnavn";
+$labels["hours"] = "Time(r),";
+$labels["imap"] = "Innkommende IMAP";
+$labels["imap-ssl"] = "Innkommende IMAP-SSL";
+$labels["ipaddress"] = "Nåværende IP-adresse";
+$labels["iphone"] = "iPhone";
+$labels["is_available"] = "er den nyeste tilgjengelige versjonen for";
+$labels["latestversion"] = "Siste versjon på nett";
+$labels["licenseagreement"] = "Les lisensavtalen";
+$labels["lightning"] = "Lynnedslag";
+$labels["mailboxdetails"] = "Detaljer om brukerens postkasse";
+$labels["minutes"] = "Minutt(er) og";
+$labels["memory"] = "Hukommelse";
+$labels["os"] = "Operativsystem";
+$labels["php_version"] = "PHP-versjon";
+$labels["pluginname"] = "Kontodetaljer";
+$labels["plugindescription"] = "Viser grunnleggende kontoinformasjon som IMAP-, POP- og SMTP-serverprotokoller, standard identitet, brukerens CalDAV- og CardDAV-URL-er og andre detaljer.";
+$labels["pop"] = "Innkommende POP";
+$labels["pop-ssl"] = "Innkommende POP-SSL";
+$labels["port"] = "Havn";
+$labels["portnumbers"] = "Portnumre";
+$labels["portnumbersencrypted"] = "Kryptert tilkobling";
+$labels["portnumbersregular"] = "Ukryptert tilkobling";
+$labels["rc_version"] = "Nåværende Roundcube-versjon";
+$labels["rcdetails"] = "Detaljer om Roundcube";
+$labels["recommended"] = "SSL anbefales";
+$labels["resolution"] = "Skjermoppløsning";
+$labels["roundcube"] = "Roundcube";
+$labels["seconds"] = "Sekund(er)";
+$labels["serverinformation"] = "Serverinformasjon";
+$labels["serverlocation"] = "Serverplassering";
+$labels["servermemory"] = "Serverminne";
+$labels["smtp"] = "Utgående SMTP";
+$labels["smtp-ssl"] = "Utgående SMTP-SSL";
+$labels["sogoconn"] = "SOGO-kontakt";
+$labels["spaauthsupported"] = "Støtte for kryptering av SPA-passord";
+$labels["storagequota"] = "Total lagring";
+$labels["supporturl"] = "Lenke til supportsiden til e-postleverandøren din";
+$labels["thunderbird"] = "Thunderbird";
+$labels["total"] = "Totalt";
+$labels["tutorial"] = "Opplæring &nbsp;&nbsp;";
+$labels["uptime"] = "Oppetid";
+$labels["usystem"] = "Detaljer om brukersystemet";
+$labels["url"] = "URL";
+$labels["usedstorage"] = "Brukt lagring";
+$labels["userdet"] = "Brukerdetaljer";
+$labels["userinfo"] = "Brukerinfo";
+$labels["userid"] = "Systembruker-ID";
+$labels["used"] = "Brukt";
+$labels["webbrowser"] = "Nettleser";
+$labels["webmail"] = "Webmail";
+$labels["webmailsystem"] = "Webmail-system";
+$labels["web_url"] = "URL til webmail";
+$labels["web_url_alt"] = "URL for å få tilgang til webmailen din";
+$labels["openrelaylocal"] = "Tillatt å sende når du er på samme nettverk som serveren";
+$labels["authrequired_local"] = "Autentisering kreves, unntatt når du er på samme nettverk som serveren";
+$labels["authrequired_local_smtpafter"] = "Autentisering eller %s kreves, unntatt når du er på samme nettverk som serveren";
+$labels["authrequired_smtpafter"] = "Autentisering eller %s kreves";
+$labels["smtpafterpop"] = "SMTP etter POP";
+$labels["smtpafterimap"] = "SMTP etter IMAP";
+$labels["smtpafterpopimap"] = "SMTP etter POP/IMAP";
 ?>

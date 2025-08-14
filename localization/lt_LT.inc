@@ -1,22 +1,98 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-$labels['userinfo'] = 'Informacija apie naudotoją';
-$labels['created'] = 'Sukurtas';
-$labels['lastlogin'] = 'Paskutinį kartą prisijungė';
-$labels['defaultidentity'] = 'Numatytoji tapatybė';
+// Auto-generated from en_US.inc via DeepL (lt_LT)
+$labels = array();
+$labels["addressbook"] = "Kontaktai";
+$labels["account_details"] = "Sąskaitos informacija";
+$labels["account_details_title"] = "Paskyros informacijos įskiepis";
+$labels["and"] = "ir";
+$labels["android"] = "\"Android\"";
+$labels["archive"] = "Archyvas";
+$labels["auth"] = "Autentiškumo nustatymas";
+$labels["authrequired"] = "Reikalingas autentiškumo patvirtinimas";
+$labels["back"] = "Atgal";
+$labels["browser-user-agent"] = "Vartotojo agentas";
+$labels["caldav"] = "CalDAV";
+$labels["caldavsync"] = "CalDAV-sync";
+$labels["calendars"] = "Kalendoriai";
+$labels["carddav"] = "CardDAV";
+$labels["carddavsync"] = "CardDAV-sync";
+$labels["clear_trash"] = "Tuščios šiukšliadėžės";
+$labels["clients"] = "Rekomenduojami klientai, palaikantys %s protokolą";
+$labels["contactadmin"] = "Siųsti el. laišką \"Webmail\" administratoriui";
+$labels["contacteditor"] = "Susisiekite su redaktoriumi";
+$labels["copiedtoclipboard"] = "Nukopijuota į iškarpinę";
+$labels["copytoclipboard"] = "Kopijuoti į iškarpinę";
+$labels["cpu"] = "CPU apkrova";
+$labels["created"] = "Sukurta";
+$labels["currver"] = "Įdiegta dabartinė versija";
+$labels["days"] = "Diena (-os),";
+$labels["description"] = "Gaukite išsamią informaciją apie savo paskyrą.";
+$labels["default"] = "Numatytoji";
+$labels["defaultidentity"] = "Pavadinimas";
+$labels["details"] = "Išsami informacija";
+$labels["downloadupdate"] = "Atsisiųsti naujausią Roundcube versiją";
+$labels["emailaddress"] = "El. pašto adresas";
+$labels["encryption"] = "Šifravimas";
+$labels["htmlserver"] = "HTML serveris";
+$labels["hostname"] = "Prieglobsčio vardas";
+$labels["hours"] = "Valanda (-os),";
+$labels["imap"] = "Įeinantis IMAP";
+$labels["imap-ssl"] = "Įeinantis IMAP-SSL";
+$labels["ipaddress"] = "Dabartinis IP adresas";
+$labels["iphone"] = "iPhone";
+$labels["is_available"] = "yra naujausia versija, skirta";
+$labels["latestversion"] = "Naujausia versija internete";
+$labels["licenseagreement"] = "Perskaitykite licencijos sutartį";
+$labels["lightning"] = "Žaibas";
+$labels["mailboxdetails"] = "Naudotojo pašto dėžutės informacija";
+$labels["minutes"] = "Minutė (-os) ir";
+$labels["memory"] = "Atmintis";
+$labels["os"] = "Operacinė sistema";
+$labels["php_version"] = "PHP versija";
+$labels["pluginname"] = "Sąskaitos informacija";
+$labels["plugindescription"] = "Rodoma pagrindinė paskyros informacija, pvz., IMAP, POP ir SMTP serverio protokolai, numatytoji tapatybė, naudotojo CalDAV ir CardDAV URL ir kita informacija.";
+$labels["pop"] = "Įeinantis POP";
+$labels["pop-ssl"] = "Įeinantis POP-SSL";
+$labels["port"] = "Uostas";
+$labels["portnumbers"] = "Uosto numeriai";
+$labels["portnumbersencrypted"] = "Užšifruotas ryšys";
+$labels["portnumbersregular"] = "Nešifruotas ryšys";
+$labels["rc_version"] = "Dabartinė \"Roundcube\" versija";
+$labels["rcdetails"] = "Roundcube detalės";
+$labels["recommended"] = "Rekomenduojamas SSL";
+$labels["resolution"] = "Ekrano skiriamoji geba";
+$labels["roundcube"] = "Roundcube";
+$labels["seconds"] = "Antrasis (-ieji)";
+$labels["serverinformation"] = "Serverio informacija";
+$labels["serverlocation"] = "Serverio vieta";
+$labels["servermemory"] = "Serverio atmintis";
+$labels["smtp"] = "Išeinantis SMTP";
+$labels["smtp-ssl"] = "Išeinantis SMTP-SSL";
+$labels["sogoconn"] = "SOGO jungtis";
+$labels["spaauthsupported"] = "&nbsp; Palaikomas SPA slaptažodžio šifravimas";
+$labels["storagequota"] = "Iš viso saugyklų";
+$labels["supporturl"] = "Nuoroda į pašto paslaugų teikėjų palaikymo puslapį";
+$labels["thunderbird"] = "Thunderbird";
+$labels["total"] = "Iš viso";
+$labels["tutorial"] = "Pamoka &nbsp;&nbsp;";
+$labels["uptime"] = "Veikimo laikas";
+$labels["usystem"] = "Naudotojo sistemos informacija";
+$labels["url"] = "URL";
+$labels["usedstorage"] = "Naudota saugykla";
+$labels["userdet"] = "Naudotojo informacija";
+$labels["userinfo"] = "Naudotojo informacija";
+$labels["userid"] = "Sistemos naudotojo ID";
+$labels["used"] = "Naudotas";
+$labels["webbrowser"] = "Žiniatinklio naršyklė";
+$labels["webmail"] = "Interneto paštas";
+$labels["webmailsystem"] = "Interneto pašto sistema";
+$labels["web_url"] = "Webmail URL";
+$labels["web_url_alt"] = "URL, kuriuo galite pasiekti savo žiniatinklio paštą";
+$labels["openrelaylocal"] = "Leidžiama siųsti, kai yra tame pačiame tinkle kaip ir serveris";
+$labels["authrequired_local"] = "Reikalingas autentiškumo patvirtinimas, išskyrus atvejus, kai serveris yra tame pačiame tinkle";
+$labels["authrequired_local_smtpafter"] = "Reikalingas autentiškumo patvirtinimas arba %s, išskyrus atvejus, kai serveris yra tame pačiame tinkle";
+$labels["authrequired_smtpafter"] = "Reikalingas autentiškumo patvirtinimas arba %s";
+$labels["smtpafterpop"] = "SMTP po POP";
+$labels["smtpafterimap"] = "SMTP po IMAP";
+$labels["smtpafterpopimap"] = "SMTP po POP/IMAP";
 ?>

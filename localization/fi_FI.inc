@@ -1,22 +1,98 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-$labels['userinfo'] = 'Käyttäjätiedot';
-$labels['created'] = 'Luotu';
-$labels['lastlogin'] = 'Viimeisin kirjautuminen';
-$labels['defaultidentity'] = 'Oletushenkilöys';
+// Auto-generated from en_US.inc via DeepL (fi_FI)
+$labels = array();
+$labels["addressbook"] = "Yhteystiedot";
+$labels["account_details"] = "Tilin tiedot";
+$labels["account_details_title"] = "Tilin tiedot Plugin";
+$labels["and"] = "ja";
+$labels["android"] = "Android";
+$labels["archive"] = "Arkisto";
+$labels["auth"] = "Tunnistus";
+$labels["authrequired"] = "Vaadittu tunnistus";
+$labels["back"] = "Takaisin";
+$labels["browser-user-agent"] = "Käyttäjäagentti";
+$labels["caldav"] = "CalDAV";
+$labels["caldavsync"] = "CalDAV-sync";
+$labels["calendars"] = "Kalenterit";
+$labels["carddav"] = "CardDAV";
+$labels["carddavsync"] = "CardDAV-sync";
+$labels["clear_trash"] = "Tyhjä roskakori";
+$labels["clients"] = "Suositellut asiakkaat, jotka tukevat %s-protokollaa";
+$labels["contactadmin"] = "Lähetä sähköpostia Webmail Administratorille";
+$labels["contacteditor"] = "Ota yhteyttä päätoimittajaan";
+$labels["copiedtoclipboard"] = "Kopioitu leikepöydälle";
+$labels["copytoclipboard"] = "Kopioi leikepöydälle";
+$labels["cpu"] = "CPU-kuormitus";
+$labels["created"] = "Luotu";
+$labels["currver"] = "Nykyinen asennettu versio";
+$labels["days"] = "Päivä(t),";
+$labels["description"] = "Saat yksityiskohtaisia tietoja tilistäsi.";
+$labels["default"] = "Oletus";
+$labels["defaultidentity"] = "Nimi";
+$labels["details"] = "Yksityiskohdat";
+$labels["downloadupdate"] = "Lataa Roundcuben uusin versio";
+$labels["emailaddress"] = "Sähköpostiosoite";
+$labels["encryption"] = "Salaus";
+$labels["htmlserver"] = "HTML-palvelin";
+$labels["hostname"] = "Isäntänimi";
+$labels["hours"] = "Tunti(t),";
+$labels["imap"] = "Saapuva IMAP";
+$labels["imap-ssl"] = "Saapuva IMAP-SSL";
+$labels["ipaddress"] = "Nykyinen IP-osoite";
+$labels["iphone"] = "iPhone";
+$labels["is_available"] = "on uusin saatavilla oleva versio";
+$labels["latestversion"] = "Uusin versio verkossa";
+$labels["licenseagreement"] = "Lue lisenssisopimus";
+$labels["lightning"] = "Salama";
+$labels["mailboxdetails"] = "Käyttäjän postilaatikon tiedot";
+$labels["minutes"] = "Minuutti(t) ja";
+$labels["memory"] = "Muisti";
+$labels["os"] = "Käyttöjärjestelmä";
+$labels["php_version"] = "PHP-versio";
+$labels["pluginname"] = "Tilin tiedot";
+$labels["plugindescription"] = "Näyttää tilin perustiedot, kuten IMAP-, POP- ja SMTP-palvelinprotokollat, oletustunnuksen, käyttäjän CalDAV- ja CardDAV-URL-osoitteet ja muut tiedot.";
+$labels["pop"] = "Saapuva POP";
+$labels["pop-ssl"] = "Saapuva POP-SSL";
+$labels["port"] = "Satama";
+$labels["portnumbers"] = "Porttinumerot";
+$labels["portnumbersencrypted"] = "Salattu yhteys";
+$labels["portnumbersregular"] = "Salaamaton yhteys";
+$labels["rc_version"] = "Nykyinen Roundcube-versio";
+$labels["rcdetails"] = "Roundcube Yksityiskohdat";
+$labels["recommended"] = "SSL Suositellaan";
+$labels["resolution"] = "Näytön tarkkuus";
+$labels["roundcube"] = "Roundcube";
+$labels["seconds"] = "Toinen(t)";
+$labels["serverinformation"] = "Palvelimen tiedot";
+$labels["serverlocation"] = "Palvelimen sijainti";
+$labels["servermemory"] = "Palvelimen muisti";
+$labels["smtp"] = "Lähtevä SMTP";
+$labels["smtp-ssl"] = "Lähtevä SMTP-SSL";
+$labels["sogoconn"] = "SOGO-liitin";
+$labels["spaauthsupported"] = "&nbsp; SPA-salasanan salaus tuettu";
+$labels["storagequota"] = "Varastointi yhteensä";
+$labels["supporturl"] = "Linkki sähköpostipalveluntarjoajan tukisivulle";
+$labels["thunderbird"] = "Thunderbird";
+$labels["total"] = "Yhteensä";
+$labels["tutorial"] = "Ohje &nbsp;&nbsp;";
+$labels["uptime"] = "Käyntiaika";
+$labels["usystem"] = "Käyttäjän järjestelmän tiedot";
+$labels["url"] = "URL";
+$labels["usedstorage"] = "Käytetty varastointi";
+$labels["userdet"] = "Käyttäjän tiedot";
+$labels["userinfo"] = "Käyttäjän tiedot";
+$labels["userid"] = "Järjestelmän käyttäjätunnus";
+$labels["used"] = "Käytetty";
+$labels["webbrowser"] = "Web-selain";
+$labels["webmail"] = "Webmail";
+$labels["webmailsystem"] = "Webmail-järjestelmä";
+$labels["web_url"] = "Webmailin URL-osoite";
+$labels["web_url_alt"] = "URL-osoite, jolla pääset Webmailiin";
+$labels["openrelaylocal"] = "Sallittu lähetys, kun ollaan samassa verkossa palvelimen kanssa";
+$labels["authrequired_local"] = "Autentikointi vaaditaan, paitsi jos palvelin on samassa verkossa palvelimen kanssa.";
+$labels["authrequired_local_smtpafter"] = "Tunnistautuminen tai %s vaaditaan, paitsi jos olet samassa verkossa palvelimen kanssa.";
+$labels["authrequired_smtpafter"] = "Tunnistautuminen tai %s vaaditaan";
+$labels["smtpafterpop"] = "SMTP POP:n jälkeen";
+$labels["smtpafterimap"] = "SMTP IMAP:n jälkeen";
+$labels["smtpafterpopimap"] = "SMTP POP/IMAP:n jälkeen";
 ?>
