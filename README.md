@@ -61,7 +61,7 @@ This document provides step-by-step installation and configuration instructions 
 
 2. **Permissions** (adjust user/group for your server):
    ```bash
-   chown -R www-data:www-data plugins/account_details
+   chown -R www-data:www-data plugins/account_details (or tailor to your server's user:group)
    find plugins/account_details -type d -exec chmod 755 {} \;
    find plugins/account_details -type f -exec chmod 644 {} \;
    ```
