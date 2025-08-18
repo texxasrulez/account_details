@@ -152,7 +152,7 @@ $account_details_config['enable_ip'] = true; // Simple IP Address from your syst
 ---
 
 ## 6) Uninstall
-- Remove the plugin folder from `plugins/` (or remove it via Composer if you package it).
+- Remove the plugin folder from `plugins/` and remove 'account_details' from Roundcube's config (or remove it via Composer if you package it).
 
 Enjoy!
 
