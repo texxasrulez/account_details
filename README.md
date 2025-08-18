@@ -17,16 +17,118 @@ You can enable/disable certain things via the config.inc.php
 
 **Installation**
 
-Upload contents to '/roundcube_location/plugins/account_details/'.
+# Account Details — Installation Guide for Roundcube
 
-Enable plugin via config.inc.php with
+This document provides step-by-step installation and configuration instructions for the **Account Details** Roundcube plugin you uploaded. The guide is generated from the plugin’s actual contents to avoid guesswork.
 
-$config['plugins'] = array('account_details');
+---
 
-Make an hourly cronjob with your web credentials as follows for Roundcube Version Checking:
+## 1) What’s in the package
+- **Main plugin class**: `account_details.php` (class `account_details`)
+- **Other plugin classes found**:
+  - None
 
-`curl https://api.github.com/repos/roundcube/roundcubemail/releases | grep tag_name | grep -o "[0-9].[0-9].[0-9]\{1,\}" | sort -n | tail -1 > /path_to_roundcube/plugins/account_details/rc_latest.txt`
+- **Config files/templates**:
+  - `config.inc.php.dist`
 
+- **SQL files**:
+  - None
+
+- **Assets present**: localization templates skins
+- **Composer manifest**: present
+
+### Hooks & actions detected
+- `add_hook(...)`: settings_actions
+- `register_action(...)`: plugin.account_details
+
+---
+
+## 2) Requirements
+- A compatible **Roundcube** installation
+- PHP matching your Roundcube version
+- File system access to the Roundcube `plugins/` directory
+
+---
+
+## 3) Installation
+
+### Option A — Manual install (simple)
+1. Copy/unzip the plugin into Roundcube’s plugins directory:
+   ```bash
+   cd /path/to/roundcube
+   unzip /tmp/account_details.zip -d plugins/account_details
+   ```
+
+2. **Permissions** (adjust user/group for your server):
+   ```bash
+   chown -R www-data:www-data plugins/account_details
+   find plugins/account_details -type d -exec chmod 755 {} \;
+   find plugins/account_details -type f -exec chmod 644 {} \;
+   ```
+
+3. **Enable the plugin** in `config/config.inc.php`:
+   ```php
+   // Add 'account_details' (or 'account_details' if that’s the folder name)
+   $config['plugins'] = array_unique(array_merge($config['plugins'] ?? [], ['account_details']));
+   ```
+
+4. **Copy and edit configuration** (if provided):
+   - `config.inc.php.dist`
+
+   Example: `cp plugins/account_details/config.inc.php.dist plugins/account_details/config.inc.php`
+
+
+
+### Option B — Composer (optional)
+The plugin does **not** include a `composer.json`. If you want to manage it via Composer and Roundcube’s plugin-installer, you’ll need to add a package manifest or wrap it in a VCS repository and declare `"type": "roundcube-plugin"`. I can generate a `composer.json` tailored to this plugin without changing its code behavior.
+
+---
+
+## 4) Configuration details
+### `config.inc.php.dist` (snippet)
+```php
+<?php
+/*
+	Account Details options
+	default config last updated in version 2009-09-26
+	To hide a row, do not remove the variable, but set it: 'false'
+*/
+$account_details_config = array();
+// Bullet Style - Default &#9679;
+$account_details_config['bulletstyle'] = '&#9775;'; // Insert your favorite unicode here. https://www.w3schools.com/charsets/ref_utf_misc_symbols.asp
+// URL Text box length - Good if you have a long domain name
+$account_details_config['urlboxlength'] = '90'; // Numbers only
+// === ACCOUNT/WEBMAIL/SERVER INFO ===================
+// Display Roundcube Info
+$account_details_config['display_rc'] = true;
+$account_details_config['display_rc_version'] = true;
+$account_details_config['display_rc_release'] = true;
+/* Hourly Cron Job is required to be setup as follows: 
+ * curl https://api.github.com/repos/roundcube/roundcubemail/releases | grep tag_name | grep -o "[0-9].[0-9].[0-9]\{1,\}" | sort -n | tail -1 >> /path_to_roundcube/plugins/account_details/rc_latest.txt
+*/
+$account_details_config['rc_latest'] = 'plugins/account_details/rc_latest.txt';
+// Display Plugin List
+$account_details_config['rc_pluginlist'] = true;
+// Enable display of used/total quota
+$account_details_config['enable_userid'] = true;
+$account_details_config['enable_quota'] = true;
+// Display last webmail login / create
+$account_details_config['display_create'] = true;
+$account_details_config['display_lastlogin'] = true;
+// Enable User IP Address
+$account_details_config['enable_ip'] = true; // Simple IP Address from your system IP Only - Shows LAN IP if behind firewall
+```
+---
+
+## 5) Post-install steps
+- Clear Roundcube caches if needed (remove contents of `temp/` and `cache/`, keep the directories).
+- Log in as a user and verify the plugin’s UI/behavior appears where expected (e.g., settings pane, message view, or toolbar).
+- Check your web server error log for any warnings or deprecations on first load; fix permissions or missing config if needed.
+
+---
+
+## 6) Uninstall
+- Remove the plugin folder from `plugins/` (or remove it via Composer if you package it).
 
 Enjoy!
 
