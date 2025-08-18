@@ -19,7 +19,7 @@ You can enable/disable certain things via the config.inc.php
 
 # Account Details — Installation Guide for Roundcube
 
-This document provides step-by-step installation and configuration instructions for the **Account Details** Roundcube plugin you uploaded. The guide is generated from the plugin’s actual contents to avoid guesswork.
+This document provides step-by-step installation and configuration instructions for the **Account Details** Roundcube plugin you uploaded.
 
 ---
 
