@@ -52,7 +52,38 @@ This document provides step-by-step installation and configuration instructions 
 
 ## 3) Installation
 
-### Option A — Manual install (simple)
+### Option A — Composer (preferred)
+1. Place the plugin in a VCS or local path that Composer can reference.
+2. Ensure your Roundcube root has the **Roundcube plugin installer** in `require` (most distros do):
+
+   ```json
+   "require": {
+     "roundcube/plugin-installer": "^0.3"
+   }
+   ```
+
+3. Add a repository that points to the plugin (adjust the path):
+
+   ```json
+   "repositories": [
+     { "type": "path", "url": "../account_details_composer" }
+   ],
+   "require": {
+     "texxasrulez/account_details": "*"
+   }
+   ```
+
+4. Run:
+   ```bash
+   composer install
+   # or
+   composer require texxasrulez/account_details:*
+   ```
+
+> Composer will install the plugin under `plugins/account_details` (per its `composer.json`).
+---
+
+### Option B — Manual install (simple)
 1. Copy/unzip the plugin into Roundcube’s plugins directory:
    ```bash
    cd /path/to/roundcube
@@ -76,13 +107,6 @@ This document provides step-by-step installation and configuration instructions 
    - `config.inc.php.dist`
 
    Example: `cp plugins/account_details/config.inc.php.dist plugins/account_details/config.inc.php`
-
-
-
-### Option B — Composer (optional)
-The plugin does **not** include a `composer.json`. If you want to manage it via Composer and Roundcube’s plugin-installer, you’ll need to add a package manifest or wrap it in a VCS repository and declare `"type": "roundcube-plugin"`. I can generate a `composer.json` tailored to this plugin without changing its code behavior.
-
----
 
 ## 4) Configuration details
 ### `config.inc.php.dist` (snippet)
