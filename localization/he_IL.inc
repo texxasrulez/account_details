@@ -1,22 +1,97 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
-$labels['userinfo'] = 'פרטי המשתמש';
+$labels = array();
+$labels['addressbook'] = 'אנשי קשר';
+$labels['account_details'] = 'פרטי חשבון';
+$labels['account_details_title'] = 'תוסף פרטי חשבון';
+$labels['and'] = 'ו';
+$labels['android'] = 'אנדרואיד';
+$labels['archive'] = 'ארכיון';
+$labels['auth'] = 'אימות';
+$labels['authrequired'] = 'נדרשת אימות';
+$labels['back'] = 'חזרה';
+$labels['browser-user-agent'] = 'סוכן משתמש';
+$labels['caldav'] = 'CalDAV';
+$labels['caldavsync'] = 'סנכרון CalDAV';
+$labels['calendars'] = 'לוחות שנה';
+$labels['carddav'] = 'CardDAV';
+$labels['carddavsync'] = 'סנכרון CardDAV';
+$labels['clear_trash'] = 'ריקון סל האשפה';
+$labels['clients'] = 'לקוחות מומלצים התומכים בפרוטוקול %s';
+$labels['contactadmin'] = 'שלח דוא"ל למנהל הדואר האלקטרוני';
+$labels['contacteditor'] = 'צור קשר עם העורך';
+$labels['copiedtoclipboard'] = 'הועתק ללוח';
+$labels['copytoclipboard'] = 'העתק ללוח';
+$labels['cpu'] = 'עומס מעבד';
 $labels['created'] = 'נוצר';
-$labels['lastlogin'] = 'הכמיסה האחרונה למערכת';
-$labels['defaultidentity'] = 'זהות ברירת מחדל';
+$labels['currver'] = 'הגרסה הנוכחית המותקנת';
+$labels['days'] = 'יום/ימים,';
+$labels['description'] = 'קבל מידע מפורט על חשבונך.';
+$labels['default'] = 'ברירת מחדל';
+$labels['defaultidentity'] = 'שם';
+$labels['details'] = 'פרטים';
+$labels['downloadupdate'] = 'הורד את הגרסה האחרונה של Roundcube';
+$labels['emailaddress'] = 'כתובת דואר אלקטרוני';
+$labels['encryption'] = 'הצפנה';
+$labels['htmlserver'] = 'שרת HTML';
+$labels['hostname'] = 'שם מארח';
+$labels['hours'] = 'שעה/שעות,';
+$labels['imap'] = 'דואר נכנס IMAP';
+$labels['imap-ssl'] = 'IMAP-SSL נכנס';
+$labels['ipaddress'] = 'כתובת IP נוכחית';
+$labels['iphone'] = 'אייפון';
+$labels['is_available'] = 'האם זו הגרסה האחרונה הזמינה עבור';
+$labels['latestversion'] = 'הגרסה האחרונה באינטרנט';
+$labels['licenseagreement'] = 'קרא את הסכם הרישיון';
+$labels['lightning'] = 'ברק';
+$labels['mailboxdetails'] = 'פרטי תיבת הדואר של המשתמש';
+$labels['minutes'] = 'דקה/דקות ו';
+$labels['memory'] = 'זיכרון';
+$labels['os'] = 'מערכת הפעלה';
+$labels['php_version'] = 'גרסת PHP';
+$labels['pluginname'] = 'פרטי חשבון';
+$labels['plugindescription'] = 'מציג מידע בסיסי על החשבון, כגון פרוטוקולי שרת IMAP, POP ו-SMTP, זהות ברירת מחדל, כתובות URL של CalDAV ו-CardDAV של המשתמש ופרטים נוספים.';
+$labels['pop'] = 'POP נכנס';
+$labels['pop-ssl'] = 'POP-SSL נכנס';
+$labels['port'] = 'נמל';
+$labels['portnumbers'] = 'מספרי יציאות';
+$labels['portnumbersencrypted'] = 'חיבור מוצפן';
+$labels['portnumbersregular'] = 'חיבור לא מוצפן';
+$labels['rc_version'] = 'גרסת Roundcube הנוכחית';
+$labels['rcdetails'] = 'פרטי Roundcube';
+$labels['recommended'] = 'SSL מומלץ';
+$labels['resolution'] = 'רזולוציית מסך';
+$labels['roundcube'] = 'Roundcube';
+$labels['seconds'] = 'שניות';
+$labels['serverinformation'] = 'מידע על השרת';
+$labels['serverlocation'] = 'מיקום השרת';
+$labels['servermemory'] = 'זיכרון שרת';
+$labels['smtp'] = 'SMTP יוצא';
+$labels['smtp-ssl'] = 'SMTP-SSL יוצא';
+$labels['sogoconn'] = 'מחבר SOGO';
+$labels['spaauthsupported'] = '&nbsp; תמיכה בהצפנת סיסמאות SPA';
+$labels['storagequota'] = 'אחסון כולל';
+$labels['supporturl'] = 'קישור לדף התמיכה של ספק הדוא"ל שלך';
+$labels['thunderbird'] = 'ת\'אנדרבירד';
+$labels['total'] = 'סה"כ';
+$labels['tutorial'] = 'הדרכה &nbsp;&nbsp;';
+$labels['uptime'] = 'זמן פעילות';
+$labels['usystem'] = 'פרטי מערכת המשתמש';
+$labels['url'] = 'כתובת URL';
+$labels['usedstorage'] = 'אחסון משומש';
+$labels['userdet'] = 'פרטי המשתמש';
+$labels['userinfo'] = 'מידע על המשתמש';
+$labels['userid'] = 'מזהה משתמש מערכת';
+$labels['used'] = 'משומש';
+$labels['webbrowser'] = 'דפדפן אינטרנט';
+$labels['webmail'] = 'דואר אלקטרוני';
+$labels['webmailsystem'] = 'מערכת דואר אלקטרוני';
+$labels['web_url'] = 'כתובת דואר אלקטרוני';
+$labels['web_url_alt'] = 'כתובת URL לגישה לדואר האלקטרוני שלך';
+$labels['openrelaylocal'] = 'מותר לשלוח כאשר נמצא באותה רשת כמו השרת';
+$labels['authrequired_local'] = 'נדרשת אימות, למעט כאשר אתה נמצא באותה רשת כמו השרת';
+$labels['authrequired_local_smtpafter'] = 'נדרשת אימות או %s, למעט כאשר אתה נמצא באותה רשת כמו השרת';
+$labels['authrequired_smtpafter'] = 'נדרשת אימות או %s';
+$labels['smtpafterpop'] = 'SMTP לאחר POP';
+$labels['smtpafterimap'] = 'SMTP לאחר IMAP';
+$labels['smtpafterpopimap'] = 'SMTP לאחר POP/IMAP';
 ?>

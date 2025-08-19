@@ -1,22 +1,97 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
+$labels = array();
+$labels['addressbook'] = 'جهات الاتصال';
+$labels['account_details'] = 'تفاصيل الحساب';
+$labels['account_details_title'] = 'المكوّن الإضافي لتفاصيل الحساب';
+$labels['and'] = 'و';
+$labels['android'] = 'أندرويد';
+$labels['archive'] = 'الأرشيف';
+$labels['auth'] = 'المصادقة';
+$labels['authrequired'] = 'المصادقة مطلوبة';
+$labels['back'] = 'رجوع';
+$labels['browser-user-agent'] = 'وكيل المستخدم';
+$labels['caldav'] = 'كالديف';
+$labels['caldavsync'] = 'CalDAV-sync';
+$labels['calendars'] = 'التقويمات';
+$labels['carddav'] = 'CardDAV';
+$labels['carddavsync'] = 'مزامنة CardDAV-sync';
+$labels['clear_trash'] = 'سلة المهملات الفارغة';
+$labels['clients'] = 'العملاء الموصى بهم الذين يدعمون بروتوكول %s';
+$labels['contactadmin'] = 'إرسال بريد إلكتروني إلى مسؤول بريد الويب';
+$labels['contacteditor'] = 'اتصل بالمحرر';
+$labels['copiedtoclipboard'] = 'نسخ إلى الحافظة';
+$labels['copytoclipboard'] = 'نسخ إلى الحافظة';
+$labels['cpu'] = 'تحميل وحدة المعالجة المركزية';
+$labels['created'] = 'تم إنشاؤها';
+$labels['currver'] = 'الإصدار الحالي المثبت';
+$labels['days'] = 'اليوم (الأيام),';
+$labels['description'] = 'احصل على معلومات تفصيلية حول حسابك.';
+$labels['default'] = 'افتراضي';
+$labels['defaultidentity'] = 'الاسم';
+$labels['details'] = 'التفاصيل';
+$labels['downloadupdate'] = 'تنزيل أحدث إصدار من راوند كيوب';
+$labels['emailaddress'] = 'عنوان البريد الإلكتروني';
+$labels['encryption'] = 'التشفير';
+$labels['htmlserver'] = 'خادم HTML';
+$labels['hostname'] = 'اسم المضيف';
+$labels['hours'] = 'ساعة (ساعات),';
+$labels['imap'] = 'IMAP الوارد';
+$labels['imap-ssl'] = 'IMAP-SSL الوارد';
+$labels['ipaddress'] = 'عنوان IP الحالي';
+$labels['iphone'] = 'آيفون';
+$labels['is_available'] = 'هو أحدث إصدار متاح لـ';
+$labels['latestversion'] = 'أحدث إصدار على الإنترنت';
+$labels['licenseagreement'] = 'قراءة اتفاقية الترخيص';
+$labels['lightning'] = 'البرق';
+$labels['mailboxdetails'] = 'تفاصيل صندوق بريد المستخدم';
+$labels['minutes'] = 'دقيقة (دقائق) و';
+$labels['memory'] = 'الذاكرة';
+$labels['os'] = 'نظام التشغيل';
+$labels['php_version'] = 'إصدار PHP';
+$labels['pluginname'] = 'تفاصيل الحساب';
+$labels['plugindescription'] = 'يعرض معلومات الحساب الأساسية مثل بروتوكولات خادم IMAP وPOP وSMTP، والهوية الافتراضية، وعناوين URL الخاصة بالمستخدم مثل CalDAV و CardDAV وتفاصيل أخرى.';
+$labels['pop'] = 'الملوثات العضوية الثابتة الواردة';
+$labels['pop-ssl'] = 'الملوثات العضوية الثابتة الواردة';
+$labels['port'] = 'الميناء';
+$labels['portnumbers'] = 'أرقام المنافذ';
+$labels['portnumbersencrypted'] = 'اتصال مشفر';
+$labels['portnumbersregular'] = 'اتصال غير مشفر';
+$labels['rc_version'] = 'إصدار Roundcube الحالي';
+$labels['rcdetails'] = 'تفاصيل المكعب المستدير';
+$labels['recommended'] = 'يوصى باستخدام SSL';
+$labels['resolution'] = 'دقة الشاشة';
+$labels['roundcube'] = 'راوند كيوب';
+$labels['seconds'] = 'الثانية(س)';
+$labels['serverinformation'] = 'معلومات الخادم';
+$labels['serverlocation'] = 'موقع الخادم';
+$labels['servermemory'] = 'ذاكرة الخادم';
+$labels['smtp'] = 'SMTP الصادر';
+$labels['smtp-ssl'] = 'SMTP-SSL الصادر';
+$labels['sogoconn'] = 'موصل SOGO';
+$labels['spaauthsupported'] = '&nbsp؛ يدعم تشفير كلمة مرور SPA';
+$labels['storagequota'] = 'إجمالي التخزين';
+$labels['supporturl'] = 'رابط إلى صفحة دعم موفري البريد الخاص بك';
+$labels['thunderbird'] = 'طائر الرعد';
+$labels['total'] = 'الإجمالي';
+$labels['tutorial'] = 'البرنامج التعليمي &nbsp;&nbsp;';
+$labels['uptime'] = 'وقت التشغيل';
+$labels['usystem'] = 'تفاصيل نظام المستخدم';
+$labels['url'] = 'عنوان URL';
+$labels['usedstorage'] = 'التخزين المستعمل';
+$labels['userdet'] = 'تفاصيل المستخدم';
 $labels['userinfo'] = 'معلومات المستخدم';
-$labels['created'] = 'أُنشئ في';
-$labels['lastlogin'] = 'آخر دخول';
-$labels['defaultidentity'] = 'الهوية الافتراضية';
+$labels['userid'] = 'معرّف مستخدم النظام';
+$labels['used'] = 'مستعمل';
+$labels['webbrowser'] = 'متصفح الويب';
+$labels['webmail'] = 'بريد الويب';
+$labels['webmailsystem'] = 'نظام بريد الويب';
+$labels['web_url'] = 'عنوان URL لبريد الويب';
+$labels['web_url_alt'] = 'عنوان URL للوصول إلى بريد الويب الخاص بك';
+$labels['openrelaylocal'] = 'مسموح بالإرسال عندما يكون على نفس الشبكة مثل الخادم';
+$labels['authrequired_local'] = 'المصادقة مطلوبة، إلا عندما تكون على نفس الشبكة مثل الخادم';
+$labels['authrequired_local_smtpafter'] = 'مطلوب المصادقة أو %s، إلا عندما يكون على نفس الشبكة مثل الخادم';
+$labels['authrequired_smtpafter'] = 'مطلوب مصادقة أو %s';
+$labels['smtpafterpop'] = 'SMTP بعد POP';
+$labels['smtpafterimap'] = 'SMTP بعد IMAP';
+$labels['smtpafterpopimap'] = 'SMTP بعد POP/IMAP';
 ?>

@@ -84,12 +84,12 @@ class Browser
     const BROWSER_MSN = 'MSN Browser'; // http://explorer.msn.com/
     const BROWSER_MSNBOT = 'MSN Bot'; // http://search.msn.com/msnbot.htm
     const BROWSER_BINGBOT = 'Bing Bot'; // http://en.wikipedia.org/wiki/Bingbot
-    const BROWSER_VIVALDI = 'Vivalidi'; // https://vivaldi.com/
+    const BROWSER_VIVALDI = 'Vivalidi'; // preserving original tag even if misspelled
 
-    const BROWSER_NETSCAPE_NAVIGATOR = 'Netscape Navigator'; // http://browser.netscape.com/ (DEPRECATED)
-    const BROWSER_GALEON = 'Galeon'; // http://galeon.sourceforge.net/ (DEPRECATED)
-    const BROWSER_NETPOSITIVE = 'NetPositive'; // http://en.wikipedia.org/wiki/NetPositive (DEPRECATED)
-    const BROWSER_PHOENIX = 'Phoenix'; // http://en.wikipedia.org/wiki/History_of_Mozilla_Firefox (DEPRECATED)
+    const BROWSER_NETSCAPE_NAVIGATOR = 'Netscape Navigator'; // (DEPRECATED)
+    const BROWSER_GALEON = 'Galeon'; // (DEPRECATED)
+    const BROWSER_NETPOSITIVE = 'NetPositive'; // (DEPRECATED)
+    const BROWSER_PHOENIX = 'Phoenix'; // (DEPRECATED)
     const BROWSER_PLAYSTATION = "PlayStation";
 
     const PLATFORM_UNKNOWN = 'unknown';
@@ -116,9 +116,13 @@ class Browser
 
     /**
      * Class constructor
+     * ONE-FILE CHANGE: automatically sends Accept-CH headers so Chrome/Edge
+     * will include full UA-CH on subsequent requests (no plugin edits needed).
      */
     public function __construct($userAgent = "")
     {
+        self::sendAcceptCHHeaders(); // one-file opt-in for UA-CH
+
         $this->reset();
         if ($userAgent != "") {
             $this->setUserAgent($userAgent);
@@ -147,189 +151,32 @@ class Browser
 
     /**
      * Check to see if the specific browser is valid
-     * @param string $browserName
-     * @return bool True if the browser is the specified browser
      */
     function isBrowser($browserName)
     {
         return (0 == strcasecmp($this->_browser_name, trim($browserName)));
     }
 
-    /**
-     * The name of the browser.  All return types are from the class contants
-     * @return string Name of the browser
-     */
-    public function getBrowser()
-    {
-        return $this->_browser_name;
-    }
+    public function getBrowser() { return $this->_browser_name; }
+    public function setBrowser($browser) { $this->_browser_name = $browser; }
+    public function getPlatform() { return $this->_platform; }
+    public function setPlatform($platform) { $this->_platform = $platform; }
+    public function getVersion() { return $this->_version; }
+    public function setVersion($version) { $this->_version = preg_replace('/[^0-9,.,a-z,A-Z-]/', '', $version); }
+    public function getAolVersion() { return $this->_aol_version; }
+    public function setAolVersion($version) { $this->_aol_version = preg_replace('/[^0-9,.,a-z,A-Z]/', '', $version); }
+    public function isAol() { return $this->_is_aol; }
+    public function isMobile() { return $this->_is_mobile; }
+    public function isTablet() { return $this->_is_tablet; }
+    public function isRobot() { return $this->_is_robot; }
+    public function isFacebook() { return $this->_is_facebook; }
+    public function setAol($isAol) { $this->_is_aol = $isAol; }
+    protected function setMobile($value = true) { $this->_is_mobile = $value; }
+    protected function setTablet($value = true) { $this->_is_tablet = $value; }
+    protected function setRobot($value = true) { $this->_is_robot = $value; }
+    protected function setFacebook($value = true) { $this->_is_facebook = $value; }
+    public function getUserAgent() { return $this->_agent; }
 
-    /**
-     * Set the name of the browser
-     * @param $browser string The name of the Browser
-     */
-    public function setBrowser($browser)
-    {
-        $this->_browser_name = $browser;
-    }
-
-    /**
-     * The name of the platform.  All return types are from the class contants
-     * @return string Name of the browser
-     */
-    public function getPlatform()
-    {
-        return $this->_platform;
-    }
-
-    /**
-     * Set the name of the platform
-     * @param string $platform The name of the Platform
-     */
-    public function setPlatform($platform)
-    {
-        $this->_platform = $platform;
-    }
-
-    /**
-     * The version of the browser.
-     * @return string Version of the browser (will only contain alpha-numeric characters and a period)
-     */
-    public function getVersion()
-    {
-        return $this->_version;
-    }
-
-    /**
-     * Set the version of the browser
-     * @param string $version The version of the Browser
-     */
-    public function setVersion($version)
-    {
-        $this->_version = preg_replace('/[^0-9,.,a-z,A-Z-]/', '', $version);
-    }
-
-    /**
-     * The version of AOL.
-     * @return string Version of AOL (will only contain alpha-numeric characters and a period)
-     */
-    public function getAolVersion()
-    {
-        return $this->_aol_version;
-    }
-
-    /**
-     * Set the version of AOL
-     * @param string $version The version of AOL
-     */
-    public function setAolVersion($version)
-    {
-        $this->_aol_version = preg_replace('/[^0-9,.,a-z,A-Z]/', '', $version);
-    }
-
-    /**
-     * Is the browser from AOL?
-     * @return boolean True if the browser is from AOL otherwise false
-     */
-    public function isAol()
-    {
-        return $this->_is_aol;
-    }
-
-    /**
-     * Is the browser from a mobile device?
-     * @return boolean True if the browser is from a mobile device otherwise false
-     */
-    public function isMobile()
-    {
-        return $this->_is_mobile;
-    }
-
-    /**
-     * Is the browser from a tablet device?
-     * @return boolean True if the browser is from a tablet device otherwise false
-     */
-    public function isTablet()
-    {
-        return $this->_is_tablet;
-    }
-
-    /**
-     * Is the browser from a robot (ex Slurp,GoogleBot)?
-     * @return boolean True if the browser is from a robot otherwise false
-     */
-    public function isRobot()
-    {
-        return $this->_is_robot;
-    }
-
-    /**
-    * Is the browser from facebook?
-    * @return boolean True if the browser is from facebook otherwise false
-    */
-    public function isFacebook()
-    {
-        return $this->_is_facebook;
-    }
-
-    /**
-     * Set the browser to be from AOL
-     * @param $isAol
-     */
-    public function setAol($isAol)
-    {
-        $this->_is_aol = $isAol;
-    }
-
-    /**
-     * Set the Browser to be mobile
-     * @param boolean $value is the browser a mobile browser or not
-     */
-    protected function setMobile($value = true)
-    {
-        $this->_is_mobile = $value;
-    }
-
-    /**
-     * Set the Browser to be tablet
-     * @param boolean $value is the browser a tablet browser or not
-     */
-    protected function setTablet($value = true)
-    {
-        $this->_is_tablet = $value;
-    }
-
-    /**
-     * Set the Browser to be a robot
-     * @param boolean $value is the browser a robot or not
-     */
-    protected function setRobot($value = true)
-    {
-        $this->_is_robot = $value;
-    }
-
-    /**
-     * Set the Browser to be a Facebook request
-     * @param boolean $value is the browser a robot or not
-     */
-    protected function setFacebook($value = true)
-    {
-        $this->_is_facebook = $value;
-    }
-
-    /**
-     * Get the user agent value in use to determine the browser
-     * @return string The user agent from the HTTP header
-     */
-    public function getUserAgent()
-    {
-        return $this->_agent;
-    }
-
-    /**
-     * Set the user agent value (the construction will use the HTTP header value - this will overwrite it)
-     * @param string $agent_string The value for the User Agent
-     */
     public function setUserAgent($agent_string)
     {
         $this->reset();
@@ -337,20 +184,11 @@ class Browser
         $this->determine();
     }
 
-    /**
-     * Used to determine if the browser is actually "chromeframe"
-     * @since 1.7
-     * @return boolean True if the browser is using chromeframe
-     */
     public function isChromeFrame()
     {
         return (strpos($this->_agent, "chromeframe") !== false);
     }
 
-    /**
-     * Returns a formatted string with a summary of the details of the browser.
-     * @return string formatted string with a summary of the browser
-     */
     public function __toString()
     {
         return "{$this->getBrowser()}<br/>\n" .
@@ -359,36 +197,119 @@ class Browser
     }
 
     /**
-     * Protected routine to calculate and determine what the browser is in use (including platform)
+     * Calculate and determine the browser (including platform).
+     * NEW: prefer UA-CH first.
      */
     protected function determine()
     {
         $this->checkPlatform();
-        $this->checkBrowsers();
+        if (!$this->checkClientHints()) {
+            $this->checkBrowsers();
+        }
         $this->checkForAol();
     }
 
     /**
-     * Protected routine to determine the browser type
-     * @return boolean True if the browser was detected otherwise false
+     * Try UA-CH headers first (full versions for Chrome/Edge/Opera/Vivaldi/Brave).
+     * Returns true if it set browser+version so UA parsing can be skipped.
+     */
+    protected function checkClientHints()
+    {
+        $chBrands   = isset($_SERVER['HTTP_SEC_CH_UA']) ? $_SERVER['HTTP_SEC_CH_UA'] : null;
+        $chMobile   = isset($_SERVER['HTTP_SEC_CH_UA_MOBILE']) ? $_SERVER['HTTP_SEC_CH_UA_MOBILE'] : null;
+        $chPlatform = isset($_SERVER['HTTP_SEC_CH_UA_PLATFORM']) ? $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] : null;
+
+        $chFullList = isset($_SERVER['HTTP_SEC_CH_UA_FULL_VERSION_LIST']) ? $_SERVER['HTTP_SEC_CH_UA_FULL_VERSION_LIST'] : null;
+        $chPlatVer  = isset($_SERVER['HTTP_SEC_CH_UA_PLATFORM_VERSION']) ? $_SERVER['HTTP_SEC_CH_UA_PLATFORM_VERSION'] : null;
+        $chArch     = isset($_SERVER['HTTP_SEC_CH_UA_ARCH']) ? $_SERVER['HTTP_SEC_CH_UA_ARCH'] : null;
+        $chBitness  = isset($_SERVER['HTTP_SEC_CH_UA_BITNESS']) ? $_SERVER['HTTP_SEC_CH_UA_BITNESS'] : null;
+        $chModel    = isset($_SERVER['HTTP_SEC_CH_UA_MODEL']) ? $_SERVER['HTTP_SEC_CH_UA_MODEL'] : null;
+
+        if (!$chBrands && !$chFullList && !$chPlatform) {
+            return false;
+        }
+
+        $pairs = $this->parseCHBrandList($chFullList ?: $chBrands);
+        $this->applyCHPlatform($chPlatform, $chPlatVer, $chMobile);
+
+        if (!$pairs) {
+            return false;
+        }
+
+        $pref = array('Google Chrome','Microsoft Edge','Opera','Vivaldi','Brave','Chromium','Chrome');
+        $brand = null; $ver = null;
+        foreach ($pref as $want) {
+            if (isset($pairs[$want])) { $brand = $want; $ver = $pairs[$want]; break; }
+        }
+        if (!$brand) { $keys = array_keys($pairs); $brand = $keys ? $keys[0] : null; $ver = $brand ? $pairs[$brand] : null; }
+        if (!$brand) return false;
+
+        $name = self::BROWSER_UNKNOWN;
+        if (stripos($brand, 'Chrome') !== false && stripos($brand, 'Google') !== false) $name = self::BROWSER_CHROME;
+        elseif (stripos($brand, 'Edge') !== false) $name = self::BROWSER_EDGE;
+        elseif (stripos($brand, 'Opera') !== false) $name = self::BROWSER_OPERA;
+        elseif (stripos($brand, 'Vivaldi') !== false) $name = self::BROWSER_VIVALDI;
+        elseif (stripos($brand, 'Brave') !== false) $name = self::BROWSER_CHROME; // keep tag compatibility
+        elseif (strcasecmp($brand,'Chromium') === 0 || strcasecmp($brand,'Chrome') === 0) $name = self::BROWSER_CHROME;
+
+        if ($name !== self::BROWSER_UNKNOWN) {
+            $this->setBrowser($name);
+            if ($ver) $this->setVersion($ver);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Parse CH brand list header into associative array
+     * Example: "Chromium";v="139.0.7258.127", "Google Chrome";v="139.0.7258.127"
+     */
+    protected function parseCHBrandList($header)
+    {
+        if (!$header) return array();
+        $out = array();
+        $parts = preg_split('/\s*,\s*/', $header);
+        foreach ($parts as $p) {
+            if (preg_match('/"([^"]+)";\s*v="?([^",]+)"?/i', $p, $m)) {
+                $brand = trim($m[1]);
+                $ver   = trim($m[2]);
+                $out[$brand] = $ver;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Apply platform + mobile flags from UA-CH
+     */
+    protected function applyCHPlatform($chPlatform, $chPlatVer, $chMobile)
+    {
+        if ($chPlatform) {
+            $plat = trim($chPlatform, "\"'");
+            switch ($plat) {
+                case 'Windows': $this->setPlatform(self::PLATFORM_WINDOWS); break;
+                case 'macOS':   $this->setPlatform(self::PLATFORM_APPLE);  break; // keep original "Apple" tag
+                case 'Linux':   $this->setPlatform(self::PLATFORM_LINUX);  break;
+                case 'Android': $this->setPlatform(self::PLATFORM_ANDROID); $this->setMobile(true); break;
+                case 'iOS':     $this->setPlatform(self::PLATFORM_IPHONE);  $this->setMobile(true); break;
+                case 'Chrome OS':
+                case 'ChromeOS': $this->setPlatform(self::PLATFORM_LINUX);  break; // no ChromeOS enum; safest mapping
+                default: break;
+            }
+        }
+        if ($chMobile) {
+            $mob = trim($chMobile, "\"'");
+            if ($mob === '?1' || $mob === '1' || strcasecmp($mob,'true') === 0) $this->setMobile(true);
+        }
+        // $chPlatVer exists but class doesn't expose OS version, so we do nothing.
+    }
+
+    /**
+     * Determine the browser type via UA string fallback
      */
     protected function checkBrowsers()
     {
         return (
-            // well-known, well-used
-            // Special Notes:
-            // (1) Opera must be checked before FireFox due to the odd
-            //     user agents used in some older versions of Opera
-            // (2) WebTV is strapped onto Internet Explorer so we must
-            //     check for WebTV before IE
-            // (3) (deprecated) Galeon is based on Firefox and needs to be
-            //     tested before Firefox is tested
-            // (4) OmniWeb is based on Safari so OmniWeb check must occur
-            //     before Safari
-            // (5) Netscape 9+ is based on Firefox so Netscape checks
-            //     before FireFox are necessary
-            // (6) Vivalid is UA contains both Firefox and Chrome so Vivalid checks
-            //     before Firefox and Chrome
             $this->checkBrowserWebTv() ||
             $this->checkBrowserEdge() ||
             $this->checkBrowserInternetExplorer() ||
@@ -399,28 +320,18 @@ class Browser
             $this->checkBrowserFirefox() ||
             $this->checkBrowserChrome() ||
             $this->checkBrowserOmniWeb() ||
-
-            // common mobile
             $this->checkBrowserAndroid() ||
             $this->checkBrowseriPad() ||
             $this->checkBrowseriPod() ||
             $this->checkBrowseriPhone() ||
             $this->checkBrowserBlackBerry() ||
             $this->checkBrowserNokia() ||
-
-            // common bots
             $this->checkBrowserGoogleBot() ||
             $this->checkBrowserMSNBot() ||
             $this->checkBrowserBingBot() ||
             $this->checkBrowserSlurp() ||
-
-            // check for facebook external hit when loading URL
             $this->checkFacebookExternalHit() ||
-
-            // WebKit base check (post mobile and others)
             $this->checkBrowserSafari() ||
-
-            // everyone else
             $this->checkBrowserNetPositive() ||
             $this->checkBrowserFirebird() ||
             $this->checkBrowserKonqueror() ||
@@ -433,14 +344,10 @@ class Browser
             $this->checkBrowserIceweasel() ||
             $this->checkBrowserW3CValidator() ||
             $this->checkBrowserPlayStation() ||
-            $this->checkBrowserMozilla() /* Mozilla is such an open standard that you must check it last */
+            $this->checkBrowserMozilla()
         );
     }
 
-    /**
-     * Determine if the user is using a BlackBerry (last updated 1.7)
-     * @return boolean True if the browser is the BlackBerry browser otherwise false
-     */
     protected function checkBrowserBlackBerry()
     {
         if (stripos($this->_agent, 'blackberry') !== false) {
@@ -456,10 +363,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the user is using an AOL User Agent (last updated 1.7)
-     * @return boolean True if the browser is from AOL otherwise false
-     */
     protected function checkForAol()
     {
         $this->setAol(false);
@@ -476,10 +379,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is the GoogleBot or not (last updated 1.7)
-     * @return boolean True if the browser is the GoogletBot otherwise false
-     */
     protected function checkBrowserGoogleBot()
     {
         if (stripos($this->_agent, 'googlebot') !== false) {
@@ -495,10 +394,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is the MSNBot or not (last updated 1.9)
-     * @return boolean True if the browser is the MSNBot otherwise false
-     */
     protected function checkBrowserMSNBot()
     {
         if (stripos($this->_agent, "msnbot") !== false) {
@@ -514,10 +409,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is the BingBot or not (last updated 1.9)
-     * @return boolean True if the browser is the BingBot otherwise false
-     */
     protected function checkBrowserBingBot()
     {
         if (stripos($this->_agent, "bingbot") !== false) {
@@ -533,10 +424,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is the W3C Validator or not (last updated 1.7)
-     * @return boolean True if the browser is the W3C Validator otherwise false
-     */
     protected function checkBrowserW3CValidator()
     {
         if (stripos($this->_agent, 'W3C-checklink') !== false) {
@@ -548,7 +435,6 @@ class Browser
                 return true;
             }
         } else if (stripos($this->_agent, 'W3C_Validator') !== false) {
-            // Some of the Validator versions do not delineate w/ a slash - add it back in
             $ua = str_replace("W3C_Validator ", "W3C_Validator/", $this->_agent);
             $aresult = explode('/', stristr($ua, 'W3C_Validator'));
             if (isset($aresult[1])) {
@@ -565,10 +451,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is the Yahoo! Slurp Robot or not (last updated 1.7)
-     * @return boolean True if the browser is the Yahoo! Slurp Robot otherwise false
-     */
     protected function checkBrowserSlurp()
     {
         if (stripos($this->_agent, 'slurp') !== false) {
@@ -585,40 +467,30 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Edge or not
-     * @return boolean True if the browser is Edge otherwise false
-     */
     protected function checkBrowserEdge()
     {
-      if( stripos($this->_agent,'Edge/') !== false ) {
-	    	$aresult = explode('/', stristr($this->_agent, 'Edge'));
-    		if (isset($aresult[1])) {
-            $aversion = explode(' ', $aresult[1]);
-            $this->setVersion($aversion[0]);
-            $this->setBrowser(self::BROWSER_EDGE);
-            if(stripos($this->_agent, 'Windows Phone') !== false || stripos($this->_agent, 'Android') !== false) {
-                $this->setMobile(true);
+        if( stripos($this->_agent,'Edge/') !== false ) {
+            $aresult = explode('/', stristr($this->_agent, 'Edge'));
+            if (isset($aresult[1])) {
+                $aversion = explode(' ', $aresult[1]);
+                $this->setVersion($aversion[0]);
+                $this->setBrowser(self::BROWSER_EDGE);
+                if(stripos($this->_agent, 'Windows Phone') !== false || stripos($this->_agent, 'Android') !== false) {
+                    $this->setMobile(true);
+                }
+                return true;
             }
-            return true;
         }
-      }
-      return false;
+        return false;
     }
 
-    /**
-     * Determine if the browser is Internet Explorer or not (last updated 1.7)
-     * @return boolean True if the browser is Internet Explorer otherwise false
-     */
     protected function checkBrowserInternetExplorer()
     {
-	//  Test for IE11
-	if( stripos($this->_agent,'Trident/7.0; rv:11.0') !== false ) {
-		$this->setBrowser(self::BROWSER_IE);
-		$this->setVersion('11.0');
-		return true;
-	}
-        // Test for v1 - v1.5 IE
+        if( stripos($this->_agent,'Trident/7.0; rv:11.0') !== false ) {
+            $this->setBrowser(self::BROWSER_IE);
+            $this->setVersion('11.0');
+            return true;
+        }
         else if (stripos($this->_agent, 'microsoft internet explorer') !== false) {
             $this->setBrowser(self::BROWSER_IE);
             $this->setVersion('1.0');
@@ -627,9 +499,8 @@ class Browser
                 $this->setVersion('1.5');
             }
             return true;
-        } // Test for versions > 1.5
+        }
         else if (stripos($this->_agent, 'msie') !== false && stripos($this->_agent, 'opera') === false) {
-            // See if the browser is the odd MSN Explorer
             if (stripos($this->_agent, 'msnb') !== false) {
                 $aresult = explode(' ', stristr(str_replace(';', '; ', $this->_agent), 'MSN'));
                 if (isset($aresult[1])) {
@@ -648,15 +519,15 @@ class Browser
                 }
                 return true;
             }
-        } // Test for versions > IE 10
-		else if(stripos($this->_agent, 'trident') !== false) {
-			$this->setBrowser(self::BROWSER_IE);
-			$result = explode('rv:', $this->_agent);
+        }
+        else if(stripos($this->_agent, 'trident') !== false) {
+            $this->setBrowser(self::BROWSER_IE);
+            $result = explode('rv:', $this->_agent);
             if (isset($result[1])) {
                 $this->setVersion(preg_replace('/[^0-9.]+/', '', $result[1]));
                 $this->_agent = str_replace(array("Mozilla", "Gecko"), "MSIE", $this->_agent);
             }
-		} // Test for Pocket IE
+        }
         else if (stripos($this->_agent, 'mspie') !== false || stripos($this->_agent, 'pocket') !== false) {
             $aresult = explode(' ', stristr($this->_agent, 'mspie'));
             if (isset($aresult[1])) {
@@ -678,10 +549,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Opera or not (last updated 1.7)
-     * @return boolean True if the browser is Opera otherwise false
-     */
     protected function checkBrowserOpera()
     {
         if (stripos($this->_agent, 'opera mini') !== false) {
@@ -738,10 +605,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Chrome or not (last updated 1.7)
-     * @return boolean True if the browser is Chrome otherwise false
-     */
     protected function checkBrowserChrome()
     {
         if (stripos($this->_agent, 'Chrome') !== false) {
@@ -750,7 +613,6 @@ class Browser
                 $aversion = explode(' ', $aresult[1]);
                 $this->setVersion($aversion[0]);
                 $this->setBrowser(self::BROWSER_CHROME);
-                //Chrome on Android
                 if (stripos($this->_agent, 'Android') !== false) {
                     if (stripos($this->_agent, 'Mobile') !== false) {
                         $this->setMobile(true);
@@ -764,11 +626,6 @@ class Browser
         return false;
     }
 
-
-    /**
-     * Determine if the browser is WebTv or not (last updated 1.7)
-     * @return boolean True if the browser is WebTv otherwise false
-     */
     protected function checkBrowserWebTv()
     {
         if (stripos($this->_agent, 'webtv') !== false) {
@@ -783,10 +640,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is NetPositive or not (last updated 1.7)
-     * @return boolean True if the browser is NetPositive otherwise false
-     */
     protected function checkBrowserNetPositive()
     {
         if (stripos($this->_agent, 'NetPositive') !== false) {
@@ -801,10 +654,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Galeon or not (last updated 1.7)
-     * @return boolean True if the browser is Galeon otherwise false
-     */
     protected function checkBrowserGaleon()
     {
         if (stripos($this->_agent, 'galeon') !== false) {
@@ -819,10 +668,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Konqueror or not (last updated 1.7)
-     * @return boolean True if the browser is Konqueror otherwise false
-     */
     protected function checkBrowserKonqueror()
     {
         if (stripos($this->_agent, 'Konqueror') !== false) {
@@ -837,10 +682,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is iCab or not (last updated 1.7)
-     * @return boolean True if the browser is iCab otherwise false
-     */
     protected function checkBrowserIcab()
     {
         if (stripos($this->_agent, 'icab') !== false) {
@@ -854,10 +695,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is OmniWeb or not (last updated 1.7)
-     * @return boolean True if the browser is OmniWeb otherwise false
-     */
     protected function checkBrowserOmniWeb()
     {
         if (stripos($this->_agent, 'omniweb') !== false) {
@@ -870,10 +707,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Phoenix or not (last updated 1.7)
-     * @return boolean True if the browser is Phoenix otherwise false
-     */
     protected function checkBrowserPhoenix()
     {
         if (stripos($this->_agent, 'Phoenix') !== false) {
@@ -887,10 +720,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Firebird or not (last updated 1.7)
-     * @return boolean True if the browser is Firebird otherwise false
-     */
     protected function checkBrowserFirebird()
     {
         if (stripos($this->_agent, 'Firebird') !== false) {
@@ -904,11 +733,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Netscape Navigator 9+ or not (last updated 1.7)
-     * NOTE: (http://browser.netscape.com/ - Official support ended on March 1st, 2008)
-     * @return boolean True if the browser is Netscape Navigator 9+ otherwise false
-     */
     protected function checkBrowserNetscapeNavigator9Plus()
     {
         if (stripos($this->_agent, 'Firefox') !== false && preg_match('/Navigator\/([^ ]*)/i', $this->_agent, $matches)) {
@@ -923,10 +747,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Shiretoko or not (https://wiki.mozilla.org/Projects/shiretoko) (last updated 1.7)
-     * @return boolean True if the browser is Shiretoko otherwise false
-     */
     protected function checkBrowserShiretoko()
     {
         if (stripos($this->_agent, 'Mozilla') !== false && preg_match('/Shiretoko\/([^ ]*)/i', $this->_agent, $matches)) {
@@ -937,10 +757,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Ice Cat or not (http://en.wikipedia.org/wiki/GNU_IceCat) (last updated 1.7)
-     * @return boolean True if the browser is Ice Cat otherwise false
-     */
     protected function checkBrowserIceCat()
     {
         if (stripos($this->_agent, 'Mozilla') !== false && preg_match('/IceCat\/([^ ]*)/i', $this->_agent, $matches)) {
@@ -951,10 +767,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Nokia or not (last updated 1.7)
-     * @return boolean True if the browser is Nokia otherwise false
-     */
     protected function checkBrowserNokia()
     {
         if (preg_match("/Nokia([^\/]+)\/([^ SP]+)/i", $this->_agent, $matches)) {
@@ -970,17 +782,12 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Firefox or not (last updated 1.7)
-     * @return boolean True if the browser is Firefox otherwise false
-     */
     protected function checkBrowserFirefox()
     {
         if (stripos($this->_agent, 'safari') === false) {
             if (preg_match("/Firefox[\/ \(]([^ ;\)]+)/i", $this->_agent, $matches)) {
                 $this->setVersion($matches[1]);
                 $this->setBrowser(self::BROWSER_FIREFOX);
-                //Firefox on Android
                 if (stripos($this->_agent, 'Android') !== false) {
                     if (stripos($this->_agent, 'Mobile') !== false) {
                         $this->setMobile(true);
@@ -998,10 +805,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Firefox or not (last updated 1.7)
-     * @return boolean True if the browser is Firefox otherwise false
-     */
     protected function checkBrowserIceweasel()
     {
         if (stripos($this->_agent, 'Iceweasel') !== false) {
@@ -1016,10 +819,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Mozilla or not (last updated 1.7)
-     * @return boolean True if the browser is Mozilla otherwise false
-     */
     protected function checkBrowserMozilla()
     {
         if (stripos($this->_agent, 'mozilla') !== false && preg_match('/rv:[0-9].[0-9][a-b]?/i', $this->_agent) && stripos($this->_agent, 'netscape') === false) {
@@ -1041,10 +840,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Lynx or not (last updated 1.7)
-     * @return boolean True if the browser is Lynx otherwise false
-     */
     protected function checkBrowserLynx()
     {
         if (stripos($this->_agent, 'lynx') !== false) {
@@ -1057,10 +852,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Amaya or not (last updated 1.7)
-     * @return boolean True if the browser is Amaya otherwise false
-     */
     protected function checkBrowserAmaya()
     {
         if (stripos($this->_agent, 'amaya') !== false) {
@@ -1075,10 +866,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Safari or not (last updated 1.7)
-     * @return boolean True if the browser is Safari otherwise false
-     */
     protected function checkBrowserSafari()
     {
         if (stripos($this->_agent, 'Safari') !== false
@@ -1098,10 +885,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Detect if URL is loaded from FacebookExternalHit
-     * @return boolean True if it detects FacebookExternalHit otherwise false
-     */
     protected function checkFacebookExternalHit()
     {
         if(stristr($this->_agent,'FacebookExternalHit'))
@@ -1113,10 +896,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Detect if URL is being loaded from internal Facebook browser
-     * @return boolean True if it detects internal Facebook browser otherwise false
-     */
     protected function checkForFacebookIos()
     {
         if(stristr($this->_agent,'FBIOS'))
@@ -1127,10 +906,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Detect Version for the Safari browser on iOS devices
-     * @return boolean True if it detects the version correctly otherwise false
-     */
     protected function getSafariVersionOnIos()
     {
         $aresult = explode('/',stristr($this->_agent,'Version'));
@@ -1143,10 +918,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Detect Version for the Chrome browser on iOS devices
-     * @return boolean True if it detects the version correctly otherwise false
-     */
     protected function getChromeVersionOnIos()
     {
         $aresult = explode('/',stristr($this->_agent,'CriOS'));
@@ -1160,10 +931,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is iPhone or not (last updated 1.7)
-     * @return boolean True if the browser is iPhone otherwise false
-     */
     protected function checkBrowseriPhone() {
         if( stripos($this->_agent,'iPhone') !== false ) {
             $this->setVersion(self::VERSION_UNKNOWN);
@@ -1177,10 +944,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is iPad or not (last updated 1.7)
-     * @return boolean True if the browser is iPad otherwise false
-     */
     protected function checkBrowseriPad() {
         if( stripos($this->_agent,'iPad') !== false ) {
             $this->setVersion(self::VERSION_UNKNOWN);
@@ -1194,10 +957,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is iPod or not (last updated 1.7)
-     * @return boolean True if the browser is iPod otherwise false
-     */
     protected function checkBrowseriPod() {
         if( stripos($this->_agent,'iPod') !== false ) {
             $this->setVersion(self::VERSION_UNKNOWN);
@@ -1211,10 +970,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Android or not (last updated 1.7)
-     * @return boolean True if the browser is Android otherwise false
-     */
     protected function checkBrowserAndroid()
     {
         if (stripos($this->_agent, 'Android') !== false) {
@@ -1236,10 +991,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is Vivaldi
-     * @return boolean True if the browser is Vivaldi otherwise false
-     */
     protected function checkBrowserVivaldi()
     {
         if (stripos($this->_agent, 'Vivaldi') !== false) {
@@ -1254,10 +1005,6 @@ class Browser
         return false;
     }
 
-    /**
-     * Determine if the browser is a PlayStation
-     * @return boolean True if the browser is PlayStation otherwise false
-     */
     protected function checkBrowserPlayStation()
     {
         if (stripos($this->_agent, 'PlayStation ') !== false) {
@@ -1276,7 +1023,7 @@ class Browser
     }
 
     /**
-     * Determine the user's platform (last updated 2.0)
+     * Determine the user's platform
      */
     protected function checkPlatform()
     {
@@ -1352,6 +1099,16 @@ class Browser
         {
             $this->_platform = self::PLATFORM_PLAYSTATION;
         }
+    }
 
+    /**
+     * Helper: encourage UA-CH on subsequent requests (HTTPS recommended).
+     * Called automatically in __construct for the one-file solution.
+     */
+    public static function sendAcceptCHHeaders()
+    {
+        // Suppress warnings if headers already sent or environment restricts header()
+        @header('Accept-CH: Sec-CH-UA, Sec-CH-UA-Mobile, Sec-CH-UA-Platform, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Model, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Bitness');
+        @header('Vary: User-Agent, Sec-CH-UA, Sec-CH-UA-Mobile, Sec-CH-UA-Platform, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Model, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Bitness');
     }
 }

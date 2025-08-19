@@ -3,13 +3,13 @@
 	default CSS last updated in version 2009-09-26
 */
 
-body.scroller {
-	overflow: auto;
+body.
 }
 
 div.settingsbox-account_details {
 	/* Expand the width of the box instead of breaking lines */
 	margin: 0 15px 15px 0;
+	overflow: auto;
 }
 
 div.settingsbox-account_details-custom {
@@ -23,6 +23,9 @@ div.settingsbox-account_details div.boxcontent {
 }
 
 div.settingsbox-account_details-custom div.boxcontent {
+	-webkit-column-span: all; /* Chrome, Safari, Opera */
+    column-span: all;
+	width: 100%;
 	padding: 1px 1px;
     bottom:0;
 }
