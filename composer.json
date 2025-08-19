@@ -2,7 +2,7 @@
     "name": "texxasrulez/account_details",
     "type": "roundcube-plugin",
     "description": "Display additional information for the current user and much more.",
-    "homepage": "https://github.com/texxasrulez/Account-Details-for-Roundcube",
+    "homepage": "https://github.com/texxasrulez/account_details",
     "license": "GPL-3.0",
     "version": "3.5",
     "authors": [
