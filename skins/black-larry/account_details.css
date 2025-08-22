@@ -9,7 +9,7 @@ body.scroller {
 
 div.settingsbox-account_details {
 	/* Expand the width of the box instead of breaking lines */
-	margin: 0 15px 15px 0;
+	margin: 0 0 15px 0;
 }
 
 div.settingsbox-account_details-custom {
@@ -205,3 +205,12 @@ input.account_details[type=text]:focus, textarea.account_details:focus {
   border: 1px solid rgba(71, 135, 177, 1);
 }
 */
+
+
+/* Fix boxtitle header span */
+div.settingsbox-account_details .boxtitle {
+  width: 100% !important;
+  box-sizing: border-box;
+  margin-right: 0 !important;
+  padding-right: 15px;
+}

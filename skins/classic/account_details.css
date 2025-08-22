@@ -20,3 +20,12 @@
 {
   color: #333333;
 }
+
+
+/* Fix boxtitle header span */
+div.settingsbox-account_details .boxtitle {
+  width: 100% !important;
+  box-sizing: border-box;
+  margin-right: 0 !important;
+  padding-right: 15px;
+}

@@ -3,57 +3,71 @@
 	default CSS last updated in version 2009-09-26
 */
 
+/* Keep scroll behavior on the content area only */
 body.scroller {
 	overflow: auto;
 }
 
+/* Box wrapper: remove right margin that caused the header notch */
 div.settingsbox-account_details {
 	/* Expand the width of the box instead of breaking lines */
-	margin: 0 15px 15px 0;
+	margin: 0 0 15px 0; /* was: 0 15px 15px 0 */
 }
 
+/* If you need an outer gutter elsewhere, keep it on content not on the header */
+div.settingsbox-account_details .box.formcontent.scroller {
+	/* optional: keep a visual gutter without truncating the header bar */
+	padding-right: 15px;
+	box-sizing: border-box;
+}
+
+/* Make the blue .boxtitle span the full width flush with the scrollbar */
+div.settingsbox-account_details .boxtitle {
+	width: 100%;
+	box-sizing: border-box;
+	margin-right: 0;           /* ensure no inherited margin creates a notch */
+	padding-right: 15px;       /* aligns text with the content gutter */
+}
+
+/* Custom box (if used) pinned to the bottom */
 div.settingsbox-account_details-custom {
 	/* Expand the width of the box instead of breaking lines */
-	position:absolute;
-    bottom:0;
+	position: absolute;
+	bottom: 0;
 }
 
+/* Content areas */
 div.settingsbox-account_details div.boxcontent {
 	padding: 1px;
 }
 
 div.settingsbox-account_details-custom div.boxcontent {
 	padding: 1px 1px;
-    bottom:0;
+	bottom: 0;
 }
 
+/* Tables */
 table.account_details {
 	margin: 0;
-	padding: 0px 0px 0px 0px;
+	padding: 0;
 	width: 100%;
 }
 
-
 table.account_details td {
 	width: auto;
-
 }
-
 
 table.account_details td.header {
 	font-weight: bold;
 	padding-top: 0px;
-	
 }
 
 table.account_details td.headerfirst {
 	font-weight: bold;
-	
 }
 
 table.account_details td.title {
 	padding-right: 10px;
-	
 }
 
 table.account_details td.categorynote {
@@ -85,48 +99,41 @@ td.bottom_bold {
 	vertical-align: bottom;
 }
 
-
 td.paypal {
-    text-align: right;
+	text-align: right;
 }
 
+/* Secondary list table */
 table.account_details-list {
 	margin: 0;
-	padding: 0px 0 0px 0;
+	padding: 0;
 	width: auto;
 	text-align: left;
 }
 
-
 table.account_details-list td {
-	padding: 0 25px 0px 0;
-/*	background: #eee; */
-
+	padding: 0 25px 0 0;
+	/* background: #eee; */
 }
-
 
 table.account_details-list td.header {
 	padding-top: 0px;
-	
 }
 
-table.account_details-list td.headerfirst {
-	
-}
+table.account_details-list td.headerfirst { }
 
 table.account_details-list td.title {
 	padding-right: 10px;
-	
 }
 
 table.account_details-list td.categorynote {
 	font-style: italic;
 }
 
-tutorial {
-	background-color: yellow;
-}
+/* Demo-only selector from old CSS (kept harmless) */
+tutorial { background-color: yellow; }
 
+/* Inputs */
 input.account_details,
 textarea.account_details,
 select.account_details,
@@ -139,11 +146,11 @@ button.account_details {
 input.account_details[type="text"],
 input.account_details[type="password"],
 textarea.account_details {
-    -webkit-transition: all 0.90s ease-in-out;
-    -moz-transition: all 0.90s ease-in-out;
-    -ms-transition: all 0.90s ease-in-out;
-    -o-transition: all 0.90s ease-in-out;
-    margin: 1px 1px 2px 0px;
+	-webkit-transition: all 0.90s ease-in-out;
+	-moz-transition: all 0.90s ease-in-out;
+	-ms-transition: all 0.90s ease-in-out;
+	-o-transition: all 0.90s ease-in-out;
+	margin: 1px 1px 2px 0px;
 	padding: 4px;
 	border: 1px solid #152e3f;
 	border-radius: 4px;
@@ -171,6 +178,7 @@ textarea.placeholder.account_details {
 	color: #aaa;
 }
 
+/* Settings section icon (Larry-classic skins) */
 #settings-sections .account_details a {
 	background-image: url(images/account_details.png);
 	background-repeat: no-repeat;
@@ -183,25 +191,4 @@ textarea.placeholder.account_details {
 	background-position: 7px 1px;
 }
 
-
-/*
-	
-
-input.account_details[type=text], textarea.account_details {
-  -webkit-transition: all 0.90s ease-in-out;
-  -moz-transition: all 0.90s ease-in-out;
-  -ms-transition: all 0.90s ease-in-out;
-  -o-transition: all 0.90s ease-in-out;
-  outline: none;
-  padding: 3px 0px 3px 3px;
-  margin: 1px 1px 2px 0px;
-  border: 1px solid #DDDDDD;
-}
- 
-input.account_details[type=text]:focus, textarea.account_details:focus {
-  box-shadow: 0 0 15px rgba(71, 135, 177, 1);
-  padding: 3px 0px 3px 3px;
-  margin: 1px 1px 2px 0px;
-  border: 1px solid rgba(71, 135, 177, 1);
-}
-*/
+/* End of file */

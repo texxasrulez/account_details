@@ -1,7 +1,15 @@
 <?php
 
 /**
- * Roundcube "Account Details" plugin — layout-focused rewrite
+ * Roundcube "Account Details" plugin — modernized with CalDAV/CardDAV tutorial links
+ * and optional mobile detection to force Elastic skin.
+ *
+ * Notes:
+ * - New config flags (optional): 
+ *     - 'force_elastic_on_mobile' (bool, default true)
+ *     - 'account_details_show_tutorial_links' (bool, default true)
+ * - Uses DavDiscoveryService like your newer version. If not available, tutorial
+ *   links simply won't render.
  */
 
 class account_details extends rcube_plugin
@@ -19,19 +27,32 @@ class account_details extends rcube_plugin
     {
         $this->rc = rcube::get_instance();
 
+        // Optional: force Elastic on mobile devices
+        if ($this->rc->config->get('force_elastic_on_mobile', true)) {
+            $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+            if (preg_match('/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i', $ua)) {
+                // Prefer output setter if available, otherwise fall back to config override
+                if (method_exists($this->rc->output, 'set_skin')) {
+                    $this->rc->output->set_skin('elastic');
+                } else {
+                    $this->rc->config->set('skin', 'elastic');
+                }
+            }
+        }
+
         $this->add_texts('localization/', ['account_details']);
         $this->register_action('plugin.account_details', [$this, 'infostep']);
         $this->add_hook('settings_actions', [$this, 'settings_actions']);
         $this->include_stylesheet($this->local_skin_path() . '/account_details.css');
 
-        // plugin deps
-        require $this->home . '/lib/mail_count.php';
-        require $this->home . '/lib/Browser.php';
-        require $this->home . '/lib/OS.php';
-        require $this->home . '/lib/CPU_usage.php';
-        require $this->home . '/lib/listplugins.php';
-        require $this->home . '/lib/DavDiscoveryService.php';
-        require $this->home . '/lib/getip.php';
+        // plugin deps (keep your originals)
+        @require_once $this->home . '/lib/mail_count.php';
+        @require_once $this->home . '/lib/Browser.php';
+        @require_once $this->home . '/lib/OS.php';
+        @require_once $this->home . '/lib/CPU_usage.php';
+        @require_once $this->home . '/lib/listplugins.php';
+        @require_once $this->home . '/lib/DavDiscoveryService.php';
+        @require_once $this->home . '/lib/getip.php';
     }
 
     private function _load_config(): void
@@ -42,12 +63,10 @@ class account_details extends rcube_plugin
         $acc_dist = [];
         $acc_user = [];
 
-        // load .dist
         if (is_file($dist) && is_readable($dist)) {
             $account_details_config = [];
             $config = null;
             include $dist;
-
             if (isset($account_details_config) && is_array($account_details_config)) {
                 $acc_dist = $account_details_config;
             } elseif (isset($config) && is_array($config)) {
@@ -55,12 +74,10 @@ class account_details extends rcube_plugin
             }
         }
 
-        // load user config
         if (is_file($conf) && is_readable($conf)) {
             $account_details_config = [];
             $config = null;
             include $conf;
-
             if (isset($account_details_config) && is_array($account_details_config)) {
                 $acc_user = $account_details_config;
             } elseif (isset($config) && is_array($config)) {
@@ -76,7 +93,6 @@ class account_details extends rcube_plugin
             ], true, true);
         }
 
-        // user overrides dist
         $this->config = array_replace((array) $acc_dist, (array) $acc_user);
     }
 
@@ -107,12 +123,11 @@ class account_details extends rcube_plugin
 
         $user = $this->rc->user;
 
-        // Config toggles for list formatting
+        // Formatting toggles
         $pn_newline     = !empty($this->config['pn_newline']);
         $pn_parentheses = !$pn_newline;
 
-        // Browser info
-        $browser = new Browser();
+        $browser = class_exists('Browser') ? new Browser() : null;
 
         // Screen Resolution (client-side)
         $width  = ' <script>document.write(screen.width);</script>';
@@ -149,14 +164,14 @@ class account_details extends rcube_plugin
         $identity = (array) $user->get_identity();
 
         if (!empty($this->config['enable_userid'])) {
-            $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('userid') . ':'));
+            $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('userid') . ':'));
             $table->add('value', rcube_utils::rep_specialchars_output($user->ID));
         }
 
-        $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('defaultidentity') . ':'));
+        $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('defaultidentity') . ':'));
         $table->add('value', rcube_utils::rep_specialchars_output(($identity['name'] ?? '') . ' '));
 
-        $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('email') . ':'));
+        $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('email') . ':'));
         $table->add('value', rcube_utils::rep_specialchars_output($identity['email'] ?? ''));
 
         $date_format = $this->rc->config->get('date_format', 'm/d/Y') . ' ' . $this->rc->config->get('time_format', 'H:i');
@@ -165,16 +180,16 @@ class account_details extends rcube_plugin
         $created_raw = $user->data['created'] ?? null;
         if (!empty($this->config['display_create']) && $created_raw && (int) date('Y', strtotime($created_raw)) > 1970) {
             $created = new DateTime($created_raw);
-            $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('created') . ':'));
-            $table->add('value', rcube_utils::rep_specialchars_output(date_format($created, $date_format)));
+            $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('created') . ':'));
+            $table->add('value', rcube_utils::rep_specialchars_output($created->format($date_format)));
         }
 
         // Last login
         $last_raw = $user->data['last_login'] ?? null;
         if (!empty($this->config['display_lastlogin']) && $last_raw) {
             $lastlogin = new DateTime($last_raw);
-            $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('last') . ' ' . $this->gettext('login') . ':'));
-            $table->add('value', rcube_utils::rep_specialchars_output(date_format($lastlogin, $date_format)));
+            $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('last') . ' ' . $this->gettext('login') . ':'));
+            $table->add('value', rcube_utils::rep_specialchars_output($lastlogin->format($date_format)));
         }
 
         // Storage / Quota
@@ -194,23 +209,23 @@ class account_details extends rcube_plugin
                 $quotatotal = 'unlimited';
             }
 
-            $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('storagequota') . ':'));
+            $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('storagequota') . ':'));
             $table->add('value', rcube_utils::rep_specialchars_output($quotatotal));
 
-            $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('usedstorage') . ':'));
+            $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('usedstorage') . ':'));
             $table->add('value', rcube_utils::rep_specialchars_output($quotaused));
         }
 
         // IP
         if (!empty($this->config['enable_ip'])) {
-            $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('ipaddress') . ':'));
-            $table->add('value', rcube_utils::rep_specialchars_output(get_client_ip_server()));
+            $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('ipaddress') . ':'));
+            $table->add('value', rcube_utils::rep_specialchars_output(function_exists('get_client_ip_server') ? get_client_ip_server() : ($_SERVER['REMOTE_ADDR'] ?? '')));
         }
 
         // Support URL
         if (!empty($this->config['enable_support'])) {
             $support_url = (string) $this->rc->config->get('support_url');
-            $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('support') . ':'));
+            $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('support') . ':'));
             $table->add('value', html::tag('a', ['href' => $support_url, 'title' => $this->gettext('supporturl'), 'target' => '_blank'], rcube_utils::rep_specialchars_output($support_url)));
         }
 
@@ -219,41 +234,35 @@ class account_details extends rcube_plugin
             $table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('usystem') . ':')));
             $table->add('', '');
 
-            // OS
-            if (!empty($this->config['enable_osystem'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('os') . ':'));
-                $uagent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-                $table->add('value', rcube_utils::rep_specialchars_output(os_info($uagent)));
-            }
+            $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('os') . ':'));
+            $uagent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+            $table->add('value', rcube_utils::rep_specialchars_output(function_exists('os_info') ? os_info($uagent) : $uagent));
 
-            // Resolution
             if (!empty($this->config['enable_resolution'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('resolution') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('resolution') . ':'));
                 $table->add('value', $width . ' x ' . $height);
             }
 
-            // Browser details
-            if (!empty($this->config['enable_browser'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('webbrowser') . ':'));
+            if (!empty($this->config['enable_browser']) && $browser) {
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('webbrowser') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output($browser->getBrowser()));
 
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('version') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('version') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output($browser->getVersion()));
 
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('browser-user-agent') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('browser-user-agent') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output($browser->getUserAgent()));
             }
         }
 
         // MAILBOX DETAILS
-        if (!empty($this->config['enable_mailbox']) && $imap) {
+        $imap_ok = (!empty($this->config['enable_mailbox']) && $imap);
+        if ($imap_ok) {
             $table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('mailboxdetails') . ':')));
             $table->add('', '');
 
-            // delimiter detection
             $delim = method_exists($imap, 'get_hierarchy_delimiter') ? $imap->get_hierarchy_delimiter() : '.';
 
-            // base names (overridable via config)
             $inbox_base   = $this->config['folder_inbox']   ?? 'INBOX';
             $drafts_base  = $this->config['folder_drafts']  ?? 'Drafts';
             $sent_base    = $this->config['folder_sent']    ?? 'Sent';
@@ -261,7 +270,6 @@ class account_details extends rcube_plugin
             $junk_base    = $this->config['folder_junk']    ?? 'Junk';
             $archive_base = $this->config['folder_archive'] ?? 'Archive';
 
-            // safe existence probe
             $folder_exists = function ($name) use ($imap) {
                 if (!$name) return false;
                 if (method_exists($imap, 'folder_exists')) {
@@ -271,7 +279,6 @@ class account_details extends rcube_plugin
                 return $c !== false && $c !== null;
             };
 
-            // detect INBOX<delim> prefix
             $maybe_children = [$drafts_base, $sent_base, $trash_base, $junk_base, $archive_base];
             $needs_prefix   = false;
             foreach ($maybe_children as $b) {
@@ -282,7 +289,6 @@ class account_details extends rcube_plugin
             }
             $prefix = $needs_prefix ? $inbox_base . $delim : '';
 
-            // resolve helper
             $resolve = function ($base) use ($prefix, $inbox_base, $delim, $folder_exists) {
                 $candidates = [];
                 if ($prefix !== '') $candidates[] = $prefix . $base;
@@ -296,23 +302,32 @@ class account_details extends rcube_plugin
 
             // INBOX
             $inbox_folder = $inbox_base;
-            $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('inbox') . ':'));
+            $inbox_size_mb = 0.0;
+            if (method_exists($imap, 'folder_size')) {
+                $sz = $imap->folder_size($inbox_folder);
+                $inbox_size_mb = $sz ? round(((float) $sz) / 1024 / 1024, 2) : 0.0;
+            }
+            $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('inbox') . ':'));
             $table->add(
                 'value',
                 rcube_utils::rep_specialchars_output((string) $imap->count($inbox_folder, 'UNSEEN')) . '&nbsp;' .
                 rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;') .
                 rcube_utils::rep_specialchars_output((string) $imap->count($inbox_folder, 'ALL')) . '&nbsp;' .
                 rcube_utils::rep_specialchars_output($this->gettext('total') . '&nbsp;-&nbsp;') .
-                rcube_utils::rep_specialchars_output((string) round(((float) $imap->folder_size($inbox_folder)) / 1024 / 1024, 2)) . '&nbsp;' .
+                rcube_utils::rep_specialchars_output((string) $inbox_size_mb) . '&nbsp;' .
                 rcube_utils::rep_specialchars_output($this->gettext('MB'))
             );
 
-            // subfolders
             $add_folder_row = function (string $label_key, string $base) use ($resolve, $imap, $table) {
                 $f = $resolve($base);
+                $size_mb = 0.0;
+                if (method_exists($imap, 'folder_size')) {
+                    $sz = $imap->folder_size($f);
+                    $size_mb = $sz ? round(((float) $sz) / 1024 / 1024, 2) : 0.0;
+                }
                 $table->add(
                     'title',
-                    '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;-&nbsp;' .
+                    '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;-&nbsp;' .
                     rcube_utils::rep_specialchars_output($this->gettext($label_key) . ' ' . $this->gettext('folder') . ':')
                 );
                 $table->add(
@@ -321,7 +336,7 @@ class account_details extends rcube_plugin
                     rcube_utils::rep_specialchars_output($this->gettext('unread') . '&nbsp;-&nbsp;') .
                     rcube_utils::rep_specialchars_output((string) $imap->count($f, 'ALL')) . '&nbsp;' .
                     rcube_utils::rep_specialchars_output($this->gettext('total') . '&nbsp;-&nbsp;') .
-                    rcube_utils::rep_specialchars_output((string) round(((float) $imap->folder_size($f)) / 1024 / 1024, 2)) . '&nbsp;' .
+                    rcube_utils::rep_specialchars_output((string) $size_mb) . '&nbsp;' .
                     rcube_utils::rep_specialchars_output($this->gettext('MB'))
                 );
             };
@@ -339,37 +354,37 @@ class account_details extends rcube_plugin
                 $table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('details') . ':')));
                 $table->add('', '');
 
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('location') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('location') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output($this->config['location']));
             }
 
             if (!empty($this->config['enable_server_os_name'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('os') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('os') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output(php_uname('s')));
             }
 
             if (!empty($this->config['enable_server_os_rel'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('os') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('os') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output(php_uname('s') . ' - ' . php_uname('r')));
             }
 
             if (!empty($this->config['enable_server_os_ver'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('os') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('os') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output(php_uname('s') . ' - ' . php_uname('r') . ' - ' . php_uname('v')));
             }
 
             if (!empty($this->config['enable_server_memory'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('memory') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('memory') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output($this->rc->show_bytes((int) round(memory_get_usage(), 2))) . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('used')));
             }
 
             if (!empty($this->config['enable_server_cpu'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('cpu') . ':'));
-                $table->add('value', rcube_utils::rep_specialchars_output((string) get_server_cpu_usage()) . ' % Used');
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('cpu') . ':'));
+                $table->add('value', rcube_utils::rep_specialchars_output((string) (function_exists('get_server_cpu_usage') ? get_server_cpu_usage() : '')) . ' % Used');
             }
 
             if (!empty($this->config['enable_server_uptime'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('uptime') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('uptime') . ':'));
                 $table->add('value',
                     rcube_utils::rep_specialchars_output((string) $days) . '&nbsp;' . $this->gettext('days') . '&nbsp;' .
                     rcube_utils::rep_specialchars_output((string) $hours) . '&nbsp;' . $this->gettext('hours') . '&nbsp;' .
@@ -378,17 +393,17 @@ class account_details extends rcube_plugin
             }
 
             if (!empty($this->config['display_php_version'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('php_version') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('php_version') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output(PHP_VERSION));
             }
 
             if (!empty($this->config['display_http_server'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('htmlserver') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('htmlserver') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output($_SERVER['SERVER_SOFTWARE'] ?? ''));
             }
 
             if (!empty($this->config['display_admin_email']) && !empty($_SERVER['SERVER_ADMIN'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' Admin ' . $this->gettext('email') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' Admin ' . $this->gettext('email') . ':'));
                 $table->add('value', html::tag(
                     'a',
                     ['href' => 'mailto:' . $_SERVER['SERVER_ADMIN'], 'title' => $this->gettext('contactadmin')],
@@ -412,7 +427,6 @@ class account_details extends rcube_plugin
             $spa_all                        = false;
             $commalist_ucfirst              = !empty($this->config['commalist_ucfirst']);
 
-            // SPA support
             if (!empty($this->config['spa_support_smtp']) && !empty($this->config['spa_support_imap']) && !empty($this->config['spa_support_pop'])) {
                 $spa_all = true;
             } else {
@@ -421,7 +435,6 @@ class account_details extends rcube_plugin
                 if (!empty($this->config['spa_support_pop']))  $pop_notes_regular  = ' (' . $this->gettext('spaauthsupported') . ')';
             }
 
-            // SMTP auth requirements
             $smtp_after_text = '';
             if (!empty($this->config['smtp_after_pop']) && empty($this->config['smtp_after_imap'])) {
                 $smtp_after_text = $this->gettext('smtpafterpop');
@@ -448,7 +461,6 @@ class account_details extends rcube_plugin
                 }
             }
 
-            // summarize notes
             $smtp_notes_array_regular   = array_merge((array) $smtp_notes_array_all, (array) $smtp_notes_array_regularonly);
             $smtp_notes_array_encrypted = array_merge((array) $smtp_notes_array_all, (array) $smtp_notes_array_encryptedonly);
 
@@ -466,21 +478,20 @@ class account_details extends rcube_plugin
                 }
 
                 if (!empty($this->config['port_smtp'])) {
-                    $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('smtp') . ':'));
+                    $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('smtp') . ':'));
                     $table->add('value', $this->_host_replace($this->config['hostname_smtp']) . ':' . $this->_separated_list((array) $this->config['port_smtp'], true) . ($smtp_notes_regular ? ' ' . $smtp_notes_regular : ''));
                 }
 
                 if (!empty($this->config['port_imap'])) {
-                    $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('imap') . ':'));
+                    $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('imap') . ':'));
                     $table->add('value', $this->_host_replace($this->config['hostname_imap']) . ':' . $this->_separated_list((array) $this->config['port_imap'], true) . ($imap_notes_regular ? ' ' . $imap_notes_regular : ''));
                 }
 
                 if (!empty($this->config['port_pop'])) {
-                    $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('pop') . ':'));
+                    $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('pop') . ':'));
                     $table->add('value', $this->_host_replace($this->config['hostname_pop']) . ':' . $this->_separated_list((array) $this->config['port_pop'], true) . ($pop_notes_regular ? ' ' . $pop_notes_regular : ''));
                 }
 
-                // Custom fields (regular ports)
                 $this->_custom_fields('customfields_regularports', $table);
             }
 
@@ -495,21 +506,20 @@ class account_details extends rcube_plugin
                 $table->add_row();
 
                 if (!empty($this->config['port_smtp-ssl'])) {
-                    $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('smtp-ssl') . ':'));
+                    $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('smtp-ssl') . ':'));
                     $table->add('value', $this->_host_replace($this->config['hostname_smtp']) . ':' . $this->_separated_list((array) $this->config['port_smtp-ssl'], true) . ($smtp_notes_encrypted ? ' ' . $smtp_notes_encrypted : ''));
                 }
 
                 if (!empty($this->config['port_imap-ssl'])) {
-                    $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('imap-ssl') . ':'));
+                    $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('imap-ssl') . ':'));
                     $table->add('value', $this->_host_replace($this->config['hostname_imap']) . ':' . $this->_separated_list((array) $this->config['port_imap-ssl'], true) . ($imap_notes_encrypted ? ' ' . $this->gettext('spaauthsupported') : ''));
                 }
 
                 if (!empty($this->config['port_pop-ssl'])) {
-                    $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('pop-ssl') . ':'));
+                    $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('pop-ssl') . ':'));
                     $table->add('value', $this->_host_replace($this->config['hostname_pop']) . ':' . $this->_separated_list((array) $this->config['port_pop-ssl'], true) . ($pop_notes_encrypted ? ' ' . $pop_notes_encrypted : ''));
                 }
 
-                // Custom fields (encrypted ports)
                 $this->_custom_fields('customfields_encryptedports', $table);
             }
         }
@@ -520,13 +530,13 @@ class account_details extends rcube_plugin
             $table->add('', '');
 
             if (!empty($this->config['display_rc_version'])) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('currver') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('currver') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output($this->gettext('roundcube')) . '<span style="font-weight:bold">&nbsp;v' . RCMAIL_VERSION . '</span>');
             }
 
             $rc_latest = $this->_print_file_contents($this->config['rc_latest'] ?? '');
             if (!empty($this->config['display_rc_release']) && $rc_latest) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('latestversion') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('latestversion') . ':'));
                 $table->add('value',
                     rcube_utils::rep_specialchars_output($this->gettext('roundcube')) .
                     '<span style="font-weight:bold">&nbsp;v' . rcube_utils::rep_specialchars_output($rc_latest) . '</span>&nbsp;' .
@@ -539,91 +549,156 @@ class account_details extends rcube_plugin
             // Webmail URL
             $webmail_url = $this->_host_replace($this->config['webmail_url'] ?? '');
             if (!empty($this->config['hostname']) && $webmail_url) {
-                $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('web_url') . ':'));
+                $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('web_url') . ':'));
                 $table->add('value', html::tag('a', ['href' => $webmail_url, 'title' => $this->gettext('web_url_alt'), 'target' => '_top'], rcube_utils::rep_specialchars_output($webmail_url)));
             }
 
-            // Plugin list — fill right column, allow per-column widths
-            if (!empty($this->config['rc_pluginlist'])) {
+            // Plugin list
+            if (!empty($this->config['rc_pluginlist']) && function_exists('rcmail_ad_plugin_list')) {
                 $plugin_html = rcmail_ad_plugin_list(['id' => 'rcmpluginlist', 'class' => 'rcm-plugin-list']);
 
                 if ($plugin_html && stripos($plugin_html, '<table') !== false) {
-                    // Apply optional col widths to the inner table
                     $cols = $this->config['rc_pluginlist_cols'] ?? null;
                     if (is_array($cols) && count($cols) > 0) {
                         $plugin_html = $this->_inject_colgroup($plugin_html, $cols);
                     }
-
-                    // Force the inner table to fill column 2
                     $plugin_html = $this->_force_first_table_width(
                         $plugin_html,
                         (string)($this->config['rc_pluginlist_width'] ?? '100%')
                     );
                 }
 
-                $table->add('top', '&nbsp;&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' .
+                $table->add('top', '&nbsp;&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' .
                     rcube_utils::rep_specialchars_output($this->gettext('installedplugins') . ':'));
                 $table->add('value', $plugin_html ?: '<em>No plugins found</em>');
             }
-        } // <-- this closes the 'display_rc' block (missing brace caused your parse error)
+        }
 
-        // DAV URLs
+        // ===== CalDAV / CardDAV tutorial links (clean modernized integration) =====
         if (!empty($this->config['enable_dav_urls'])) {
-            $svc       = new DavDiscoveryService($this, $this->home);
-            $resources = (array) $svc->discover(true);
-            $i         = 0;
+            $clients_html = '';
+            $i = 0;
 
-            // CALDAV
-            $calitems = $resources['caldav'] ?? [];
-            if (!empty($calitems)) {
-                $i++;
-                $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('calendars') . ':&nbsp;&sup' . $i . ';'));
-                $table->add('', '');
-                foreach ($calitems as $idx => $item) {
-                    $name     = rcube::Q($item['name'] ?? '');
-                    $url      = rcube::Q($item['url'] ?? '');
-                    $input_id = 'dav-url-cal-' . $idx;
-                    $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . $name);
-                    $table->add('', html::tag('input', [
-                        'id'    => $input_id,
-                        'class' => 'account_details',
-                        'value' => $url,
-                        'onclick' => 'this.setSelectionRange(0, this.value.length)',
-                        'name'  => $name,
-                        'type'  => 'text',
-                        'size'  => $url_box_length,
-                    ]));
+            if (class_exists('DavDiscoveryService')) {
+                $svc       = new DavDiscoveryService($this, $this->home);
+                $resources = (array) $svc->discover(true);
+
+                // CALDAV
+                $calitems = $resources['caldav'] ?? [];
+                if (!empty($calitems)) {
+                    $i++;
+                    $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('calendars') . ':&nbsp;<sup>' . (int)$i . '</sup>'));
+                    $table->add('', '');
+
+                    foreach ($calitems as $idx => $item) {
+                        $name     = rcube::Q($item['name'] ?? '');
+                        $url      = rcube::Q($item['url'] ?? '');
+                        $input_id = 'dav-url-cal-' . $idx;
+                        $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . $name);
+                        $table->add('', html::tag('input', [
+                            'id'    => $input_id,
+                            'class' => 'account_details',
+                            'value' => $url,
+                            'onclick' => 'this.setSelectionRange(0, this.value.length)',
+                            'name'  => $name,
+                            'type'  => 'text',
+                            'size'  => $url_box_length,
+                        ]));
+                    }
+
+                    if ($this->rc->config->get('account_details_show_tutorial_links', true)) {
+                        $clients_html .= html::tag('hr') . '&nbsp;<sup>' . (int)$i . '</sup>&nbsp;'
+                            . sprintf($this->gettext('clients'), 'CalDAV') . ':'
+                            . html::tag('br')
+                            . '&nbsp;&nbsp;- '
+                            . html::tag('a', ['href' => 'https://www.mozilla.org/en-US/thunderbird/all.html', 'target' => '_blank'], 'Thunderbird')
+                            . ' + '
+                            . html::tag('a', ['href' => 'https://addons.mozilla.org/en-US/thunderbird/addon/lightning/', 'target' => '_blank'], 'Lightning');
+
+                        $url = (string) $this->rc->config->get('caldav_thunderbird','../tutorials/thunderbird-caldav');
+                        $clients_html .= html::tag('a', ['href' => $url, 'target' =>'_blank'], html::tag('div', ['style' => 'display:inline;float:right;'], 'Thunderbird ' . $this->gettext('tutorial')));
+
+                        $url = (string) $this->rc->config->get('caldav_android_app','https://play.google.com/store/apps/details?id=org.dmfs.caldav.lib&hl=en');
+                        $clients_html .= html::tag('br') . '&nbsp;&nbsp;- '
+                            . html::tag('a', ['href' => 'https://www.android.com/', 'target' => '_blank'], 'Android')
+                            . ' + '
+                            . html::tag('a', ['href' => $url, 'target' => '_blank'], 'CalDAV-sync');
+
+                        $url = (string) $this->rc->config->get('caldav_android','../tutorials/android-caldav');
+                        $clients_html .= html::tag('a', ['href' => $url, 'target' =>'_blank'], html::tag('div', ['style' => 'display:inline;float:right;'], 'Android ' . $this->gettext('tutorial')));
+
+                        $url = (string) $this->rc->config->get('caldav_iphone','../tutorials/iphone-caldav');
+                        $clients_html .= html::tag('br') . '&nbsp;&nbsp;- '
+                            . html::tag('a', ['href' => 'https://www.apple.com/iphone/', 'target' => '_blank'], 'iPhone')
+                            . html::tag('a', ['href' => $url, 'target' => '_blank'], html::tag('div', ['style' => 'display:inline;float:right;'], 'iPhone ' . $this->gettext('tutorial')))
+                            . html::tag('br') . html::tag('br');
+                    }
+                }
+
+                // CARDDAV
+                $abitems = $resources['carddav'] ?? [];
+                if (!empty($abitems)) {
+                    $i++;
+                    $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('addressbook') . ':&nbsp;<sup>' . (int)$i . '</sup>'));
+                    $table->add('', '');
+
+                    foreach ($abitems as $idx => $item) {
+                        $name     = rcube::Q($item['name'] ?? '');
+                        $url      = rcube::Q($item['url'] ?? '');
+                        $input_id = 'dav-url-card-' . $idx;
+                        $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . $name);
+                        $table->add('', html::tag('input', [
+                            'id'    => $input_id,
+                            'class' => 'account_details',
+                            'value' => $url,
+                            'onclick' => 'this.setSelectionRange(0, this.value.length)',
+                            'name'  => $name,
+                            'type'  => 'text',
+                            'size'  => $url_box_length,
+                        ]));
+                    }
+
+                    if ($this->rc->config->get('account_details_show_tutorial_links', true)) {
+                        if ($clients_html === '') $clients_html = html::tag('hr');
+                        $clients_html .= '&nbsp;<sup>' . (int)$i . '</sup>&nbsp;' . sprintf($this->gettext('clients'), 'CardDAV') . ':'
+                            . html::tag('br') . '&nbsp;&nbsp;- '
+                            . html::tag('a', ['href' => 'https://www.mozilla.org/en-US/thunderbird/all.html', 'target' => '_blank'], 'Thunderbird');
+                        $url = (string) $this->rc->config->get('carddav_thunderbird','../tutorials/thunderbird-carddav');
+                        $clients_html .= ' + ' . html::tag('a', ['href' => 'https://sogo.nu/download.html#/frontends', 'target' => '_blank'], 'SOGo Connector')
+                            . html::tag('a', ['href' => $url, 'target' =>'_blank'], html::tag('div', ['style' => 'display:inline;float:right;'], 'Thunderbird ' . $this->gettext('tutorial')));
+
+                        $url = (string) $this->rc->config->get('carddav_android_app','https://play.google.com/store/apps/details?id=org.dmfs.carddav.sync&hl=en');
+                        $clients_html .= html::tag('br') . '&nbsp;&nbsp;- '
+                            . html::tag('a', ['href' => 'https://www.android.com/', 'target' => '_blank'], 'Android')
+                            . ' + '
+                            . html::tag('a', ['href' => $url, 'target' => '_blank'], 'CardDAV-sync');
+
+                        $url = (string) $this->rc->config->get('carddav_android_app_editor','https://play.google.com/store/apps/details?id=org.dmfs.android.contacts&hl=en');
+                        if ($url) {
+                            $clients_html .= ' + ' . html::tag('a', ['href' => $url, 'target' => '_blank'], 'Contact Editor');
+                        }
+
+                        $url = (string) $this->rc->config->get('carddav_android','../tutorials/android-carddav');
+                        $clients_html .= html::tag('a', ['href' => $url, 'target' =>'_blank'], html::tag('div', ['style' => 'display:inline;float:right;'], 'Android ' . $this->gettext('tutorial')));
+
+                        $url = (string) $this->rc->config->get('carddav_iphone','../tutorials/iphone-carddav');
+                        $clients_html .= html::tag('br') . '&nbsp;&nbsp;- '
+                            . html::tag('a', ['href' => 'https://www.apple.com/iphone/', 'target' => '_blank'], 'iPhone')
+                            . html::tag('a', ['href' => $url, 'target' => '_blank'], html::tag('div', ['style' => 'display:inline;float:right;'], 'iPhone ' . $this->gettext('tutorial')));
+                    }
                 }
             }
 
-            // CARDDAV
-            $abitems = $resources['carddav'] ?? [];
-            if (!empty($abitems)) {
-                $i++;
-                $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('addressbook') . ':&nbsp;&sup' . $i . ';'));
-                $table->add('', '');
-                foreach ($abitems as $idx => $item) {
-                    $name     = rcube::Q($item['name'] ?? '');
-                    $url      = rcube::Q($item['url'] ?? '');
-                    $input_id = 'dav-url-card-' . $idx;
-                    $table->add('title', '&nbsp;' . $this->config['bulletstyle'] . '&nbsp;' . $name);
-                    $table->add('', html::tag('input', [
-                        'id'    => $input_id,
-                        'class' => 'account_details',
-                        'value' => $url,
-                        'onclick' => 'this.setSelectionRange(0, this.value.length)',
-                        'name'  => $name,
-                        'type'  => 'text',
-                        'size'  => $url_box_length,
-                    ]));
-                }
+            if ($clients_html !== '') {
+                $table->add(['colspan' => 2, 'class' => 'wholeline'], $clients_html);
+                $table->add_row();
             }
         }
 
         // Bottom custom fields
         $this->_custom_fields('customfields_bottom', $table);
 
-        // ---- Render and inject main table column widths ----
+        // Render and inject main table column widths
         $rendered_table = $table->show();
         $col1 = trim((string) ($this->config['col1_width'] ?? '20%'));
         $col2 = trim((string) ($this->config['col2_width'] ?? '80%'));
@@ -797,8 +872,8 @@ class account_details extends rcube_plugin
 
         $colgroup = '<colgroup>' . implode('', $cols) . '</colgroup>';
 
-        // Insert right after the opening <table ...>
-        return preg_replace('/(<table\b[^>]*>)/i', '$1' . $colgroup, $html, 1) ?? $html;
+        $res = preg_replace('/(<table\b[^>]*>)/i', '$1' . $colgroup, $html, 1);
+        return is_string($res) ? $res : $html;
     }
 
     /**
@@ -814,12 +889,10 @@ class account_details extends rcube_plugin
             function ($m) use ($width) {
                 $attrs = $m[1];
 
-                // No style attribute → add style with width
                 if (stripos($attrs, 'style=') === false) {
                     return '<table' . $attrs . ' style="width:' . rcube_utils::rep_specialchars_output($width) . '">';
                 }
 
-                // Style exists but no width → prepend width
                 if (!preg_match('/width\s*:/i', $attrs)) {
                     $attrs = preg_replace(
                         '/style="([^"]*)"/i',
@@ -830,7 +903,6 @@ class account_details extends rcube_plugin
                     return '<table' . $attrs . '>';
                 }
 
-                // Already has width → leave as-is
                 return '<table' . $attrs . '>';
             },
             $html,
