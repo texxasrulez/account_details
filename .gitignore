@@ -47,4 +47,8 @@ Temporary Items
 .apdisk
 
 # Files that I don't want sneaking past me
+*.swp
+*.sgh
+*.zip
+translate_locales.php
 config.inc.php

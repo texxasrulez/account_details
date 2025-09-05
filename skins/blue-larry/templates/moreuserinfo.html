@@ -1,21 +1,20 @@
-<roundcube:object name="doctype" value="html5" />
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title><roundcube:object name="pagetitle" /></title>
 <roundcube:include file="/includes/links.html" />
 <link rel="stylesheet" type="text/css" href="/settings.css" />
 <style type="text/css">
-table.propform_settings td
-{
-  border-bottom: none !important;
-  background: transparent;
+h3 {
+  font-size: 12px;
 }
 </style>
+<script type="text/javascript" src="/functions.js"></script>
 </head>
 <body class="iframe">
-<h1 class="boxtitle"><a href="./?_task=settings&_action=edit-prefs&_section=accountlink&_framed=1" style="font-size:12px"><roundcube:label name="settings.account" /></a>&nbsp;&raquo;&nbsp;<roundcube:label name="moreuserinfo.accountinformation" /></h1>
+<div id="prefs-title" class="boxtitle"><a href="./?_task=settings&_action=edit-prefs&_section=accountlink&_framed=1"><roundcube:label name="settings.account" /></a>&nbsp;&raquo;&nbsp;<roundcube:label name="moreuserinfo.accountinformation" /></div>
 <form name="form" class="propform">
-<div id="preferences-details" class="boxcontent">
+<div id="prefs-details" class="boxcontent">
 <roundcube:object name="plugin.moreuserinfo_html" />
 <roundcube:container name="userprefs" id="userprefscontainer" />
 </div>
