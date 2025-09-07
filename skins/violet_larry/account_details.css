@@ -145,7 +145,7 @@ textarea.account_details {
     -o-transition: all 0.90s ease-in-out;
     margin: 1px 1px 2px 0px;
 	padding: 4px;
-	border: 1px solid #3f1a67;
+	border: 1px solid #661705;
 	border-radius: 4px;
 	box-shadow: inset 0 0 2px 1px rgba(0,0,0, 0.1);
 	-webkit-box-shadow: inset 0 0 2px 1px rgba(0,0,0, 0.1);
@@ -155,9 +155,9 @@ input.account_details[type="text"]:focus,
 input.account_details[type="password"]:focus,
 input.button.account_details:focus,
 textarea.account_details:focus {
-	border-color: #3f1a67;
-	box-shadow: 0 0 5px 2px rgba(63, 26, 103, 0.9);
-	-webkit-box-shadow: 0 0 5px 2px rgba(63, 26, 103, 0.9);
+	border-color: #661705;
+	box-shadow: 0 0 5px 2px rgba(102, 23, 5, 0.9);
+	-webkit-box-shadow: 0 0 5px 2px rgba(102, 23, 5, 0.9);
 	outline: none;
 }
 
@@ -171,16 +171,26 @@ textarea.placeholder.account_details {
 	color: #aaa;
 }
 
-#settings-sections .account_details a {
-	background-image: url(images/account_details.png);
-	background-repeat: no-repeat;
-	background-position: 7px -23px;
+#settings-sections a.account_details,
+#settings-sections li.account_details > a,
+a.listitem.account_details,
+li.account_details > a {
+  background-image: url('./images/account_details.svg') !important;
+  background-repeat: no-repeat !important;
+  background-position: 8px center !important;
+  background-size: 20px 20px !important;
+  padding-left: 36px; /* ensure text doesn't overlap the icon */
 }
 
-#settings-sections .account_details.selected a {
-	background-image: url(images/account_details.png);
-	background-repeat: no-repeat;
-	background-position: 7px 1px;
+#settings-sections a.account_details.selected,
+#settings-sections li.account_details.selected > a,
+a.listitem.account_details.selected,
+a.listitem.account_details:focus,
+a.listitem.account_details:hover,
+li.account_details > a.selected,
+li.account_details > a:focus,
+li.account_details > a:hover {
+  background-image: url('./images/account_details_act.svg') !important;
 }
 
 

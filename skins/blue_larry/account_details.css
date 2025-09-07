@@ -171,16 +171,26 @@ textarea.placeholder.account_details {
 	color: #aaa;
 }
 
-#settings-sections .account_details a {
-	background-image: url(images/account_details.png);
-	background-repeat: no-repeat;
-	background-position: 7px -23px;
+#settings-sections a.account_details,
+#settings-sections li.account_details > a,
+a.listitem.account_details,
+li.account_details > a {
+  background-image: url('./images/account_details.svg') !important;
+  background-repeat: no-repeat !important;
+  background-position: 8px center !important;
+  background-size: 20px 20px !important;
+  padding-left: 36px; /* ensure text doesn't overlap the icon */
 }
 
-#settings-sections .account_details.selected a {
-	background-image: url(images/account_details.png);
-	background-repeat: no-repeat;
-	background-position: 7px 1px;
+#settings-sections a.account_details.selected,
+#settings-sections li.account_details.selected > a,
+a.listitem.account_details.selected,
+a.listitem.account_details:focus,
+a.listitem.account_details:hover,
+li.account_details > a.selected,
+li.account_details > a:focus,
+li.account_details > a:hover {
+  background-image: url('./images/account_details_act.svg') !important;
 }
 
 
