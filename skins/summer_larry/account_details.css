@@ -9,7 +9,7 @@ body.scroller {
 
 div.settingsbox-account_details {
 	/* Expand the width of the box instead of breaking lines */
-	margin: 0 0 15px 0;
+	margin: 0 15px 15px 0;
 }
 
 div.settingsbox-account_details-custom {
@@ -145,30 +145,30 @@ textarea.account_details {
     -o-transition: all 0.90s ease-in-out;
     margin: 1px 1px 2px 0px;
 	padding: 4px;
-	border: 1px solid #661705;
+	border: 1px solid inherit;
 	border-radius: 4px;
-	box-shadow: inset 0 0 2px 1px rgba(0,0,0, 0.1);
-	-webkit-box-shadow: inset 0 0 2px 1px rgba(0,0,0, 0.1);
+	box-shadow: inset 0 0 2px 1px inherit;
+	-webkit-box-shadow: inset 0 0 2px 1px inherit;
 }
 
 input.account_details[type="text"]:focus,
 input.account_details[type="password"]:focus,
 input.button.account_details:focus,
 textarea.account_details:focus {
-	border-color: #661705;
-	box-shadow: 0 0 5px 2px rgba(102, 23, 5, 0.9);
-	-webkit-box-shadow: 0 0 5px 2px rgba(102, 23, 5, 0.9);
+	border-color: inherit;
+	box-shadow: 0 0 5px 2px inherit;
+	-webkit-box-shadow: 0 0 5px 2px inherit;
 	outline: none;
 }
 
 input.account_details[type="text"]:required,
 input.account_details[type="password"]:required {
-	border-color: #4787b1;
+	border-color: inherit;
 }
 
 input.placeholder.account_details,
 textarea.placeholder.account_details {
-	color: #aaa;
+	color: inherit;
 }
 
 #settings-sections a.account_details,
@@ -215,12 +215,3 @@ input.account_details[type=text]:focus, textarea.account_details:focus {
   border: 1px solid rgba(71, 135, 177, 1);
 }
 */
-
-
-/* Fix boxtitle header span */
-div.settingsbox-account_details .boxtitle {
-  width: 100% !important;
-  box-sizing: border-box;
-  margin-right: 0 !important;
-  padding-right: 15px;
-}
