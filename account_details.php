@@ -564,7 +564,7 @@ class account_details extends rcube_plugin
                     }
                     $plugin_html = $this->_force_first_table_width(
                         $plugin_html,
-                        (string)($this->config['rc_pluginlist_width'] ?? '70%')
+                        (string)($this->config['rc_pluginlist_width'] ?? '100%')
                     );
                 }
 
