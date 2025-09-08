@@ -5,7 +5,6 @@
 	default config last updated in version 2009-09-26
 	
 	To hide a row, do not remove the variable, but set it: 'false'
-
 */
 
 $account_details_config = array();
@@ -29,6 +28,7 @@ $account_details_config['rc_latest'] = 'plugins/account_details/rc_latest.txt';
 
 // Display Plugin List
 $account_details_config['rc_pluginlist'] = true;
+$account_details_config['rc_pluginlist_width'] = '50%';
 
 // Enable display of used/total quota
 $account_details_config['enable_userid'] = true;
