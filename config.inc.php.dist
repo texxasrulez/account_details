@@ -14,7 +14,7 @@ $account_details_config = array();
 $account_details_config['bulletstyle'] = '&#9775;'; // Insert your favorite unicode here. https://www.w3schools.com/charsets/ref_utf_misc_symbols.asp
 
 // URL Text box length - Good if you have a long domain name
-$account_details_config['urlboxlength'] = '110'; // Numbers only
+$account_details_config['urlboxlength'] = '90'; // Numbers only
 
 // === ACCOUNT/WEBMAIL/SERVER INFO ===================
 // Display Roundcube Info
@@ -29,6 +29,7 @@ $account_details_config['rc_latest'] = 'plugins/account_details/rc_latest.txt';
 
 // Display Plugin List
 $account_details_config['rc_pluginlist'] = true;
+$account_details_config['rc_pluginlist_width'] = '50%';
 
 // Enable display of used/total quota
 $account_details_config['enable_userid'] = true;
