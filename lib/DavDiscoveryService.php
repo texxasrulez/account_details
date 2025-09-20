@@ -1,376 +1,439 @@
 <?php
-class DavDiscoveryService
+/**
+ * DavDiscoveryService - strict RFC discovery with robust URL joining.
+ * Logging made quiet with configurable levels:
+ *   $config['dav_log_level'] = 'off' | 'error' | 'warn' | 'info' | 'debug'  (default: 'error')
+ */
+
+if (!function_exists('__dav_level_num')) {
+    function __dav_level_num($lvl) {
+        switch (strtolower((string)$lvl)) {
+            case 'error': return 1;
+            case 'warn':  return 2;
+            case 'info':  return 3;
+            case 'debug': return 4;
+            case 'off':   return 5;
+            default:      return 1; // error
+        }
+    }
+}
+if (!function_exists('__dav_guess_level')) {
+    function __dav_guess_level($tag) {
+        $t = strtolower((string)$tag);
+        if (strpos($t, 'error') !== false) return 'error';
+        if (strpos($t, 'warn')  !== false) return 'warn';
+        // noisy tags we only want when info/debug
+        if (preg_match('#^(auth:|dav:|rfc:|discover:)#', $t)) return 'info';
+        return 'debug';
+    }
+}
+if (!function_exists('__dav_should_log')) {
+    function __dav_should_log($tag) {
+        $level = __dav_guess_level($tag);
+        $threshold = 'error';
+        if (class_exists('rcmail')) {
+            $rc = rcmail::get_instance();
+            if ($rc && $rc->config) {
+                $cfg = (string)$rc->config->get('dav_log_level', 'error');
+                if ($cfg !== '') $threshold = $cfg;
+            }
+        }
+        return __dav_level_num($level) <= __dav_level_num($threshold);
+    }
+}
+if (!function_exists('__dav_log')) {
+    function __dav_log($tag, $payload = array()) {
+        if (!__dav_should_log($tag)) return;
+        if (!is_array($payload)) $payload = array('msg' => (string)$payload);
+        error_log('[DAVDEBUG] ' . $tag . ' ' . json_encode($payload));
+    }
+}
+
+__dav_log('bootstrap', array('file' => __FILE__));
+
+if (!class_exists('rcmail') && file_exists(__DIR__ . '/../../program/include/iniset.php')) {
+    @include_once __DIR__ . '/../../program/include/iniset.php';
+}
+
+class DavDiscoveryServiceCore
 {
-    /** @var rcube */
     private $rc;
-    /** @var rcube_plugin */
-    private $plugin;
-    /** @var string */
-    private $plugin_dir;
-    /** @var array|null */
-    private $plugin_cfg = null;
+    private $log_threshold;
 
-    public function __construct(rcube_plugin $plugin, ?string $plugin_dir = null)
+    public function __construct()
     {
-        $this->plugin = $plugin;
-        $this->rc = rcube::get_instance();
-        // Do NOT access protected $plugin->home directly
-        $this->plugin_dir = $plugin_dir ?: dirname(__DIR__); // lib/.. => plugin root
-        $this->load_plugin_cfg();
+        $this->rc = class_exists('rcmail') ? rcmail::get_instance() : null;
+        $this->log_threshold = 'error';
+        if ($this->rc && $this->rc->config) {
+            $this->log_threshold = (string)$this->rc->config->get('dav_log_level', 'error');
+        }
+        $this->log('init', array(
+            'rc_user_id' => ($this->rc && $this->rc->user) ? (int)$this->rc->user->ID : null,
+            'debug_on'   => ($this->log_threshold === 'debug'),
+            'db_class'   => ($this->rc && $this->rc->db) ? get_class($this->rc->db) : null
+        ));
     }
 
-    private function load_plugin_cfg(): void
+    public function discover()
     {
-        if ($this->plugin_cfg !== null) return;
-        $this->plugin_cfg = [];
-        // Load config (plugin-local first, then .dist as fallback)
-        $paths = array(
-            $this->plugin_dir . '/config.inc.php',
-            $this->plugin_dir . '/config.inc.php.dist',
-        );
-        foreach ($paths as $p) {
-            if (@is_file($p) && @is_readable($p)) {
-                $account_details_config = null;
-                ob_start();
-                include($p);
-                ob_end_clean();
-                if (is_array($account_details_config)) {
-                    $this->plugin_cfg = array_merge($this->plugin_cfg, $account_details_config);
-                }
+        $user = $this->currentUserIdentity();
+        $this->log('discover:start', array('user' => $user));
+
+        $cal = array();
+        $card = array();
+
+        $calroot = $this->wellKnown('caldav');
+        if ($calroot) {
+            $cal = $this->discoverByRfc($calroot['url'], 'caldav');
+            if (empty($cal)) $cal[] = $calroot;
+        }
+
+        $cardroot = $this->wellKnown('carddav');
+        if ($cardroot) {
+            $card = $this->discoverByRfc($cardroot['url'], 'carddav');
+        }
+
+        $this->log('discover:end', array('cal_count' => count($cal), 'card_count' => count($card)));
+        return array('caldav' => $cal, 'carddav' => $card);
+    }
+
+    /** ---------- Basic URL seed ---------- */
+    private function wellKnown($type)
+    {
+        $base = '';
+        if ($this->rc && $this->rc->config) {
+            $base = (string)$this->rc->config->get('dav_base_url', '');
+            $base = rtrim($base, '/');
+        }
+        if ($base === '') {
+            $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '');
+            if ($host === '') return null;
+            $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+            $base = $scheme . '://' . $host;
+        }
+        $url = $base . '/.well-known/' . $type;
+        $this->log('rfc:well_known', array('input' => $url, 'target' => $url, 'status' => 0));
+        return array('name' => strtoupper($type) . ' Root', 'url' => $url);
+    }
+
+    /** ---------- RFC discovery path ---------- */
+
+    private function discoverByRfc($rootUrl, $type)
+    {
+        // Depth:0 at .well-known target
+        $r = $this->httpPropfind($rootUrl, 0);
+        $code = isset($r['code']) ? (int)$r['code'] : 0;
+        $body = isset($r['body']) ? $r['body'] : false;
+        $headers = isset($r['headers']) ? $r['headers'] : array();
+
+        if ($code >= 300 && $code < 400 && isset($headers['location'][0])) {
+            $loc = $this->joinUrl($rootUrl, $headers['location'][0]);
+            $this->log('dav:propfind:redirect', array('from' => $rootUrl, 'to' => $loc, 'code' => $code));
+            $rootUrl = $loc;
+            $r = $this->httpPropfind($rootUrl, 0);
+            $code = (int)$r['code']; $body = $r['body']; $headers = isset($r['headers']) ? $r['headers'] : array();
+        }
+
+        $home = $this->extractHomeFromBody($rootUrl, $body, $type);
+        if (!$home) {
+            $home = $this->principalHome($rootUrl, $type);
+        }
+        if (!$home) return array();
+
+        $this->log('dav:propfind:retry_home', array('home' => $home, 'type' => $type));
+
+        // Depth:1 on home-set
+        $r2 = $this->httpPropfind($home, 1);
+        if (!isset($r2['code']) || $r2['code'] >= 400 || $r2['body'] === false) return array();
+        return $this->parseCollections($home, $r2['body'], $type);
+    }
+
+    private function principalHome($baseUrl, $type)
+    {
+        $r1 = $this->httpPropfind($baseUrl, 0);
+        $this->log('dav:principal:base', array('code' => $r1['code'], 'type' => $type));
+
+        $principal = '';
+        if ($r1['code'] >= 200 && $r1['body']) {
+            $dom = new DOMDocument();
+            if (@$dom->loadXML((string)$r1['body'])) {
+                $xp = new DOMXPath($dom);
+                $xp->registerNamespace('d', 'DAV:');
+                $node = $xp->query('//d:current-user-principal/d:href')->item(0);
+                if ($node) $principal = trim((string)$node->textContent);
             }
         }
-    }
+        if ($principal === '') return null;
 
-    private function cfg(string $key, $default = null)
-    {
-        // Prefer Roundcube config, then plugin config file
-        $val = $this->rc->config->get($key, null);
-        if ($val !== null) return $val;
-        if ($this->plugin_cfg !== null && array_key_exists($key, $this->plugin_cfg)) {
-            return $this->plugin_cfg[$key];
+        $principal = $this->joinUrl($baseUrl, $principal);
+        $this->log('dav:principal:href', array('href' => $principal));
+
+        $r2 = $this->httpPropfind($principal, 0);
+        $home = '';
+        if ($r2['code'] >= 200 && $r2['body']) {
+            $home = $this->extractHomeFromBody($baseUrl, $r2['body'], $type);
         }
-        return $default;
-    }
-
-    private function is_debug(): bool
-    {
-        $cfg = $this->cfg('enable_dav_debug', false);
-        $flag = is_bool($cfg) ? $cfg : (bool)$cfg;
-        $get  = isset($_GET['_davdebug']) && $_GET['_davdebug'];
-        return $flag || $get;
-    }
-
-    private function dbg(string $msg, array $ctx = []): void
-    {
-        if (!$this->is_debug()) return;
-        $line = '[DAVDEBUG] ' . $msg . (!empty($ctx) ? (' ' . json_encode($ctx)) : '');
-        if (is_callable(['rcube','write_log'])) { @rcube::write_log('dav_debug', $line); }
-        @error_log($line);
-    }
-
-    public function discover(bool $use_db = true): array
-    {
-        $this->dbg('discover:start', ['use_db' => $use_db, 'user_id' => $this->rc->user->ID ?? null]);
-
-        $cal  = [];
-        $card = [];
-
-        $cal_mode  = (string)$this->cfg('dav_caldav_mode', 'rfc'); // 'none'|'db'|'rfc'|'static'
-        $card_mode = (string)$this->cfg('dav_carddav_mode', 'db');  // 'none'|'db'|'rfc'
-
-        if ($cal_mode === 'none') {
-            $this->dbg('caldav:disabled');
-            $cal = [];
-        } elseif ($cal_mode === 'static') {
-            $cal = (array)$this->cfg('dav_caldav_static', []);
-        } elseif ($cal_mode === 'db') {
-            $cal = $this->from_db('caldav');
-        } else {
-            if ($use_db) $cal = $this->from_db('caldav');
-            if (empty($cal)) {
-                $this->dbg('rfc:fallback_trigger', ['type' => 'caldav']);
-                $cal = $this->discover_via_rfc('caldav');
-            }
+        if ($home) {
+            $this->log('dav:principal:home', array('href' => $home, 'type' => $type));
+            return $home;
         }
-
-        if ($card_mode === 'none') {
-            $this->dbg('carddav:disabled');
-            $card = [];
-        } elseif ($card_mode === 'db') {
-            $card = $this->from_db('carddav');
-        } else {
-            if ($use_db) $card = $this->from_db('carddav');
-            if (empty($card)) {
-                $this->dbg('rfc:fallback_trigger', ['type' => 'carddav']);
-                $card = $this->discover_via_rfc('carddav');
-            }
-        }
-
-        // Replacement maps
-        $cal  = $this->apply_replacements($cal,  (array)$this->cfg('caldav_url_replace', []));
-        $card = $this->apply_replacements($card, (array)$this->cfg('carddav_url_replace', []));
-
-        // Optional hide patterns (regex) for names/urls
-        $cal_hide  = (array)$this->cfg('caldav_hide_patterns', []);
-        $card_hide = (array)$this->cfg('carddav_hide_patterns', []);
-        $cal  = $this->apply_hide_patterns($cal,  $cal_hide);
-        $card = $this->apply_hide_patterns($card, $card_hide);
-
-        // Final sanitation: drop empties and weird placeholders
-        $cal  = array_values(array_filter($cal,  function($it){ return is_array($it) && !empty($it['url']) && isset($it['name']) && trim($it['name']) !== '' && trim($it['name']) !== '%N'; }));
-        $card = array_values(array_filter($card, function($it){ return is_array($it) && !empty($it['url']) && isset($it['name']) && trim($it['name']) !== '' && trim($it['name']) !== '%N'; }));
-
-        // Sort by name
-        usort($cal,  function($a,$b){ return strcasecmp($a['name'],$b['name']); });
-        usort($card, function($a,$b){ return strcasecmp($a['name'],$b['name']); });
-
-        $this->dbg('discover:end', ['cal_count' => count($cal), 'card_count' => count($card)]);
-        return ['caldav' => $cal, 'carddav' => $card];
-    }
-
-    private function from_db(string $type): array
-    {
-        $this->dbg('from_db:start', ['type' => $type]);
-
-        $uid   = (int)($this->rc->user->ID ?? 0);
-        $uname = $this->rc->user ? (string)$this->rc->user->get_username() : '';
-
-        if ($type === 'caldav') {
-            $candidates = [
-                ['table' => $this->rc->db->table_name('caldav_calendars'), 'url' => 'caldav_url', 'name' => 'name'],
-                ['table' => $this->rc->db->table_name('caldav_calendars'), 'url' => 'url',        'name' => 'name'],
-                ['table' => $this->rc->db->table_name('caldav_calendars'), 'url' => 'url',        'name' => 'displayname'],
-            ];
-        } else {
-            $candidates = [
-                ['table' => $this->rc->db->table_name('carddav_addressbooks'), 'url' => 'url', 'name' => 'name'],
-            ];
-        }
-
-        foreach ($candidates as $idx => $c) {
-            $table = $c['table'];
-            $this->dbg('from_db:candidate', ['idx' => $idx, 'table' => $table, 'name_col' => $c['name'], 'url_col' => $c['url']]);
-
-            if (!$this->table_exists($table)) {
-                $this->dbg('from_db:skip_missing_table', ['table' => $table]);
-                continue;
-            }
-            if (!$this->column_exists($table, $c['name']) || !$this->column_exists($table, $c['url'])) {
-                $this->dbg('from_db:skip_missing_columns', ['table' => $table, 'name_col' => $c['name'], 'url_col' => $c['url']]);
-                continue;
-            }
-
-            $owner_cols = $this->find_owner_columns($table);
-            $this->dbg('from_db:owner_cols', ['table' => $table, 'cols' => $owner_cols]);
-
-            $where_sets = [];
-            if (in_array('user_id', $owner_cols, true))   $where_sets[] = ['col' => 'user_id', 'val' => $uid];
-            if (in_array('user', $owner_cols, true))      $where_sets[] = ['col' => 'user', 'val' => $uname];
-            if (in_array('username', $owner_cols, true))  $where_sets[] = ['col' => 'username', 'val' => $uname];
-            if (in_array('account', $owner_cols, true))   $where_sets[] = ['col' => 'account', 'val' => $uname];
-            if (in_array('email', $owner_cols, true))     $where_sets[] = ['col' => 'email', 'val' => $uname];
-            $where_sets[] = null; // try unfiltered
-
-            $items = [];
-            foreach ($where_sets as $widx => $w) {
-                if ($w) {
-                    $sql = sprintf('SELECT %s AS name, %s AS url FROM %s WHERE %s = ?', $c['name'], $c['url'], $table, $w['col']);
-                    $this->dbg('from_db:query', ['sql' => $sql, 'val' => $w['val']]);
-                    $res = $this->rc->db->query($sql, $w['val']);
-                } else {
-                    $sql = sprintf('SELECT %s AS name, %s AS url FROM %s', $c['name'], $c['url'], $table);
-                    $this->dbg('from_db:query', ['sql' => $sql]);
-                    $res = $this->rc->db->query($sql);
-                }
-                while ($res && ($row = $this->rc->db->fetch_assoc($res))) {
-                    if (!isset($row['name']) || !isset($row['url'])) continue;
-                    $nm = (string)$row['name'];
-                    $u  = (string)$row['url'];
-                    if ($nm === '' || $u === '') continue;
-                    $items[] = ['name' => $nm, 'url' => $u];
-                }
-                $this->dbg('from_db:rows', ['count' => count($items), 'where_idx' => $widx]);
-                if (!empty($items)) break;
-            }
-
-            if (!empty($items)) return $items;
-        }
-
-        return [];
-    }
-
-    private function table_exists(string $table): bool
-    {
-        try {
-            $res = $this->rc->db->query('SHOW TABLES LIKE ?', $table);
-            return ($res && $this->rc->db->num_rows($res) > 0);
-        } catch (Throwable $e) {
-            return false;
-        }
-    }
-
-    private function column_exists(string $table, string $col): bool
-    {
-        try {
-            $res = $this->rc->db->query('SHOW COLUMNS FROM ' . $table . ' LIKE ?', $col);
-            return ($res && $this->rc->db->num_rows($res) > 0);
-        } catch (Throwable $e) {
-            return false;
-        }
-    }
-
-    private function find_owner_columns(string $table): array
-    {
-        $cands = ['user_id','user','username','account','email'];
-        $have  = [];
-        foreach ($cands as $c) {
-            if ($this->column_exists($table, $c)) $have[] = $c;
-        }
-        return $have;
-    }
-
-    private function guess_base_url(): ?string
-    {
-        $host = $this->cfg('dav_host', null);
-        if ($host) return (stripos($host, 'http') === 0) ? $host : ('https://' . $host);
-        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-        $h = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? ($_SERVER['HTTP_HOST'] ?? '');
-        if ($h) return $scheme . '://' . $h;
-        $imap_host = $this->rc->config->get('default_host');
-        if (is_string($imap_host) && preg_match('~[a-z0-9.-]+\.[a-z]{2,}$~i', $imap_host)) return 'https://' . $imap_host;
         return null;
     }
 
-    private function discover_via_rfc(string $type): array
+    private function extractHomeFromBody($baseUrl, $xmlBody, $type)
     {
-        $base = $this->guess_base_url();
-        if (!$base) { $this->dbg('rfc:base_missing'); return []; }
+        if (!$xmlBody) return null;
+        $dom = new DOMDocument();
+        if (!@$dom->loadXML((string)$xmlBody)) return null;
+        $xp = new DOMXPath($dom);
+        $xp->registerNamespace('d', 'DAV:');
+        $xp->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
+        $xp->registerNamespace('ab', 'urn:ietf:params:xml:ns:carddav');
 
-        $wk = rtrim($base, '/') . '/.well-known/' . ($type === 'caldav' ? 'caldav' : 'carddav');
-        $head = $this->http_request('HEAD', $wk, null, 4.0, []);
-        $target = (!empty($head['effective_url'])) ? $head['effective_url'] : $wk;
-        $this->dbg('rfc:well_known', ['input' => $wk, 'target' => $target, 'status' => $head['status']]);
+        $node = ($type === 'caldav')
+            ? $xp->query('//cal:calendar-home-set/d:href')->item(0)
+            : $xp->query('//ab:addressbook-home-set/d:href')->item(0);
+        if (!$node) return null;
 
-        // Accept 401 on well-known if configured; still surface target
-        $accept401 = (bool)$this->cfg('dav_accept_401_well_known', true);
-        if ($head['status'] >= 400 && !($accept401 && $head['status'] == 401)) {
-            return [];
-        }
-
-        $label = (string)$this->cfg('dav_caldav_label', 'Calendars');
-        if ($type !== 'caldav') $label = (string)$this->cfg('dav_carddav_label', 'Address Books');
-        return [[ 'name' => $label, 'url' => $target ]];
+        $href = trim((string)$node->textContent);
+        return $this->joinUrl($baseUrl, $href);
     }
 
-    private function http_request(string $method, string $url, ?string $body, float $timeout, array $extra_headers = []): array
+    private function parseCollections($root, $xmlBody, $type)
     {
-        if (function_exists('curl_init')) {
-            $ch = curl_init();
-            $headers = array_merge(['User-Agent: Roundcube-DAV-Discovery'], $extra_headers);
-            curl_setopt_array($ch, [
-                CURLOPT_URL => $url,
-                CURLOPT_CUSTOMREQUEST => $method,
-                CURLOPT_NOBODY => ($method === 'HEAD'),
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_MAXREDIRS => 3,
-                CURLOPT_HEADER => false,
-                CURLOPT_CONNECTTIMEOUT => max(1, (int)floor($timeout / 2)),
-                CURLOPT_TIMEOUT => max(1, (int)ceil($timeout)),
-                CURLOPT_HTTPHEADER => $headers,
-            ]);
-            if ($body !== null && $method !== 'HEAD') {
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-            }
-            $resp_body = curl_exec($ch);
-            $info = curl_getinfo($ch);
-            $err  = curl_error($ch);
-            curl_close($ch);
-            return [
-                'status' => isset($info['http_code']) ? (int)$info['http_code'] : 0,
-                'body'   => $resp_body,
-                'error'  => $err ?: null,
-                'effective_url' => isset($info['url']) ? $info['url'] : $url
-            ];
+        $out = array();
+        $dom = new DOMDocument();
+        if (!@$dom->loadXML((string)$xmlBody)) { $this->log('dav:propfind:parse_error', array('error' => 'loadXML failed')); return array(); }
+
+        $xp = new DOMXPath($dom);
+        $xp->registerNamespace('d', 'DAV:');
+        $xp->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
+        $xp->registerNamespace('ab', 'urn:ietf:params:xml:ns:carddav');
+
+        $responses = $xp->query('//d:response');
+        for ($i = 0; $i < $responses->length; $i++) {
+            $resNode = $responses->item($i);
+            $hrefNode = $xp->query('d:href', $resNode)->item(0);
+            if (!$hrefNode) continue;
+            $href = (string)$hrefNode->textContent;
+
+            $isWanted = ($type === 'caldav')
+                ? ($xp->query('.//d:resourcetype/cal:calendar', $resNode)->length > 0)
+                : ($xp->query('.//d:resourcetype/ab:addressbook', $resNode)->length > 0);
+            if (!$isWanted) continue;
+
+            $nameNode = $xp->query('.//d:propstat/d:prop/d:displayname', $resNode)->item(0);
+            $name = $nameNode ? (string)$nameNode->textContent : trim(basename($href), '/');
+
+            $out[] = array('name' => $name, 'url' => $this->joinUrl($root, $href));
         }
-        $headers = array_merge(['User-Agent: Roundcube-DAV-Discovery'], $extra_headers);
-        $opts = ['http' => ['method' => $method,'timeout' => $timeout,'ignore_errors' => true,'header' => implode("\r\n", $headers)]];
-        if ($body !== null && $method !== 'HEAD') $opts['http']['content'] = $body;
-        $ctx = stream_context_create($opts);
-        $resp = @file_get_contents($url, false, $ctx);
-        $status = 0;
-        if (isset($http_response_header) && is_array($http_response_header)) {
-            foreach ($http_response_header as $h) { if (preg_match('~HTTP/\d\.\d\s+(\d+)~', $h, $m)) { $status = (int)$m[1]; break; } }
-        }
-        return ['status' => $status, 'body' => $resp, 'error' => null, 'effective_url' => $url];
+
+        $this->log('dav:propfind:found', array('count' => count($out), 'type' => $type));
+        return $this->dedupe($out);
     }
 
-    private function apply_replacements(array $items, array $repl): array
+    /** ---------- URL helpers ---------- */
+
+    private function joinUrl($base, $href)
     {
-        foreach ($items as &$it) {
-            if (!is_array($it) || !isset($it['url'])) continue;
-            $u = $this->normalize_url($it['url']);
-            foreach ($repl as $k => $v) {
-                if (is_string($k) && strlen($k) > 2 && $k[0] === '/' && substr($k, -1) === '/') {
-                    $u = @preg_replace($k, (string)$v, $u);
+        $href = (string)$href;
+        if ($href === '') return $base;
+        if (preg_match('#^https?://#i', $href)) return $href;
+
+        $p = @parse_url($base);
+        if (!$p || !isset($p['scheme']) || !isset($p['host'])) return $href;
+        $origin = $p['scheme'] . '://' . $p['host'] . (isset($p['port']) ? (':' . $p['port']) : '');
+
+        if ($href[0] === '/') {
+            // server-absolute; ignore base path to avoid /dav//dav duplication
+            return rtrim($origin, '/') . $href;
+        }
+
+        // relative; join with base *directory*
+        $basePath = isset($p['path']) ? $p['path'] : '/';
+        if ($basePath === '') $basePath = '/';
+        if (substr($basePath, -1) !== '/') {
+            $basePath = substr($basePath, 0, strrpos($basePath, '/') + 1);
+        }
+        return rtrim($origin, '/') . '/' . ltrim($basePath . $href, '/');
+    }
+
+    /** ---------- HTTP + auth ---------- */
+
+    private function httpPropfind($url, $depth)
+    {
+        $xml = '<?xml version="1.0" encoding="utf-8" ?>'
+             . '<d:propfind xmlns:d="DAV:" xmlns:cal="urn:ietf:params:xml:ns:caldav" xmlns:ab="urn:ietf:params:xml:ns:carddav">'
+             . '<d:prop>'
+             . '<d:displayname/><d:resourcetype/><d:current-user-principal/>'
+             . '<cal:calendar-home-set/><ab:addressbook-home-set/>'
+             . '</d:prop>'
+             . '</d:propfind>';
+
+        list($user, $pass, $local) = $this->getHttpBasicCreds();
+
+        $code = 0; $body = false; $headers = array();
+
+        for ($attempt = 1; $attempt <= 3; $attempt++) {
+            $code = 0; $body = false; $headers = array();
+
+            $exec = function($u) use ($url, $depth, $xml, $pass, &$code, &$body, &$headers) {
+                $code = 0; $body = false; $headers = array();
+                if (function_exists('curl_init')) {
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PROPFIND');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        'Depth: ' . (string)$depth,
+                        'Content-Type: application/xml',
+                        'User-Agent: Roundcube-AccountDetails-DAV/1.0',
+                        'Accept: */*'
+                    ));
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HEADER, true);
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, 12);
+                    if ($u && $pass) {
+                        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+                        curl_setopt($ch, CURLOPT_USERPWD, $u . ':' . $pass);
+                    }
+                    $resp = curl_exec($ch);
+                    if ($resp !== false) {
+                        $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+                        $raw_headers = substr($resp, 0, $header_size);
+                        $body        = substr($resp, $header_size);
+                        $code        = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                        $lines = preg_split('/\r?\n/', (string)$raw_headers);
+                        foreach ($lines as $line) {
+                            $pos = strpos($line, ':');
+                            if ($pos !== false) {
+                                $hname = strtolower(trim(substr($line, 0, $pos)));
+                                $hval  = trim(substr($line, $pos + 1));
+                                if (!isset($headers[$hname])) $headers[$hname] = array();
+                                $headers[$hname][] = $hval;
+                            }
+                        }
+                    }
+                    curl_close($ch);
                 } else {
-                    $u = str_replace((string)$k, (string)$v, $u);
+                    $hdrs = "Depth: " . (string)$depth . "\r\n"
+                          . "Content-Type: application/xml\r\n"
+                          . "User-Agent: Roundcube-AccountDetails-DAV/1.0\r\n"
+                          . "Accept: */*\r\n";
+                    if ($u && $pass) $hdrs .= "Authorization: Basic " . base64_encode($u . ':' . $pass) . "\r\n";
+                    $ctx = stream_context_create(array('http' => array('method'=>'PROPFIND','header'=>$hdrs,'content'=>$xml,'ignore_errors'=>true,'timeout'=>12)));
+                    $resp = @file_get_contents($url, false, $ctx);
+                    $body = $resp;
+                    if (isset($http_response_header) && is_array($http_response_header)) {
+                        foreach ($http_response_header as $h) {
+                            if (preg_match('#HTTP/\d\.\d\s+(\d{3})#', $h, $m)) $code = (int)$m[1];
+                            $pos = strpos($h, ':');
+                            if ($pos !== false) {
+                                $hname = strtolower(trim(substr($h, 0, $pos)));
+                                $hval  = trim(substr($h, $pos + 1));
+                                if (!isset($headers[$hname])) $headers[$hname] = array();
+                                $headers[$hname][] = $hval;
+                            }
+                        }
+                    }
                 }
+            };
+
+            $exec($user);
+            if ($code == 401 && $user && strpos($user, '@') !== false && $local) {
+                $this->log('auth:alt_try', array('switch_to' => $local));
+                $exec($local);
             }
-            $it['url'] = $u;
+
+            if ($code == 429 || $code == 503) {
+                usleep((int)(400000 * $attempt)); // 0.4s, 0.8s, 1.2s
+                continue;
+            }
+            break;
         }
-        unset($it);
-        return $items;
+
+        return array('code' => $code, 'body' => $body, 'headers' => $headers);
     }
 
-    private function apply_hide_patterns(array $items, array $patterns): array
+    private function getHttpBasicCreds()
     {
-        if (empty($patterns)) return $items;
-        $out = [];
-        foreach ($items as $it) {
-            if (!is_array($it)) continue;
-            $name = (string)($it['name'] ?? '');
-            $url  = (string)($it['url'] ?? '');
-            $hide = false;
-            foreach ($patterns as $rx) {
-                if (!is_string($rx) || $rx === '') continue;
-                $ok = @preg_match($rx, '') !== false; // validate regex
-                if ($ok) {
-                    if (@preg_match($rx, $name) || @preg_match($rx, $url)) { $hide = true; break; }
-                } else {
-                    // treat as plain substring
-                    if (stripos($name, $rx) !== false || stripos($url, $rx) !== false) { $hide = true; break; }
-                }
+        $rcU = $this->rcCurrentUsername();
+        $rcP = $this->rcCurrentPassword();
+        $local = $this->rcUserLocalPart($rcU);
+        $domain = $this->rcUserDomainPart($rcU);
+
+        $u_src = ''; $p_src = '';
+
+        if ($this->rc && $this->rc->config) {
+            $cfgU = (string)$this->rc->config->get('calendar_caldav_user', '');
+            $cfgP = (string)$this->rc->config->get('calendar_caldav_pass', '');
+            if ($cfgU !== '') $u_src = str_replace(array('%u','%U','%email','%username','%l','%local','%d','%domain'), array($rcU,$rcU,$rcU,$rcU,$local,$local,$domain,$domain), $cfgU);
+            if ($cfgP !== '') $p_src = str_replace(array('%p','%P','%pass','%password'), array($rcP,$rcP,$rcP,$rcP), $cfgP);
+
+            if ($u_src === '' || $p_src === '') {
+                $cfgU = (string)$this->rc->config->get('dav_basic_user', '');
+                $cfgP = (string)$this->rc->config->get('dav_basic_pass', '');
+                if ($cfgU !== '') $u_src = str_replace(array('%u','%U','%email','%username','%l','%local','%d','%domain'), array($rcU,$rcU,$rcU,$rcU,$local,$local,$domain,$domain), $cfgU);
+                if ($cfgP !== '') $p_src = str_replace(array('%p','%P','%pass','%password'), array($rcP,$rcP,$rcP,$rcP), $cfgP);
             }
-            if (!$hide) $out[] = $it;
+        }
+
+        if ($u_src === '') $u_src = $rcU;
+        if ($p_src === '') $p_src = $rcP;
+
+        $this->log('auth:fallback', array('user' => $u_src, 'has_pass' => ($p_src !== '')));
+        if ($u_src === '' || $p_src === '') return array(null, null, null);
+        return array($u_src, $p_src, $local);
+    }
+
+    /** ---------- small helpers ---------- */
+    private function currentUserIdentity()
+    {
+        $id = 0; $username = ''; $email = '';
+        if ($this->rc && $this->rc->user) {
+            $id = (int)$this->rc->user->ID;
+            if (method_exists($this->rc->user, 'get_username')) $username = (string)$this->rc->user->get_username();
+            $ident = method_exists($this->rc->user, 'get_identity') ? $this->rc->user->get_identity() : null;
+            if (is_array($ident) && isset($ident['email'])) $email = (string)$ident['email'];
+        }
+        return array('id' => $id, 'username' => $username, 'email' => $email);
+    }
+    private function rcCurrentUsername() { $ident = $this->currentUserIdentity(); return (is_array($ident) && isset($ident['username'])) ? (string)$ident['username'] : ''; }
+    private function rcCurrentPassword() {
+        if ($this->rc) {
+            if (method_exists($this->rc, 'get_user_password')) {
+                $p = $this->rc->get_user_password();
+                if (is_string($p) && $p !== '') return $p;
+            }
+            if (method_exists($this->rc, 'decrypt') && isset($_SESSION['password']) && is_string($_SESSION['password'])) {
+                $p = @$this->rc->decrypt($_SESSION['password']);
+                if (is_string($p) && $p !== '') return $p;
+            }
+        }
+        if (isset($_SESSION['password']) && is_string($_SESSION['password']) && $_SESSION['password'] !== '') return (string)$_SESSION['password'];
+        if (isset($_SESSION['imap_password']) && is_string($_SESSION['imap_password']) && $_SESSION['imap_password'] !== '') return (string)$_SESSION['imap_password'];
+        return '';
+    }
+    private function rcUserLocalPart($username) { $at = strpos((string)$username, '@'); return ($at === false) ? (string)$username : substr((string)$username, 0, $at); }
+    private function rcUserDomainPart($username) { $at = strpos((string)$username, '@'); return ($at === false) ? '' : substr((string)$username, $at + 1); }
+    private function dedupe($rows)
+    {
+        $seen = array(); $out = array();
+        for ($i = 0; $i < count($rows); $i++) {
+            $k = $rows[$i]['name'] . "\0" . $rows[$i]['url'];
+            if (!isset($seen[$k])) { $seen[$k] = true; $out[] = $rows[$i]; }
         }
         return $out;
     }
-
-    private function normalize_url(string $raw): string
-    {
-        $parts = explode('?', $raw, 2);
-        $base = $parts[0];
-        $q = isset($parts[1]) ? $parts[1] : '';
-
-        $p = @parse_url($base);
-        if (!$p || empty($p['scheme']) || empty($p['host'])) {
-            return $raw;
-        }
-
-        $scheme = strtolower($p['scheme']);
-        $host   = $p['host'];
-        $port   = isset($p['port']) ? (int)$p['port'] : null;
-        $path   = isset($p['path']) ? $p['path'] : '/';
-
-        if (($scheme === 'https' && $port === 443) || ($scheme === 'http' && $port === 80)) {
-            $port = null;
-        }
-        $path = preg_replace('~/{2,}~', '/', $path ?: '/');
-
-        $url = $scheme . '://' . $host . ($port ? ':' . $port : '') . $path;
-        if ($q !== '') $url .= '?' . $q;
-
-        return $url;
+    private function log($tag, $payload = array()) {
+        if (!__dav_should_log($tag)) return;
+        if (!is_array($payload)) $payload = array('msg' => (string)$payload);
+        error_log('[DAVDEBUG] ' . $tag . ' ' . json_encode($payload));
     }
 }
+
+if (!class_exists('DavDiscoveryService', false)) { class_alias('DavDiscoveryServiceCore', 'DavDiscoveryService'); }
+if (!class_exists('AccountDetails\\DavDiscoveryService', false)) { class_alias('DavDiscoveryServiceCore', 'AccountDetails\\DavDiscoveryService'); }
+if (!class_exists('AccountDetails\\Lib\\DavDiscoveryService', false)) { class_alias('DavDiscoveryServiceCore', 'AccountDetails\\Lib\\DavDiscoveryService'); }
+?>

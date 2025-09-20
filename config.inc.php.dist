@@ -5,10 +5,12 @@
 	default config last updated in version 2009-09-26
 	
 	To hide a row, do not remove the variable, but set it: 'false'
-
 */
 
 $account_details_config = array();
+
+// Keep logs quiet but still capture problems
+$config['dav_log_level'] = 'error'; // 'info', 'error' or 'debug'
 
 // Bullet Style - Default &#9679;
 $account_details_config['bulletstyle'] = '&#9775;'; // Insert your favorite unicode here. https://www.w3schools.com/charsets/ref_utf_misc_symbols.asp
@@ -26,6 +28,22 @@ $account_details_config['display_rc_release'] = true;
  * curl https://api.github.com/repos/roundcube/roundcubemail/releases | grep tag_name | grep -o "[0-9].[0-9].[0-9]\{1,\}" | sort -n | tail -1 >> /path_to_roundcube/plugins/account_details/rc_latest.txt
 */
 $account_details_config['rc_latest'] = 'plugins/account_details/rc_latest.txt';
+
+// Caldav Creds
+// Universal DAV auth via Roundcube login (no hardcoding)
+$config['dav_basic_user'] = '%u';   // full username
+$config['dav_basic_pass'] = '%p';   // Roundcube session password
+
+// Leave base empty to use host-based autodiscovery (/.well-known)
+$config['dav_base_url'] = '';
+
+// SSL checks on (best practice). Set true only for self-signed lab setups.
+$config['dav_curl_insecure'] = false;
+
+// Optionally extend DB discovery (kept empty to stay Kolab-aligned)
+// $config['dav_calendar_tables'] = [
+//   ['table' => 'cal_calendars', 'name_col' => 'name', 'url_col' => 'href'],
+// ];
 
 // Display Plugin List
 $account_details_config['rc_pluginlist'] = true;
