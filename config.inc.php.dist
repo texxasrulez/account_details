@@ -7,33 +7,28 @@
 	To hide a row, do not remove the variable, but set it: 'false'
 
 */
- // Debugging
-$config['enable_dav_debug'] = true; 
-
-// Point discovery at the right host (recommended)
-$config['dav_host'] = 'https://www.domain.com';
-
-// Do RFC discovery with HTTP Basic auth (like Thunderbird)
-$config['dav_auth'] = 'basic';
-
-// Expand to your Roundcube username (email) and IMAP password in the session
-$config['dav_user'] = '%u';
-$config['dav_pass'] = '%p';
-
-// Turn CalDAV discovery off (no DB/RFC probing, no UI section)
-$config['dav_caldav_mode'] = 'none';   // 'none' | 'db' | 'rfc' | 'static'
-
-// (optional) Keep CardDAV discovery enabled
-$config['dav_carddav_mode'] = 'db';    // 'db' | 'rfc' | 'none'
-
-// If you ever want to show a fixed list of CalDAV URLs (not Nextcloud), set:
-// $config['dav_caldav_mode'] = 'static';
-// $config['dav_caldav_static'] = [
-//   ['name' => 'Work', 'url' => 'https://cal.example.com/dav/calendars/user/work/'],
-//   ['name' => 'Home', 'url' => 'https://cal.example.com/dav/calendars/user/home/'],
-// ];
- 
 $account_details_config = array();
+
+ // Debugging
+$config['enable_dav_debug'] = false; 
+// Keep logs quiet but still capture problems
+$config['dav_log_level'] = 'error'; // 'info', 'error' or 'debug'
+
+// Caldav Creds
+// Universal DAV auth via Roundcube login (no hardcoding)
+$config['dav_basic_user'] = '%u';   // full username
+$config['dav_basic_pass'] = '%p';   // Roundcube session password
+
+// Leave base empty to use host-based autodiscovery (/.well-known)
+$config['dav_base_url'] = '';
+
+// SSL checks on (best practice). Set true only for self-signed lab setups.
+$config['dav_curl_insecure'] = false;
+
+// Optionally extend DB discovery (kept empty to stay Kolab-aligned)
+// $config['dav_calendar_tables'] = [
+//   ['table' => 'cal_calendars', 'name_col' => 'name', 'url_col' => 'href'],
+// ];
 
 // Bullet Style - Default &#9679;
 $account_details_config['bulletstyle'] = '&#9774;'; // Insert your favorite unicode here. https://www.w3schools.com/charsets/ref_utf_misc_symbols.asp
