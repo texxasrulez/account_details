@@ -70,11 +70,8 @@ $account_details_config['location'] = 'The Great State of Texas'; // Cannot be b
 
 //========= Mailbox Details ==========================
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
-// Require INBOX. prefix for folders
-$account_details_config['enable_mailbox'] = false;
-// No prefix needed for folders
-$account_details_config['enable_mailbox_noprefix'] = true;
-// Enable or Disable Individual Folders - 'enable_mailbox' or 'enable_mailbox_noprefix' Must be true
+$account_details_config['enable_mailbox'] = true;
+// Enable or Disable Individual Folders - 'enable_mailbox' Must be true
 $account_details_config['enable_drafts'] = true;
 $account_details_config['enable_sent'] = true;
 $account_details_config['enable_junk'] = true; 
