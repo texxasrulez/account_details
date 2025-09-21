@@ -193,11 +193,29 @@ class account_details extends rcube_plugin
         }
 
         // Storage / Quota
-        $this->rc->storage_connect(true);
+        // $this->rc->storage_connect(); // avoid forcing IMAP in settings
         $imap  = $this->rc->get_storage();
-        $quota = is_object($imap) && method_exists($imap, 'get_quota') ? (array) $imap->get_quota() : null;
+        $quota = null;
+        if (is_object($imap) && method_exists($imap, 'is_connected') && $imap->is_connected() && method_exists($imap, 'get_quota')) {
+            $q = $imap->get_quota();
+            if (is_array($q)) {
+                if (isset($q['STORAGE']) && is_array($q['STORAGE'])) {
+                    $quota = [
+                        'total'   => $q['STORAGE']['total']  ?? null,
+                        'used'    => $q['STORAGE']['used']   ?? null,
+                        'percent' => $q['STORAGE']['percent']?? null,
+                    ];
+                } else {
+                    $quota = [
+                        'total'   => $q['total']   ?? null,
+                        'used'    => $q['used']    ?? null,
+                        'percent' => $q['percent'] ?? null,
+                    ];
+                }
+            }
+        }
 
-        if (!empty($this->config['enable_quota']) && $quota) {
+        if (!empty($this->config['enable_quota']) && $quota && is_object($imap) && method_exists($imap,'is_connected') && $imap->is_connected()) {
             $total_bytes = (int) (($quota['total'] ?? 0) * 1024);
             $used_bytes  = (int) (($quota['used'] ?? 0) * 1024);
             $percent     = (int) ($quota['percent'] ?? 0);
@@ -205,7 +223,7 @@ class account_details extends rcube_plugin
             $quotatotal = $this->rc->show_bytes($total_bytes);
             $quotaused  = $this->rc->show_bytes($used_bytes) . ' (' . $percent . '%)';
 
-            if (!empty($quota) && ($quota['total'] == 0) && $this->rc->config->get('quota_zero_as_unlimited')) {
+            if (!empty($quota) && (( $quota['total'] ?? 0) == 0) && $this->rc->config->get('quota_zero_as_unlimited')) {
                 $quotatotal = 'unlimited';
             }
 
