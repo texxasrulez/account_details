@@ -5,15 +5,38 @@
 	default config last updated in version 2009-09-26
 	
 	To hide a row, do not remove the variable, but set it: 'false'
-*/
 
+*/
+ // Debugging
+$config['enable_dav_debug'] = true; 
+
+// Point discovery at the right host (recommended)
+$config['dav_host'] = 'https://www.domain.com';
+
+// Do RFC discovery with HTTP Basic auth (like Thunderbird)
+$config['dav_auth'] = 'basic';
+
+// Expand to your Roundcube username (email) and IMAP password in the session
+$config['dav_user'] = '%u';
+$config['dav_pass'] = '%p';
+
+// Turn CalDAV discovery off (no DB/RFC probing, no UI section)
+$config['dav_caldav_mode'] = 'none';   // 'none' | 'db' | 'rfc' | 'static'
+
+// (optional) Keep CardDAV discovery enabled
+$config['dav_carddav_mode'] = 'db';    // 'db' | 'rfc' | 'none'
+
+// If you ever want to show a fixed list of CalDAV URLs (not Nextcloud), set:
+// $config['dav_caldav_mode'] = 'static';
+// $config['dav_caldav_static'] = [
+//   ['name' => 'Work', 'url' => 'https://cal.example.com/dav/calendars/user/work/'],
+//   ['name' => 'Home', 'url' => 'https://cal.example.com/dav/calendars/user/home/'],
+// ];
+ 
 $account_details_config = array();
 
-// Keep logs quiet but still capture problems
-$config['dav_log_level'] = 'error'; // 'info', 'error' or 'debug'
-
 // Bullet Style - Default &#9679;
-$account_details_config['bulletstyle'] = '&#9775;'; // Insert your favorite unicode here. https://www.w3schools.com/charsets/ref_utf_misc_symbols.asp
+$account_details_config['bulletstyle'] = '&#9774;'; // Insert your favorite unicode here. https://www.w3schools.com/charsets/ref_utf_misc_symbols.asp
 
 // URL Text box length - Good if you have a long domain name
 $account_details_config['urlboxlength'] = '90'; // Numbers only
@@ -29,25 +52,8 @@ $account_details_config['display_rc_release'] = true;
 */
 $account_details_config['rc_latest'] = 'plugins/account_details/rc_latest.txt';
 
-// Caldav Creds
-// Universal DAV auth via Roundcube login (no hardcoding)
-$config['dav_basic_user'] = '%u';   // full username
-$config['dav_basic_pass'] = '%p';   // Roundcube session password
-
-// Leave base empty to use host-based autodiscovery (/.well-known)
-$config['dav_base_url'] = '';
-
-// SSL checks on (best practice). Set true only for self-signed lab setups.
-$config['dav_curl_insecure'] = false;
-
-// Optionally extend DB discovery (kept empty to stay Kolab-aligned)
-// $config['dav_calendar_tables'] = [
-//   ['table' => 'cal_calendars', 'name_col' => 'name', 'url_col' => 'href'],
-// ];
-
 // Display Plugin List
 $account_details_config['rc_pluginlist'] = true;
-$account_details_config['rc_pluginlist_width'] = '50%';
 
 // Enable display of used/total quota
 $account_details_config['enable_userid'] = true;
@@ -59,7 +65,7 @@ $account_details_config['display_lastlogin'] = true;
 
 // Enable User IP Address
 $account_details_config['enable_ip'] = true; // Simple IP Address from your system IP Only - Shows LAN IP if behind firewall
-$account_details_config['useipinfo'] = true; // Displays IP, City and Region provided by http://ipinfo.io/ - Free up to 1000 hits a day - No Registration required
+$account_details_config['useipinfo'] = true; // Displays IP, City and Region provided by http://ipinfo.io/ - Free up to 1000 hits a day
 
 // Display Support URL - If enabled, Be sure and fill this out in Roundcubes main config.inc.php if not specified during installation
 $account_details_config['enable_support'] = true;
@@ -69,8 +75,11 @@ $account_details_config['location'] = 'The Great State of Texas'; // Cannot be b
 
 //========= Mailbox Details ==========================
 // Display Mailbox Details - Unread Count - Total Count - Size of Folder
-$account_details_config['enable_mailbox'] = true;
-// Enable or Disable Individual Folders - 'enable_mailbox' Must be true
+// Require INBOX. prefix for folders
+$account_details_config['enable_mailbox'] = false;
+// No prefix needed for folders
+$account_details_config['enable_mailbox_noprefix'] = true;
+// Enable or Disable Individual Folders - 'enable_mailbox' or 'enable_mailbox_noprefix' Must be true
 $account_details_config['enable_drafts'] = true;
 $account_details_config['enable_sent'] = true;
 $account_details_config['enable_junk'] = true; 
@@ -131,11 +140,11 @@ $account_details_config['display_admin_email'] = true;
 $account_details_config['webmail_url'] = '%p://%s/mail/';
 
 // Server hostname
-$account_details_config['hostname'] = '%S';
+$account_details_config['hostname'] = '%s';
 // If you have different server host names per protocol
-$account_details_config['hostname_smtp'] = 'smtp.%S';
-$account_details_config['hostname_imap'] = 'imap.%S';
-$account_details_config['hostname_pop'] = 'pop.%S';
+$account_details_config['hostname_smtp'] = 'smtp.%s';
+$account_details_config['hostname_imap'] = 'imap.%s';
+$account_details_config['hostname_pop'] = 'pop.%s';
 
 // === SERVER CAPABILITIES ==========================================
 
