@@ -46,3 +46,4 @@ I appreciate the interest in this plugin and hope all the best ...
 With All Details enabled
 
 ![Alt text](/tests/ad-screenshot1.png?raw=true "Account Details Screenshot")
+![Alt text](/tests/screenshot2.png?raw=true "Account Details Screenshot")
