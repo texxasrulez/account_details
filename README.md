@@ -16,7 +16,9 @@ Adds tab in Setting for more user info.
 You can enable/disable certain things via the config.inc.php
 
 **Installation**
-
+```
+php composer.phar require texxasrulez/account_details
+```
 Upload contents to '/roundcube_location/plugins/account_details/'.
 
 Enable plugin via config.inc.php with
@@ -25,8 +27,9 @@ $config['plugins'] = array('account_details');
 
 Make an hourly cronjob with your web credentials as follows for Roundcube Version Checking:
 
-`curl https://api.github.com/repos/roundcube/roundcubemail/releases | grep tag_name | grep -o "[0-9].[0-9].[0-9]\{1,\}" | sort -n | tail -1 > /path_to_roundcube/plugins/account_details/rc_latest.txt`
-
+```
+curl -sL https://api.github.com/repos/roundcube/roundcubemail/releases/latest | jq -r ".tag_name" | sort -n | tail -1 > /path_to_roundcube/plugins/account_details/rc_latest.txt`
+```
 
 Enjoy!
 
