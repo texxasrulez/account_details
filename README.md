@@ -1,11 +1,11 @@
 # Account Details for Roundcube Plugin
 
-[![Packagist](https://img.shields.io/packagist/dt/texxasrulez/account_details?style=flat-square)](https://packagist.org/packages/texxasrulez/account_details)
-[![Packagist Version](https://img.shields.io/packagist/v/texxasrulez/account_details?style=flat-square)](https://packagist.org/packages/texxasrulez/account_details)
-[![Project license](https://img.shields.io/github/license/texxasrulez/account_details?style=flat-square)](https://github.com/texxasrulez/account_details/LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/texxasrulez/account_details?style=flat-square&logo=github)](https://github.com/texxasrulez/account_details/stargazers)
+[![Packagist](https://img.shields.io/packagist/dt/texxasrulez/account_details?style=plastic)](https://packagist.org/packages/texxasrulez/account_details)
+[![Packagist Version](https://img.shields.io/packagist/v/texxasrulez/account_details?style=plastic&logo=packagist&logoColor=white)](https://packagist.org/packages/texxasrulez/account_details)
+[![Project license](https://img.shields.io/github/license/texxasrulez/account_details?style=plastic)](https://github.com/texxasrulez/account_details/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/texxasrulez/account_details?style=plastic&logo=github)](https://github.com/texxasrulez/account_details/stargazers)
 [![issues](https://img.shields.io/github/issues/texxasrulez/account_details)](https://github.com/texxasrulez/account_details/issues)
-[![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&logo=paypal)](https://www.paypal.me/texxasrulez)
+[![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-blue.svg?style=plastic&logo=paypal)](https://www.paypal.me/texxasrulez)
 
 
 Adds tab in Setting for more user info. 
