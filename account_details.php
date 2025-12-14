@@ -27,6 +27,11 @@ class account_details extends rcube_plugin
     {
         $this->rc = rcube::get_instance();
 
+        if (defined('ACCOUNT_DETAILS_DIAG') && ACCOUNT_DETAILS_DIAG) {
+            $this->_load_config();
+            return;
+        }
+
         // Optional: force Elastic on mobile devices
         if ($this->rc->config->get('force_elastic_on_mobile', true)) {
             $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
@@ -86,14 +91,23 @@ class account_details extends rcube_plugin
         }
 
         if (!$acc_dist && !$acc_user) {
-            raise_error([
-                'code'    => 527,
-                'type'    => 'php',
-                'message' => 'Failed to load Account Details plugin config',
-            ], true, true);
+            $this->config = [];
+            return;
         }
 
         $this->config = array_replace((array) $acc_dist, (array) $acc_user);
+
+        if ($this->rc && $this->rc->config) {
+            if (isset($this->config['dav_caldav_template'])) {
+                $this->rc->config->set('dav_caldav_template', $this->config['dav_caldav_template']);
+            }
+            if (isset($this->config['dav_carddav_template'])) {
+                $this->rc->config->set('dav_carddav_template', $this->config['dav_carddav_template']);
+            }
+            if (isset($this->config['hide_dav_well_known'])) {
+                $this->rc->config->set('dav_hide_well_known', (bool) $this->config['hide_dav_well_known']);
+            }
+        }
     }
 
     public function infostep(): void
@@ -764,6 +778,131 @@ class account_details extends rcube_plugin
         }
 
         return true;
+    }
+
+    public function get_dav_resources(array $identity = null): array
+    {
+        if (empty($this->config)) {
+            $this->_load_config();
+        }
+
+        if ($identity === null && $this->rc && $this->rc->user) {
+            $identity = (array) $this->rc->user->get_identity();
+        }
+
+        $resources = ['caldav' => [], 'carddav' => []];
+        $svc = null;
+        if (class_exists('DavDiscoveryService')) {
+            $svc = new DavDiscoveryService();
+            $resources = (array) $svc->discover();
+        }
+
+        return $this->apply_dav_templates($resources, (array)$identity, $svc);
+    }
+
+    private function apply_dav_templates(array $resources, array $identity, $svc = null): array
+    {
+        $resources = array_merge(['caldav' => [], 'carddav' => []], $resources);
+
+        $cal_tpl = trim((string) ($this->config['dav_caldav_template'] ?? $this->rc->config->get('dav_caldav_template', '')));
+        if ($cal_tpl !== '') {
+            $url = $this->expand_dav_template($cal_tpl, $identity);
+            if ($url) {
+                $extra = ($svc && method_exists($svc, 'discoverFromHome')) ? (array) $svc->discoverFromHome($url, 'caldav') : [];
+                if (!empty($extra)) {
+                    $resources['caldav'] = array_merge($resources['caldav'], $extra);
+                } else {
+                    $resources['caldav'][] = $this->build_dav_entry($url, 'CalDAV');
+                }
+            }
+        }
+
+        $card_tpl = trim((string) ($this->config['dav_carddav_template'] ?? $this->rc->config->get('dav_carddav_template', '')));
+        if ($card_tpl !== '') {
+            $url = $this->expand_dav_template($card_tpl, $identity);
+            if ($url) {
+                $extra = ($svc && method_exists($svc, 'discoverFromHome')) ? (array) $svc->discoverFromHome($url, 'carddav') : [];
+                if (!empty($extra)) {
+                    $resources['carddav'] = array_merge($resources['carddav'], $extra);
+                } else {
+                    $resources['carddav'][] = $this->build_dav_entry($url, 'CardDAV');
+                }
+            }
+        }
+
+        $resources['caldav'] = $this->dedupe_dav_entries($resources['caldav']);
+        $resources['carddav'] = $this->dedupe_dav_entries($resources['carddav']);
+
+        return $resources;
+    }
+
+    private function expand_dav_template(string $template, array $identity): ?string
+    {
+        $username = '';
+        if ($this->rc && $this->rc->user && method_exists($this->rc->user, 'get_username')) {
+            $username = (string) $this->rc->user->get_username();
+        }
+        if ($username === '' && !empty($identity['email'])) {
+            $username = (string) $identity['email'];
+        }
+
+        $local = $username;
+        $domain = '';
+        if (strpos($username, '@') !== false) {
+            [$local, $domain] = explode('@', $username, 2);
+        }
+
+        $display_name = trim((string) ($identity['name'] ?? $local));
+        if ($display_name === '') {
+            $display_name = $local !== '' ? $local : $username;
+        }
+        $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $display_name));
+        $slug = trim($slug, '-');
+        if ($slug === '') {
+            $slug = $local !== '' ? $local : 'dav';
+        }
+
+        $url = str_replace(
+            ['%u', '%l', '%d', '%n'],
+            [$username, $local, $domain, $slug],
+            $template
+        );
+
+        return trim($url) !== '' ? $url : null;
+    }
+
+    private function build_dav_entry(string $url, string $fallback_label): array
+    {
+        $path = (string) parse_url($url, PHP_URL_PATH);
+        $name = trim($path) !== '' ? trim(basename(rtrim($path, '/'))) : '';
+        if ($name === '') {
+            $name = $fallback_label;
+        }
+
+        return [
+            'name' => $name,
+            'url'  => $url,
+        ];
+    }
+
+    private function dedupe_dav_entries(array $entries): array
+    {
+        $out = [];
+        $seen = [];
+
+        foreach ($entries as $entry) {
+            if (empty($entry['url'])) {
+                continue;
+            }
+            $key = (string) $entry['url'];
+            if (isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
+            $out[] = $entry;
+        }
+
+        return $out;
     }
 
     /**

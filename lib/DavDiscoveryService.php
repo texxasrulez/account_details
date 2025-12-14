@@ -59,22 +59,41 @@ class DavDiscoveryServiceCore
 {
     private $rc;
     private $log_threshold;
+    private $curl_insecure = false;
+    private $hide_well_known = false;
 
-    public function __construct()
+    public function __construct(...$args)
     {
-        $this->rc = class_exists('rcmail') ? rcmail::get_instance() : null;
+        $this->rc = null;
+        if (class_exists('rcmail', false)) {
+            foreach ($args as $arg) {
+                if ($arg instanceof rcmail) {
+                    $this->rc = $arg;
+                    break;
+                }
+            }
+        }
+        if (!$this->rc && class_exists('rcmail')) {
+            $this->rc = rcmail::get_instance();
+        }
+
         $this->log_threshold = 'error';
         if ($this->rc && $this->rc->config) {
-            $this->log_threshold = (string)$this->rc->config->get('dav_log_level', 'error');
+            $cfg = $this->rc->config;
+            $this->log_threshold = (string)$cfg->get('dav_log_level', 'error');
+            $this->curl_insecure = (bool)$cfg->get('dav_curl_insecure', false);
+            $this->hide_well_known = (bool)$cfg->get('dav_hide_well_known', false);
         }
         $this->log('init', array(
-            'rc_user_id' => ($this->rc && $this->rc->user) ? (int)$this->rc->user->ID : null,
-            'debug_on'   => ($this->log_threshold === 'debug'),
-            'db_class'   => ($this->rc && $this->rc->db) ? get_class($this->rc->db) : null
+            'rc_user_id'     => ($this->rc && $this->rc->user) ? (int)$this->rc->user->ID : null,
+            'debug_on'       => ($this->log_threshold === 'debug'),
+            'db_class'       => ($this->rc && $this->rc->db) ? get_class($this->rc->db) : null,
+            'curl_insecure'  => $this->curl_insecure,
+            'hide_well_known'=> $this->hide_well_known,
         ));
     }
 
-    public function discover()
+    public function discover($force_refresh = false)
     {
         $user = $this->currentUserIdentity();
         $this->log('discover:start', array('user' => $user));
@@ -91,6 +110,13 @@ class DavDiscoveryServiceCore
         $cardroot = $this->wellKnown('carddav');
         if ($cardroot) {
             $card = $this->discoverByRfc($cardroot['url'], 'carddav');
+        }
+
+        $cal = $this->applyTemplates($cal, 'caldav');
+        $card = $this->applyTemplates($card, 'carddav');
+        if ($this->hide_well_known) {
+            $cal = $this->stripWellKnown($cal);
+            $card = $this->stripWellKnown($card);
         }
 
         $this->log('discover:end', array('cal_count' => count($cal), 'card_count' => count($card)));
@@ -111,6 +137,11 @@ class DavDiscoveryServiceCore
             $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
             $base = $scheme . '://' . $host;
         }
+        if ($this->directDavBase($base)) {
+            $this->log('rfc:well_known:direct', array('input' => $base, 'type' => $type));
+            return array('name' => strtoupper($type) . ' Root', 'url' => $base);
+        }
+
         $url = $base . '/.well-known/' . $type;
         $this->log('rfc:well_known', array('input' => $url, 'target' => $url, 'status' => 0));
         return array('name' => strtoupper($type) . ' Root', 'url' => $url);
@@ -120,6 +151,8 @@ class DavDiscoveryServiceCore
 
     private function discoverByRfc($rootUrl, $type)
     {
+        $rootUrl = $this->resolveInitialUrl($rootUrl);
+
         // Depth:0 at .well-known target
         $r = $this->httpPropfind($rootUrl, 0);
         $code = isset($r['code']) ? (int)$r['code'] : 0;
@@ -138,14 +171,17 @@ class DavDiscoveryServiceCore
         if (!$home) {
             $home = $this->principalHome($rootUrl, $type);
         }
-        if (!$home) return array();
+        if ($home) {
+            return $this->discoverCollections($home, $type);
+        }
 
-        $this->log('dav:propfind:retry_home', array('home' => $home, 'type' => $type));
-
-        // Depth:1 on home-set
-        $r2 = $this->httpPropfind($home, 1);
-        if (!isset($r2['code']) || $r2['code'] >= 400 || $r2['body'] === false) return array();
-        return $this->parseCollections($home, $r2['body'], $type);
+        // Fallback: some servers expose collections directly under the .well-known redirect target
+        $this->log('dav:propfind:fallback_root', array('root' => $rootUrl, 'type' => $type));
+        return $this->discoverCollections($rootUrl, $type);
+    }
+    public function discoverFromHome($homeUrl, $type)
+    {
+        return $this->discoverCollections($homeUrl, $type);
     }
 
     private function principalHome($baseUrl, $type)
@@ -171,7 +207,7 @@ class DavDiscoveryServiceCore
         $r2 = $this->httpPropfind($principal, 0);
         $home = '';
         if ($r2['code'] >= 200 && $r2['body']) {
-            $home = $this->extractHomeFromBody($baseUrl, $r2['body'], $type);
+            $home = $this->extractHomeFromBody($principal, $r2['body'], $type);
         }
         if ($home) {
             $this->log('dav:principal:home', array('href' => $home, 'type' => $type));
@@ -232,6 +268,29 @@ class DavDiscoveryServiceCore
         return $this->dedupe($out);
     }
 
+    private function applyTemplates($items, $type)
+    {
+        $tplKey = ($type === 'caldav') ? 'dav_caldav_template' : 'dav_carddav_template';
+        $template = '';
+        if ($this->rc && $this->rc->config) {
+            $template = (string) $this->rc->config->get($tplKey, '');
+        }
+        if ($template === '') return $this->dedupe($items);
+
+        $url = $this->expandTemplate($template);
+        if (!$url) return $this->dedupe($items);
+
+        $extra = $this->discoverFromHome($url, $type);
+        if (empty($extra)) {
+            $extra = array(array(
+                'name' => strtoupper($type) . ' Home',
+                'url'  => $url,
+            ));
+        }
+
+        return $this->dedupe(array_merge($items, $extra));
+    }
+
     /** ---------- URL helpers ---------- */
 
     private function joinUrl($base, $href)
@@ -259,6 +318,106 @@ class DavDiscoveryServiceCore
     }
 
     /** ---------- HTTP + auth ---------- */
+
+    private function resolveInitialUrl($url)
+    {
+        $current = $url;
+        for ($i = 0; $i < 5; $i++) {
+            $head = $this->httpHead($current);
+            $code = isset($head['code']) ? (int)$head['code'] : 0;
+            if ($code >= 300 && $code < 400 && isset($head['headers']['location'][0])) {
+                $next = $this->joinUrl($current, $head['headers']['location'][0]);
+                if ($next === $current) break;
+                $this->log('dav:head:redirect', array('from' => $current, 'to' => $next, 'code' => $code));
+                $current = $next;
+                continue;
+            }
+            break;
+        }
+        return $current;
+    }
+
+    private function httpHead($url)
+    {
+        $code = 0; $headers = array();
+        if (function_exists('curl_init')) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_NOBODY, true);
+            curl_setopt($ch, CURLOPT_HEADER, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 8);
+            if ($this->curl_insecure) {
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            }
+            $resp = curl_exec($ch);
+            if ($resp !== false) {
+                $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $lines = preg_split('/\r?\n/', (string)$resp);
+                foreach ($lines as $line) {
+                    $pos = strpos($line, ':');
+                    if ($pos !== false) {
+                        $hname = strtolower(trim(substr($line, 0, $pos)));
+                        $hval  = trim(substr($line, $pos + 1));
+                        if (!isset($headers[$hname])) $headers[$hname] = array();
+                        $headers[$hname][] = $hval;
+                    }
+                }
+            }
+            curl_close($ch);
+        } else {
+            $ctx_opts = array(
+                'http' => array(
+                    'method'        => 'HEAD',
+                    'ignore_errors' => true,
+                    'timeout'       => 8,
+                ),
+            );
+            if ($this->curl_insecure) {
+                $ctx_opts['ssl'] = array(
+                    'verify_peer'      => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed'=> true,
+                );
+            }
+            $ctx = stream_context_create($ctx_opts);
+            $resp = @file_get_contents($url, false, $ctx);
+            if (isset($http_response_header) && is_array($http_response_header)) {
+                foreach ($http_response_header as $h) {
+                    if (preg_match('#HTTP/\d\.\d\s+(\d{3})#', $h, $m)) $code = (int)$m[1];
+                    $pos = strpos($h, ':');
+                    if ($pos !== false) {
+                        $hname = strtolower(trim(substr($h, 0, $pos)));
+                        $hval  = trim(substr($h, $pos + 1));
+                        if (!isset($headers[$hname])) $headers[$hname] = array();
+                        $headers[$hname][] = $hval;
+                    }
+                }
+            }
+        }
+        return array('code' => $code, 'headers' => $headers);
+    }
+
+    private function directDavBase($base)
+    {
+        if ($base === '') return false;
+        if (stripos($base, '/.well-known/') !== false) return true;
+        $parsed = @parse_url($base);
+        if (!$parsed) return false;
+        $path = isset($parsed['path']) ? $parsed['path'] : '';
+        if ($path === '' || $path === '/') return false;
+        return true;
+    }
+
+    private function discoverCollections($home, $type)
+    {
+        $this->log('dav:propfind:retry_home', array('home' => $home, 'type' => $type));
+        $r2 = $this->httpPropfind($home, 1);
+        if (!isset($r2['code']) || $r2['code'] >= 400 || $r2['body'] === false) return array();
+        return $this->parseCollections($home, $r2['body'], $type);
+    }
 
     private function httpPropfind($url, $depth)
     {
@@ -294,6 +453,10 @@ class DavDiscoveryServiceCore
                     curl_setopt($ch, CURLOPT_HEADER, true);
                     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
                     curl_setopt($ch, CURLOPT_TIMEOUT, 12);
+                    if ($this->curl_insecure) {
+                        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                    }
                     if ($u && $pass) {
                         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
                         curl_setopt($ch, CURLOPT_USERPWD, $u . ':' . $pass);
@@ -322,7 +485,23 @@ class DavDiscoveryServiceCore
                           . "User-Agent: Roundcube-AccountDetails-DAV/1.0\r\n"
                           . "Accept: */*\r\n";
                     if ($u && $pass) $hdrs .= "Authorization: Basic " . base64_encode($u . ':' . $pass) . "\r\n";
-                    $ctx = stream_context_create(array('http' => array('method'=>'PROPFIND','header'=>$hdrs,'content'=>$xml,'ignore_errors'=>true,'timeout'=>12)));
+                    $context_opts = array(
+                        'http' => array(
+                            'method'        => 'PROPFIND',
+                            'header'        => $hdrs,
+                            'content'       => $xml,
+                            'ignore_errors' => true,
+                            'timeout'       => 12,
+                        ),
+                    );
+                    if ($this->curl_insecure) {
+                        $context_opts['ssl'] = array(
+                            'verify_peer'      => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed'=> true,
+                        );
+                    }
+                    $ctx = stream_context_create($context_opts);
                     $resp = @file_get_contents($url, false, $ctx);
                     $body = $resp;
                     if (isset($http_response_header) && is_array($http_response_header)) {
@@ -425,6 +604,40 @@ class DavDiscoveryServiceCore
             if (!isset($seen[$k])) { $seen[$k] = true; $out[] = $rows[$i]; }
         }
         return $out;
+    }
+
+    private function stripWellKnown($rows)
+    {
+        $out = array();
+        for ($i = 0; $i < count($rows); $i++) {
+            $url = isset($rows[$i]['url']) ? (string) $rows[$i]['url'] : '';
+            if ($url !== '' && stripos($url, '/.well-known/') !== false) {
+                continue;
+            }
+            $out[] = $rows[$i];
+        }
+        return $out;
+    }
+
+    private function expandTemplate($template)
+    {
+        $username = $this->rcCurrentUsername();
+        $local = $this->rcUserLocalPart($username);
+        $domain = $this->rcUserDomainPart($username);
+        $identity = $this->currentUserIdentity();
+        $display = isset($identity['name']) ? trim((string)$identity['name']) : '';
+        if ($display === '') $display = $local !== '' ? $local : $username;
+        $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $display));
+        $slug = trim($slug, '-');
+        if ($slug === '') $slug = $local !== '' ? $local : 'dav';
+
+        $url = str_replace(
+            array('%u', '%l', '%d', '%n'),
+            array($username, $local, $domain, $slug),
+            $template
+        );
+
+        return trim($url) !== '' ? $url : null;
     }
     private function log($tag, $payload = array()) {
         if (!__dav_should_log($tag)) return;

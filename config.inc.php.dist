@@ -19,8 +19,13 @@ $config['dav_log_level'] = 'error'; // 'info', 'error' or 'debug'
 $config['dav_basic_user'] = '%u';   // full username
 $config['dav_basic_pass'] = '%p';   // Roundcube session password
 
+// Enable CalDAV and CardDAV URL's
+$account_details_config['enable_dav_urls'] = true;
+$account_details_config['hide_dav_well_known'] = false;
 // Leave base empty to use host-based autodiscovery (/.well-known)
 $config['dav_base_url'] = '';
+$account_details_config['dav_caldav_template'] = '';
+$account_details_config['dav_carddav_template'] = '';
 
 // SSL checks on (best practice). Set true only for self-signed lab setups.
 $config['dav_curl_insecure'] = false;
@@ -169,9 +174,6 @@ $account_details_config['recommendssl'] = true; // TODO Doesn't work as expexted
 // Add a newline between the port numbers and the port notes
 // if false - put in pharentesises instead
 $account_details_config['pn_newline'] = false;
-
-// Enable CalDAV and CardDAV URL's
-$account_details_config['enable_dav_urls'] = true;
 
 // === CUSTOM INFORMATION: ADD TO SERVER INFO BOX ======================
 

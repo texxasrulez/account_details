@@ -1,57 +1,29 @@
 <?php
-// Simple diagnostic harness for the discovery service.
-// URL: plugins/account_details/tools/dav_diag.php?_davdebug=1
 declare(strict_types=1);
+define('ACCOUNT_DETAILS_DIAG', true);
 
-@ini_set('display_errors', '1');
-@error_reporting(E_ALL);
+$plugin_dir = realpath(__DIR__ . '/..');
+$rc_root    = realpath(__DIR__ . '/../../..');
 
-$here = __DIR__;
-$root = realpath($here . '/../../');
-
-// Bootstrap Roundcube if possible
-if (file_exists($root . '/program/include/iniset.php')) {
-    require_once $root . '/program/include/iniset.php';
+if ($rc_root && file_exists($rc_root . '/program/include/iniset.php')) {
+    if (!defined('INSTALL_PATH')) {
+        define('INSTALL_PATH', rtrim($rc_root, '/') . '/');
+    }
+    require_once INSTALL_PATH . 'program/include/iniset.php';
 }
 
-// Load service file
-require_once $root . '/plugins/account_details/lib/DavDiscoveryService.php';
+require_once $plugin_dir . '/account_details.php';
 
-// Acquire an rcmail instance if available
-$rc = class_exists('rcmail') ? rcmail::get_instance() : null;
-
-// Get PDO handle either from Roundcube db or fail
-$pdo = null;
-if ($rc && $rc->db && method_exists($rc->db, 'dbh')) {
-    $pdo = $rc->db->dbh;
-} elseif ($rc && $rc->db) {
-    // Older RC versions might expose a public dbh property
-    $pdo = isset($rc->db->dbh) ? $rc->db->dbh : null;
-}
-
-if (!$pdo instanceof PDO) {
+$rcmail = class_exists('rcmail') ? rcmail::get_instance() : null;
+if (!$rcmail || !$rcmail->user || !$rcmail->user->ID) {
     header('Content-Type: application/json');
-    echo json_encode(['error' => 'No PDO handle available']);
+    echo json_encode(['error' => 'No active Roundcube session']);
     exit;
 }
 
-// Instantiate using any of the exposed names
-$svc = null;
-if (class_exists('AccountDetails\Lib\DavDiscoveryService')) {
-    $svc = new \AccountDetails\Lib\DavDiscoveryService($pdo, $rc);
-} elseif (class_exists('AccountDetails\DavDiscoveryService')) {
-    $svc = new \AccountDetails\DavDiscoveryService($pdo, $rc);
-} elseif (class_exists('DavDiscoveryService')) {
-    $svc = new \DavDiscoveryService($pdo, $rc);
-}
-
-if (!$svc) {
-    header('Content-Type: application/json');
-    echo json_encode(['error' => 'Service class not found']);
-    exit;
-}
-
-$result = $svc->discover();
+$plugin = new account_details($rcmail);
+$plugin->init(); // loads config and sets template overrides
+$resources = $plugin->get_dav_resources();
 
 header('Content-Type: application/json');
-echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+echo json_encode($resources, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
