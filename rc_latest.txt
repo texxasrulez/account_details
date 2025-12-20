@@ -1,1 +1,1 @@
-&nbsp;&nbsp;&nbsp;Setup a Cron Job to check latest version - curl -sL https://api.github.com/repos/roundcube/roundcubemail/releases/latest | jq -r ".tag_name" | sort -n | tail -1 > /path_to_roundcube/plugins/account_details/rc_latest.txt
+1.6.12

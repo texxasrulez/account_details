@@ -1,20 +1,19 @@
 <?php
-
-/*
- +-----------------------------------------------------------------------+
- | plugins/userinfo/localization/<lang>.inc                              |
- |                                                                       |
- | Localization file of the Roundcube Webmail Userinfo plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
- |                                                                       |
- | Licensed under the GNU General Public License version 3 or            |
- | any later version with exceptions for skins & plugins.                |
- | See the README file for a full license statement.                     |
- |                                                                       |
- +-----------------------------------------------------------------------+
-
- For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-userinfo/
-*/
+/**
+ * Localization stub
+ * Locale: ne_NP
+ * Language: Nepali (नेपाली)
+ * Encoding: UTF-8
+ *
+ * This file is intentionally empty of label keys.
+ * Copy keys from en_US.inc when available and translate only the values.
+ *
+ * Guidelines:
+ *  - Keep keys IDENTICAL to en_US.inc.
+ *  - Preserve placeholders like %s, %d, and {braced} variables.
+ *  - Preserve HTML tags and entities.
+ *  - Escape single quotes in values using \' if needed.
+ */
 
 $labels = array();
 $labels['addressbook'] = 'Contacts';
