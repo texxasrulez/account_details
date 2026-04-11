@@ -1,5 +1,6 @@
 # Account Details for Roundcube Plugin
 
+![Downloads](https://img.shields.io/github/downloads/texxasrulez/account_details/total?style=plastic&logo=github&logoColor=white&label=Downloads&labelColor=aqua&color=blue)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/texxasrulez/account_details?style=plastic&logo=packagist&logoColor=white&label=Downloads&labelColor=blue&color=gold)](https://packagist.org/packages/texxasrulez/account_details)
 [![Packagist Version](https://img.shields.io/packagist/v/texxasrulez/account_details?style=plastic&logo=packagist&logoColor=white&label=Version&labelColor=blue&color=limegreen)](https://packagist.org/packages/texxasrulez/account_details)
 [![Github License](https://img.shields.io/github/license/texxasrulez/account_details?style=plastic&logo=github&label=License&labelColor=blue&color=coral)](https://github.com/texxasrulez/account_details/LICENSE)
@@ -56,3 +57,15 @@ With All Details enabled
 
 ![Alt text](/tests/ad-screenshot1.png?raw=true "Account Details Screenshot")
 ![Alt text](/tests/screenshot2.png?raw=true "Account Details Screenshot")
+
+## Versioning
+- `account_details` now keeps its canonical version in `account_details::PLUGIN_VERSION` inside `account_details.php`.
+- `account_details::info()` exposes the plugin metadata array used for self-identification.
+- Development builds should use a `+dev` suffix such as `5.0.0+dev`.
+- Release builds should use a clean tagged version such as `5.0.0`.
+
+For a release bump:
+1. Update `account_details::PLUGIN_VERSION` in `account_details.php` or run `sh scripts/bump-version.sh 5.0.0`.
+2. Update `CHANGELOG.md`.
+3. Create the matching release tag after verification.
+

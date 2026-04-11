@@ -4,6 +4,10 @@
  * Roundcube "Account Details" plugin — modernized with CalDAV/CardDAV tutorial links
  * and optional mobile detection to force Elastic skin.
  *
+ * @version 5.0.0
+ * @license GPL-3.0
+ * @author Gene Hawkins
+ *
  * Notes:
  * - New config flags (optional): 
  *     - 'force_elastic_on_mobile' (bool, default true)
@@ -14,8 +18,25 @@
 
 class account_details extends rcube_plugin
 {
+    const PLUGIN_VERSION = '4.1.0';
+    const PLUGIN_INFO = array(
+        'name' => 'account_details',
+        'vendor' => 'Gene Hawkins',
+        'version' => self::PLUGIN_VERSION,
+        'license' => 'GPL-3.0',
+        'uri' => 'https://github.com/texxasrulez/account_details',
+    );
+
+    public static function info(): array
+    {
+        return self::PLUGIN_INFO;
+    }
+
     /** @var string */
     public $task = 'settings';
+
+    /** @var string Plugin version shown by Roundcube in Settings -> About */
+    public $version = self::PLUGIN_VERSION;
 
     /** @var rcube */
     private $rc;
@@ -26,6 +47,7 @@ class account_details extends rcube_plugin
     public function init(): void
     {
         $this->rc = rcube::get_instance();
+        $this->version = $this->detect_plugin_version();
 
         if (defined('ACCOUNT_DETAILS_DIAG') && ACCOUNT_DETAILS_DIAG) {
             $this->_load_config();
@@ -58,6 +80,30 @@ class account_details extends rcube_plugin
         @require_once $this->home . '/lib/listplugins.php';
         @require_once $this->home . '/lib/DavDiscoveryService.php';
         @require_once $this->home . '/lib/getip.php';
+    }
+
+    private function detect_plugin_version(): string
+    {
+        $package = 'texxasrulez/account_details';
+
+        // Prefer Composer's resolved package version when available.
+        if (class_exists('\\Composer\\InstalledVersions')) {
+            try {
+                if (\Composer\InstalledVersions::isInstalled($package)) {
+                    $pretty = \Composer\InstalledVersions::getPrettyVersion($package);
+                    if (is_string($pretty) && $pretty !== '') {
+                        $normalized = ltrim($pretty, 'v');
+                        if (stripos($normalized, 'dev') !== 0) {
+                            return $normalized;
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                // Fall through to default.
+            }
+        }
+
+        return $this->version;
     }
 
     private function _load_config(): void
