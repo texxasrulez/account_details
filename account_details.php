@@ -18,7 +18,7 @@
 
 class account_details extends rcube_plugin
 {
-    const PLUGIN_VERSION = '4.1.0';
+    const PLUGIN_VERSION = '5.0.0';
     const PLUGIN_INFO = array(
         'name' => 'account_details',
         'vendor' => 'Gene Hawkins',
@@ -217,9 +217,13 @@ class account_details extends rcube_plugin
             'cellspacing' => 0,
         ]);
 
+        $add_section = function (string $label_html, string $class = 'account-details-section') use ($table): void {
+            $table->add(['colspan' => 2, 'class' => 'header ' . $class], $label_html);
+            $table->add_row();
+        };
+
         // USER DETAILS
-        $table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('userdet') . ':')));
-        $table->add('', '');
+        $add_section(html::tag('h4', null, rcube_utils::rep_specialchars_output($this->gettext('userdet') . ':')));
 
         $identity = (array) $user->get_identity();
 
@@ -309,8 +313,7 @@ class account_details extends rcube_plugin
 
         // OS / Browser / Resolution
         if (!empty($this->config['enable_osystem'])) {
-            $table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('usystem') . ':')));
-            $table->add('', '');
+            $add_section(html::tag('h4', null, rcube_utils::rep_specialchars_output($this->gettext('usystem') . ':')));
 
             $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('os') . ':'));
             $uagent = $_SERVER['HTTP_USER_AGENT'] ?? '';
@@ -336,8 +339,7 @@ class account_details extends rcube_plugin
         // MAILBOX DETAILS
         $imap_ok = (!empty($this->config['enable_mailbox']) && $imap);
         if ($imap_ok) {
-            $table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('mailboxdetails') . ':')));
-            $table->add('', '');
+            $add_section(html::tag('h4', null, rcube_utils::rep_specialchars_output($this->gettext('mailboxdetails') . ':')));
 
             $delim = method_exists($imap, 'get_hierarchy_delimiter') ? $imap->get_hierarchy_delimiter() : '.';
 
@@ -429,8 +431,7 @@ class account_details extends rcube_plugin
         // SERVER DETAILS
         if (!empty($this->config['enable_server_os'])) {
             if (!empty($this->config['location'])) {
-                $table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('details') . ':')));
-                $table->add('', '');
+                $add_section(html::tag('h4', null, rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('details') . ':')));
 
                 $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('server') . ' ' . $this->gettext('location') . ':'));
                 $table->add('value', rcube_utils::rep_specialchars_output($this->config['location']));
@@ -547,8 +548,7 @@ class account_details extends rcube_plugin
 
             // Regular ports
             if (!empty($this->config['port_smtp']) || !empty($this->config['port_imap']) || !empty($this->config['port_pop']) || !empty($this->config['customfields_regularports'])) {
-                $table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('portnumbers') . ' - ' . $this->gettext('portnumbersregular'))));
-                $table->add('', '');
+                $add_section(html::tag('h4', null, rcube_utils::rep_specialchars_output($this->gettext('portnumbers') . ' - ' . $this->gettext('portnumbersregular'))));
 
                 if ($spa_all) {
                     $table->add(['colspan' => 2, 'class' => 'categorynote'], ucfirst($this->gettext('spaauthsupported')));
@@ -575,13 +575,12 @@ class account_details extends rcube_plugin
 
             // Encrypted ports
             if (!empty($this->config['port_smtp-ssl']) || !empty($this->config['port_imap-ssl']) || !empty($this->config['port_pop-ssl']) || !empty($this->config['customfields_encryptedports'])) {
-                $header = html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('portnumbers') . ' - ' . $this->gettext('portnumbersencrypted')));
+                $header = html::tag('h4', null, rcube_utils::rep_specialchars_output($this->gettext('portnumbers') . ' - ' . $this->gettext('portnumbersencrypted')));
                 if (!empty($this->config['recommendssl'])) {
-                    $header .= ' ' . html::tag('div', ['style' => 'color:red;'], '&nbsp;' . $this->gettext('recommended'));
+                    $header .= html::tag('span', ['class' => 'account-details-badge'], rcube_utils::rep_specialchars_output($this->gettext('recommended')));
                 }
 
-                $table->add(['colspan' => 2, 'class' => 'header'], $header);
-                $table->add_row();
+                $add_section($header);
 
                 if (!empty($this->config['port_smtp-ssl'])) {
                     $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('smtp-ssl') . ':'));
@@ -604,8 +603,7 @@ class account_details extends rcube_plugin
 
         // ROUNDCUBE SECTION
         if (!empty($this->config['display_rc'])) {
-            $table->add('title', html::tag('h4', null, '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('rcdetails') . ':')));
-            $table->add('', '');
+            $add_section(html::tag('h4', null, rcube_utils::rep_specialchars_output($this->gettext('rcdetails') . ':')));
 
             if (!empty($this->config['display_rc_version'])) {
                 $table->add('title', '&nbsp;' . ($this->config['bulletstyle'] ?? '•') . '&nbsp;' . rcube_utils::rep_specialchars_output($this->gettext('currver') . ':'));
@@ -665,8 +663,7 @@ class account_details extends rcube_plugin
                 $calitems = $resources['caldav'] ?? [];
                 if (!empty($calitems)) {
                     $i++;
-                    $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('calendars') . ':&nbsp;<sup>' . (int)$i . '</sup>'));
-                    $table->add('', '');
+                    $add_section(html::tag('h4', null, $this->gettext('calendars') . ':&nbsp;<sup>' . (int) $i . '</sup>'));
 
                     foreach ($calitems as $idx => $item) {
                         $name     = rcube::Q($item['name'] ?? '');
@@ -717,8 +714,7 @@ class account_details extends rcube_plugin
                 $abitems = $resources['carddav'] ?? [];
                 if (!empty($abitems)) {
                     $i++;
-                    $table->add('title', html::tag('h4', null, '&nbsp;' . $this->gettext('addressbook') . ':&nbsp;<sup>' . (int)$i . '</sup>'));
-                    $table->add('', '');
+                    $add_section(html::tag('h4', null, $this->gettext('addressbook') . ':&nbsp;<sup>' . (int) $i . '</sup>'));
 
                     foreach ($abitems as $idx => $item) {
                         $name     = rcube::Q($item['name'] ?? '');
@@ -783,19 +779,27 @@ class account_details extends rcube_plugin
         if ($col1 === '' || $col2 === '') { $col1 = '20%'; $col2 = '80%'; }
         $rendered_table = $this->_inject_colgroup($rendered_table, [$col1, $col2]);
 
-        $out = html::div(['class' => 'settingsbox-account_details'],
-                html::div(['class' => 'boxtitle'], $this->gettext('account_details') . ' for ' . rcube_utils::rep_specialchars_output($identity['name'] ?? ''))
+        $header_identity = trim((string) ($identity['name'] ?? ''));
+        if ($header_identity === '') {
+            $header_identity = trim((string) ($identity['email'] ?? ''));
+        }
+        if ($header_identity === '' && $this->rc && $this->rc->user && method_exists($this->rc->user, 'get_username')) {
+            $header_identity = trim((string) $this->rc->user->get_username());
+        }
+
+        $out = html::div(['class' => 'settingsbox-account_details account-details-shell'],
+                html::div(['class' => 'boxtitle account-details-title'], $this->gettext('account_details') . ' for ' . rcube_utils::rep_specialchars_output($header_identity))
             ) .
-            html::div(['class' => 'box formcontent scroller'], $rendered_table);
+            html::div(['class' => 'box formcontent scroller account-details-content'], $rendered_table);
 
         // Optional custom box content
         if (!empty($this->config['enable_custombox']) && !empty($this->config['custombox_file'])) {
             $rendered_table2 = $table->show();
             $rendered_table2 = $this->_inject_colgroup($rendered_table2, [$col1, $col2]);
-            $out = html::div(['class' => 'settingsbox-account_details'],
-                    html::div(['class' => 'boxtitle'], $this->gettext('account_details') . ' for ' . rcube_utils::rep_specialchars_output($identity['name'] ?? ''))
+            $out = html::div(['class' => 'settingsbox-account_details account-details-shell'],
+                    html::div(['class' => 'boxtitle account-details-title'], $this->gettext('account_details') . ' for ' . rcube_utils::rep_specialchars_output($header_identity))
                 ) .
-                html::div(['class' => 'box formcontent scroller'], $rendered_table2 . $this->_print_file_contents($this->config['custombox_file']));
+                html::div(['class' => 'box formcontent scroller account-details-content'], $rendered_table2 . $this->_print_file_contents($this->config['custombox_file']));
         }
 
         return $out;
@@ -1001,12 +1005,14 @@ class account_details extends rcube_plugin
      */
     private function _print_file_contents(string $filename): string
     {
-        if ($filename && is_file($filename) && is_readable($filename)) {
-            $size = filesize($filename);
+        $path = $this->_resolve_local_file($filename);
+
+        if ($path !== '' && is_file($path) && is_readable($path)) {
+            $size = filesize($path);
             if ($size === 0 || $size === false) {
                 return '';
             }
-            $handle   = fopen($filename, 'r');
+            $handle   = fopen($path, 'r');
             $contents = $handle ? fread($handle, $size) : '';
             if ($handle) {
                 fclose($handle);
@@ -1015,6 +1021,63 @@ class account_details extends rcube_plugin
         }
 
         return 'Could not output file ' . rcube_utils::rep_specialchars_output($filename);
+    }
+
+    /**
+     * Resolve plugin-local file paths across Roundcube public_html layouts.
+     */
+    private function _resolve_local_file(string $filename): string
+    {
+        $filename = trim($filename);
+        if ($filename === '') {
+            return '';
+        }
+
+        $candidates = [];
+        $add_candidate = static function (string $path) use (&$candidates): void {
+            $path = trim($path);
+            if ($path !== '' && !in_array($path, $candidates, true)) {
+                $candidates[] = $path;
+            }
+        };
+
+        $add_candidate($filename);
+
+        if (!$this->_is_absolute_path($filename)) {
+            $plugin_dir = rtrim((string) $this->home, '/\\');
+            $plugin_name = basename($plugin_dir);
+            $normalized = str_replace('\\', '/', $filename);
+            $plugin_prefix = 'plugins/' . $plugin_name . '/';
+
+            if ($plugin_dir !== '') {
+                if (strpos($normalized, $plugin_prefix) === 0) {
+                    $add_candidate($plugin_dir . '/' . substr($normalized, strlen($plugin_prefix)));
+                } else {
+                    $add_candidate($plugin_dir . '/' . $filename);
+                }
+            }
+
+            if (defined('INSTALL_PATH')) {
+                $add_candidate(rtrim((string) INSTALL_PATH, '/\\') . '/' . $filename);
+            }
+
+            if (defined('RCUBE_INSTALL_PATH')) {
+                $add_candidate(rtrim((string) RCUBE_INSTALL_PATH, '/\\') . '/' . $filename);
+            }
+        }
+
+        foreach ($candidates as $candidate) {
+            if (is_file($candidate) && is_readable($candidate)) {
+                return $candidate;
+            }
+        }
+
+        return '';
+    }
+
+    private function _is_absolute_path(string $path): bool
+    {
+        return $path !== '' && ($path[0] === '/' || preg_match('/^[A-Za-z]:[\\\\\\/]/', $path) === 1);
     }
 
     /**

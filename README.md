@@ -38,8 +38,10 @@ $config['plugins'] = array('account_details');
 Make an hourly cronjob with your web credentials as follows for Roundcube Version Checking:
 
 ```
-curl -sL https://api.github.com/repos/roundcube/roundcubemail/releases/latest | jq -r ".tag_name" | sort -n | tail -1 > /path_to_roundcube/plugins/account_details/rc_latest.txt`
+curl -sL https://api.github.com/repos/roundcube/roundcubemail/releases/latest | jq -r ".tag_name" > /path_to_roundcube/plugins/account_details/rc_latest.txt
 ```
+
+For Roundcube 1.7 public_html installs, write `rc_latest.txt` to the real plugin directory, not `public_html/plugins/account_details/`.
 
 Enjoy!
 
@@ -68,4 +70,3 @@ For a release bump:
 1. Update `account_details::PLUGIN_VERSION` in `account_details.php` or run `sh scripts/bump-version.sh 5.0.0`.
 2. Update `CHANGELOG.md`.
 3. Create the matching release tag after verification.
-

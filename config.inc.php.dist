@@ -47,8 +47,11 @@ $account_details_config['display_rc'] = true;
 $account_details_config['display_rc_version'] = true;
 $account_details_config['display_rc_release'] = true;
 
-/* Hourly Cron Job is required to be setup as follows: 
- * curl https://api.github.com/repos/roundcube/roundcubemail/releases | grep tag_name | grep -o "[0-9].[0-9].[0-9]\{1,\}" | sort -n | tail -1 >> /path_to_roundcube/plugins/account_details/rc_latest.txt
+/* Hourly Cron Job is required to be setup as follows.
+ * For Roundcube 1.7 public_html installs, write this to the real plugin
+ * directory, not public_html/plugins/account_details/.
+ *
+ * curl -sL https://api.github.com/repos/roundcube/roundcubemail/releases/latest | jq -r ".tag_name" > /path_to_roundcube/plugins/account_details/rc_latest.txt
 */
 $account_details_config['rc_latest'] = 'plugins/account_details/rc_latest.txt';
 
