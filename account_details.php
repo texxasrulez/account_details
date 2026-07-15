@@ -18,7 +18,7 @@
 
 class account_details extends rcube_plugin
 {
-    const PLUGIN_VERSION = '5.0.0';
+    const PLUGIN_VERSION = '5.0.1';
     const PLUGIN_INFO = array(
         'name' => 'account_details',
         'vendor' => 'Gene Hawkins',
