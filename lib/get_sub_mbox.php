@@ -75,10 +75,10 @@ if (!function_exists('account_details_render_sub_mboxes')) {
 
         $rows = account_details_get_sub_mboxes($root);
         foreach ($rows as $row) {
-            $fname = rcube_utils::rep_specialchars_output($row['name']);
-            $table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output($label_folder . ':'));
+            $fname = rcube_utils::rep_specialchars_output((string) $row['name'], 'html');
+            $table->add('title', '&nbsp;&#9679;&nbsp;' . rcube_utils::rep_specialchars_output((string) $label_folder . ':', 'html'));
             if (isset($row['size_kb'])) {
-                $table->add('value', $fname . '&nbsp; ' . (int)$row['size_kb'] . '&nbsp;' . rcube_utils::rep_specialchars_output($label_kb));
+                $table->add('value', $fname . '&nbsp; ' . (int)$row['size_kb'] . '&nbsp;' . rcube_utils::rep_specialchars_output((string) $label_kb, 'html'));
             } else {
                 $table->add('value', $fname);
             }
